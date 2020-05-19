@@ -18,28 +18,30 @@ namespace API.Controllers
         private MVC_Gas_MapEntities db = new MVC_Gas_MapEntities();
 
         // GET: api/Stores
-        public IEnumerable<Store> GetStores()
+        [ResponseType(typeof(Store))]
+        public IHttpActionResult GetStores()
         {
             var view = RunDataUseProcedure.getStoreInfor("");
-            return view;
+            return Json(view);
         }
 
-        // GET: api/AmountOfStores
-        //public HttpResponseMessage GetAmountOfStores()
-        //{
-        //    System.Threading.Thread.Sleep(10000);
-        //    string result = RunDataUseProcedure.getAmountOfStoresForCardInFormIndex();
-        //    return new HttpResponseMessage()
-        //    {
-        //        Content = new StringContent(
-        //             result,
-        //             Encoding.UTF8,
-        //             "text/html"
-        //         )
-        //    };
-        //}
+        // GET : api/Stores?mode=0
+        [ResponseType(typeof(string))]
+        public IHttpActionResult GetStore(int mode)
+        {
+            //System.Threading.Thread.Sleep(10000);
+            string result = RunDataUseProcedure.getAmountOfStoresForCardInFormIndex();
+            return base.ResponseMessage(new HttpResponseMessage()
+            {
+                Content = new StringContent(
+                    result,
+                    Encoding.UTF8,
+                    "text/html"
+                )
+            });
+        }
 
-        //GET: api/Stores?storeid=sto0001
+        // GET : api/Stores?storeid=sto0001
         [ResponseType(typeof(Store))]
         public IHttpActionResult GetStore(string storeid)
         {
@@ -49,21 +51,21 @@ namespace API.Controllers
                 return NotFound();
             }
 
-            return Ok(view);
+            return Json(view);
         }
 
-        // GET: api/Stores/5
-        [ResponseType(typeof(Store))]
-        public IHttpActionResult GetStore(int id)
-        {
-            Store store = db.Stores.Find(id);
-            if (store == null)
-            {
-                return NotFound();
-            }
+        //// GET: api/Stores/5
+        //[ResponseType(typeof(Store))]
+        //public IHttpActionResult GetStore(int id)
+        //{
+        //    Store store = db.Stores.Find(id);
+        //    if (store == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return Ok(store);
-        }
+        //    return Ok(store);
+        //}
 
         // PUT: api/Stores/5
         [ResponseType(typeof(void))]

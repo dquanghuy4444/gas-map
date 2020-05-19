@@ -5,7 +5,7 @@ var popupContent = null;
 var defaultCoord = null;
 var mapObj = null;
 var marker;
-var zoomLevel = 13;
+var zoomLevel = 14;
 var minimap = null;
 
 //var amountOfStos = null;
@@ -171,16 +171,14 @@ function getAllStoresInDb() {
     };
     var name = null;
 
-
     $.ajax({
-        type: 'POST',
+        type: 'post',
         url: '/Store/getAllStores',
-        dataType: 'JSON',
+        dataType: 'json',
         contentType: 'application/json; charset=utf-8',
         success: function (data) {
             if (1 == 1)
-            {
-
+            {           
                 var layerGroup = new L.layerGroup([osm2]);
                 var responsive = data.data;
                 console.log(responsive.length);

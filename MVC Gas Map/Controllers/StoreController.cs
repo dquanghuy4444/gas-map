@@ -12,6 +12,10 @@ namespace MVC_Gas_Map.Controllers
         // GET: Store
         public ActionResult Index()
         {
+            HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("Stores?mode=1").Result;
+
+            string amountOfStores = response.Content.ReadAsStringAsync().Result ;
+            ViewBag.AmountOfStores = amountOfStores;
             return View();
         }
 
@@ -20,7 +24,14 @@ namespace MVC_Gas_Map.Controllers
         {
             IEnumerable<Store> storeList;
             HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("Stores").Result;
-            storeList = response.Content.ReadAsAsync<IEnumerable<Store>>().Result;
+            try
+            {
+                storeList = response.Content.ReadAsAsync<IEnumerable<Store>>().Result;
+            }
+            catch
+            {
+                storeList = null;
+            }
             //return View(storeList);
             return Json(new { data = storeList }, JsonRequestBehavior.AllowGet);
         }
