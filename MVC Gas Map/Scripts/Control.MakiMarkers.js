@@ -71,7 +71,7 @@
           break;
         case "l":
           L.extend(options, L.MakiMarkers.largeOptions);
-          break;
+              break;
         default:
           options.size = "m";
           L.extend(options, L.MakiMarkers.mediumOptions);
@@ -89,7 +89,7 @@
           options.color = options.color.substr(1);
         }
 
-        pin += "+" + options.color;
+        pin += "+17a";
       }
 
       options.iconUrl = "" + L.MakiMarkers.apiUrl + pin +  ".png" + tokenQuery;

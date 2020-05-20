@@ -148,7 +148,9 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\StoreController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -175,8 +177,10 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Images\111-1722.jpg" />
+    <Content Include="Images\200.gif" />
     <Content Include="Images\92978289_651374272327767_5647810410020077568_n.png" />
     <Content Include="Images\bct-1509.png" />
+    <Content Include="Images\buy-vector-flat-4.png" />
     <Content Include="Images\check.png" />
     <Content Include="Images\dmca-badge-w100-5x1-11.png" />
     <Content Include="Images\icon-fullscreen-2x.png" />
@@ -197,6 +201,7 @@
     <Content Include="Images\toggle.svg" />
     <Content Include="Images\transparent-pixel.png" />
     <Content Include="Images\tải xuống.png" />
+    <Content Include="Images\untitled_2.gif" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -242,6 +247,8 @@
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Store\Index.cshtml" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <Content Include="Views\Error\PageNotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

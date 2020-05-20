@@ -9,6 +9,7 @@ namespace API.Models
 {
     public class RunDataUseProcedure
     {
+        //private static string conStr = @"Data Source=DESKTOP-O7QF51K\POHIPPC;Initial Catalog=MVC Gas Map;Integrated Security=True;MultipleActiveResultSets=True;Application Name=EntityFramework";
         private static string conStr = @"Data Source=POHIPPC;Initial Catalog=MVC Gas Map;Integrated Security=True;MultipleActiveResultSets=True;Application Name=EntityFramework";
         private static SqlConnection sqlcon = new SqlConnection(conStr);
 
