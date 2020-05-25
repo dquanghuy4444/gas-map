@@ -1,13 +1,140 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@*<link href="~/Css/StyleSheet1.css" rel="stylesheet" />*@
+<style type="text/css">
+    .auto-style1 {
+        text-align: center;
+        font-family: "Segoe UI";
+    }
 
+    .auto-style2 {
+        position: relative;
+        width: 100%;
+        flex: 0 0 50%;
+        left: 0px;
+        top: 0px;
+        padding-left: .75rem;
+        padding-right: .75rem;
+    }
+</style>
+<div>
+    <div class="container">
 
-<h2>Index</h2>
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+
+            <div class="col-xl-5 col-md-5">
+
+                <div class="card o-hidden border-0 shadow-lg my-5" id="loginin">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="auto-style2">
+                            <div class="p-5">
+                                <form class="user" runat="server" method="post">
+                                    <span class="ml-3">Tên đăng nhập</span>
+                                    <div class="form-group">
+                                        <input class="form-control form-control-user" id="txt_username" name="UserName" type="username" value="" />
+                                    </div>
+                                    <span class="ml-3">Mật khẩu</span>
+                                    <div class="form-group">
+                                        <input class="form-control form-control-user" id="txt_password" name="Password" type="password" value="" />
+
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox small">
+                                            <input type="checkbox" class="custom-control-input" id="customCheck">
+                                            <asp:Label ID="lbl_tb" runat="server" ForeColor="Red"></asp:Label>
+                                            <br />
+                                            &nbsp;<label class="custom-control-label" for="customCheck">Remember Me</label>
+                                        </div>
+                                        </divẩ
+                                        <div>
+                                            <input class="btn btn-facebook btn-user btn-block" id="txt_username2" name="UserName" type="submit" value="Login" />
+                                            @*<asp:Button ID="btn_login" runat="server" class="btn btn-primary btn-user btn-block" Text="Login" OnClick="btn_login_Click" />*@
+                                        </div>
+                                        <hr>
+                                        <a href="index.html" class="btn btn-google btn-user btn-block">
+                                            <i class="fa fa-google fa-fw"></i> Login with Google
+                                        </a>
+                                        <a href="https://www.facebook.com/dialog/oauth?client_id=594051934729967&redirect_uri=https://localhost:44342/loginfb.aspx" class="btn btn-facebook btn-user btn-block">
+                                            <i class="fa fa-facebook-f fa-fw"></i> Login with Facebook
+                                        </a>
+
+                                        <hr>
+                                        <div class="text-center">
+                                            <a class="small" href="forgot-password.html">Forgot Password?</a>
+                                        </div>
+                                        <div class="auto-style1">
+                                            <a href="#" id="btn_ToggleCreateAcc" onclick="toggleCreateAccSection()" class="small">Create an Account!</a>
+                                            <br />
+                                        </div>
+                                        <div style="margin-top: 1rem;display:none;" id="createAccSection">
+                                            <span class="ml-3">Tên đăng nhập</span>
+                                            <div class="form-group">
+                                                <input class="form-control form-control-user" id="tbx_creatuser" name="CreUN" value="" />
+                                            </div>
+                                            <span class="ml-3">Nhập mật khẩu</span>
+                                            <div class="form-group">
+                                                <input class="form-control form-control-user" id="tbx_creatpass" name="CrePass" value="" />
+                                            </div>
+                                            <span class="ml-3">Nhập lại mật khẩu</span>
+                                            <div class="form-group">
+                                                <input class="form-control form-control-user" id="tbx_creatpass2" name="CrePass" value="" />
+                                            </div>
+                                            <div class="form-group">
+                                                <input class="btn btn-primary btn-user btn-block" id="txt_username3" name="UserName" type="submit" value="Create" />
+                                            </div>
+                                        </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
 
 <script>
+    var flagStatusCreateAccSec = false;
+    var mode = 0;
+    var url = new URL(document.URL);
+    var search_params = url.searchParams;
+    if (search_params.has('mode')) {
+        mode=1
+    }
+
     $(".loader").hide();
-    $("#introProject").hide();
+        $("#introProject").hide();
+        if (mode == 1) {
+            $("#createAccSection").show();
+            flagStatusCreateAccSec = true;
+            scrollToIntroSection_FrLogin('createAccSection');
+        }
+
+    function toggleCreateAccSection() {
+        if (!flagStatusCreateAccSec) {
+            $("#createAccSection").show();
+            flagStatusCreateAccSec = true;
+            scrollToIntroSection_FrLogin('createAccSection');
+        }
+        else {
+            $("#createAccSection").hide();
+            flagStatusCreateAccSec = false;
+            scrollToIntroSection_FrLogin('loginin');
+        }
+        }
+
+            function scrollToIntroSection_FrLogin(id) {
+            var targetElement = $('#'+id);
+            $([document.documentElement, document.body]).animate({
+                scrollTop: targetElement.offset().top
+            }, 800);
+    }
+
 </script>

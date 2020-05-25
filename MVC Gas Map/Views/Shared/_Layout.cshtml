@@ -46,7 +46,7 @@
                         <i class="fa fa-bars"></i>
                     </button>
                     <ul class="navbar-nav ml-auto">
-                        <a class="btn btn-danger" style="font-size:1.5rem;padding:0.8rem 2.2rem;background-color:#f5cf71!important;margin-right:1.2rem;" href="/Login/Index">Đăng kí tài khoản</a>
+                        <a class="btn btn-danger" style="font-size:1.5rem;padding:0.8rem 2.2rem;background-color:#f5cf71!important;margin-right:1.2rem;" href="/Login/Index?mode=1">Đăng kí tài khoản</a>
                         <a class="btn btn-danger" style="font-size:1.5rem;padding:0.8rem 2.2rem;background-color:#4e73df!important;" href="/Login/Index">Đăng nhập</a>
                     </ul>
                     <!-- Topbar Navbar -->
@@ -273,6 +273,24 @@
             $([document.documentElement, document.body]).animate({
                 scrollTop: targetElement.offset().top
             }, 1200);
+        }
+
+        function getUrlParameters(parameter, staticURL, decode) {
+
+            var currLocation = (staticURL.length) ? staticURL : window.location.search,
+                parArr = currLocation.split("?")[1].split("&"),
+                returnBool = true;
+
+            for (var i = 0; i < parArr.length; i++) {
+                parr = parArr[i].split("=");
+                if (parr[0] == parameter) {
+                    return (decode) ? decodeURIComponent(parr[1]) : parr[1];
+                    returnBool = true;
+                } else {
+                    returnBool = false;
+                }
+            }
+            if (!returnBool) return false;
         }
     </script>
 </body>
