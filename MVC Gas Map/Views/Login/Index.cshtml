@@ -32,14 +32,14 @@
                         <!-- Nested Row within Card Body -->
                         <div class="auto-style2">
                             <div class="p-5">
-                                <form class="user" runat="server" method="post">
+
                                     <span class="ml-3">Tên đăng nhập</span>
                                     <div class="form-group">
-                                        <input class="form-control form-control-user" id="txt_username" name="UserName" type="username" value="" />
+                                        <input class="form-control form-control-user" id="txt_UserToLogin" placeholder="Nhập tên đăng nhập" type="text" value="" />
                                     </div>
                                     <span class="ml-3">Mật khẩu</span>
                                     <div class="form-group">
-                                        <input class="form-control form-control-user" id="txt_password" name="Password" type="password" value="" />
+                                        <input class="form-control form-control-user" id="txt_PassToLogin" placeholder="Nhập mật khẩu" type="password" value="" />
 
                                     </div>
                                     <div class="form-group">
@@ -49,7 +49,7 @@
                                             <br />
                                             &nbsp;<label class="custom-control-label" for="customCheck">Remember Me</label>
                                         </div>
-                                        </divẩ
+                                        </div>
                                         <div>
                                             <input class="btn btn-facebook btn-user btn-block" id="txt_username2" name="UserName" type="submit" value="Login" />
                                             @*<asp:Button ID="btn_login" runat="server" class="btn btn-primary btn-user btn-block" Text="Login" OnClick="btn_login_Click" />*@
@@ -73,21 +73,20 @@
                                         <div style="margin-top: 1rem;display:none;" id="createAccSection">
                                             <span class="ml-3">Tên đăng nhập</span>
                                             <div class="form-group">
-                                                <input class="form-control form-control-user" id="tbx_creatuser" name="CreUN" value="" />
+                                                <input class="form-control form-control-user" id="txt_UserToCreate" placeholder="Nhập tên đăng nhập"  value="" />
                                             </div>
                                             <span class="ml-3">Nhập mật khẩu</span>
                                             <div class="form-group">
-                                                <input class="form-control form-control-user" id="tbx_creatpass" name="CrePass" value="" />
+                                                <input class="form-control form-control-user" id="txt_PassToCreate" placeholder="Nhập mật khẩu" type="password" value="" />
                                             </div>
                                             <span class="ml-3">Nhập lại mật khẩu</span>
                                             <div class="form-group">
-                                                <input class="form-control form-control-user" id="tbx_creatpass2" name="CrePass" value="" />
+                                                <input class="form-control form-control-user" id="txt_Pass2ToCreate" placeholder="Nhập mật khẩu lần 2" type="password" value="" />
                                             </div>
                                             <div class="form-group">
-                                                <input class="btn btn-primary btn-user btn-block" id="txt_username3" name="UserName" type="submit" value="Create" />
+                                                <button class="btn btn-primary btn-user btn-block" id="btn_CreateUser" onclick="createUser()">Create</button>
                                             </div>
                                         </div>
-                                </form>
                             </div>
                         </div>
                     </div>
@@ -130,11 +129,71 @@
         }
         }
 
-            function scrollToIntroSection_FrLogin(id) {
+    function scrollToIntroSection_FrLogin(id) {
             var targetElement = $('#'+id);
             $([document.documentElement, document.body]).animate({
                 scrollTop: targetElement.offset().top
             }, 800);
+    }
+
+    function createUser()
+    {
+        if (checkValidInputToCreateUser('txt_UserToCreate', 'txt_PassToCreate', 'txt_Pass2ToCreate'))
+        {
+
+        }
+    }
+
+    function checkValidInputToCreateUser(idUser, idPass, idPass2)
+    {
+        var strEmpty = "Chưa nhập thông tin";
+        var strInputAgain = "Mật khẩu nhập lại không giống mật khẩu đầu tiên";
+        var strLength = "Nhập thiếu .Thông tin phải bằng hoặc lớn hơn 6 kí tự";
+
+        var strUser = $('#' + idUser).val();
+        if (strUser === "") {
+            message_Error(idUser, strEmpty);
+            return false;
+        }
+        else if (strUser.length < 6)
+        {
+            message_Error(idUser, strLength);
+            return false;
+        }
+
+        var strPass = $('#' + idPass).val();
+        if (strPass === "") {
+            message_Error(idPass, strEmpty);
+            return false;
+        }
+        else if (strPass.length < 6)
+        {
+            message_Error(idPass, strLength);
+            return false;
+        }
+
+        if (idPass2 !== "")
+        {
+            var strPass2 = $('#' + idPass2).val();
+            if (strPass2 === "")
+            {
+                message_Error(idPass2, strEmpty);
+                return false;
+            }
+            else if (strPass2.length < 6)
+            {
+                message_Error(idPass2, strLength);
+                return false;
+            }
+            else if (strPass !== strPass2)
+            {
+                message_Error(idPass2, strInputAgain);
+                return false;
+            }
+        }
+
+        setTimeout($('.notifyjs-wrapper').remove(), 2000);      
+        return true;
     }
 
 </script>
