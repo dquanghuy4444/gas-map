@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<MVC_Gas_Map.Models.User>
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -71,21 +72,26 @@
                                             <br />
                                         </div>
                                         <div style="margin-top: 1rem;display:none;" id="createAccSection">
-                                            <span class="ml-3">Tên đăng nhập</span>
-                                            <div class="form-group">
-                                                <input class="form-control form-control-user" id="txt_UserToCreate" placeholder="Nhập tên đăng nhập"  value="" />
-                                            </div>
-                                            <span class="ml-3">Nhập mật khẩu</span>
-                                            <div class="form-group">
-                                                <input class="form-control form-control-user" id="txt_PassToCreate" placeholder="Nhập mật khẩu" type="password" value="" />
-                                            </div>
-                                            <span class="ml-3">Nhập lại mật khẩu</span>
-                                            <div class="form-group">
-                                                <input class="form-control form-control-user" id="txt_Pass2ToCreate" placeholder="Nhập mật khẩu lần 2" type="password" value="" />
-                                            </div>
-                                            <div class="form-group">
-                                                <button class="btn btn-primary btn-user btn-block" id="btn_CreateUser" onclick="createUser()">Create</button>
-                                            </div>
+                                            @using (Html.BeginForm("Index","Login",FormMethod.Post,new { id="createForm",role="form"}))
+                                            {
+                                                <span class="ml-3">Tên đăng nhập</span>
+                                                <div class="form-group">
+                                                    <input class="form-control form-control-user" id="txt_UserToCreate" placeholder="Nhập tên đăng nhập" value="" />
+                                                </div>
+                                                <span class="ml-3">Nhập mật khẩu</span>
+                                                <div class="form-group">
+                                                    <input class="form-control form-control-user" id="txt_PassToCreate" placeholder="Nhập mật khẩu" type="password" value="" />
+                                                </div>
+                                                <span class="ml-3">Nhập lại mật khẩu</span>
+                                                <div class="form-group">
+                                                    <input class="form-control form-control-user" id="txt_Pass2ToCreate" placeholder="Nhập mật khẩu lần 2" type="password" value="" />
+                                                </div>
+                                                <div class="form-group">
+                                                    <input class="btn btn-primary btn-user btn-block" id="btn_CreateUser" type="submit" />
+                                                    @*<button class="btn btn-primary btn-user btn-block" id="btn_CreateUser" onclick="createUser()">Create</button>*@
+                                                </div>
+                                            }
+
                                         </div>
                             </div>
                         </div>
@@ -100,6 +106,9 @@
 </div>
 
 <script>
+    $(".loader").hide();
+    $("#introProject").hide();
+
     var flagStatusCreateAccSec = false;
     var mode = 0;
     var url = new URL(document.URL);
@@ -108,8 +117,6 @@
         mode=1
     }
 
-    $(".loader").hide();
-        $("#introProject").hide();
         if (mode == 1) {
             $("#createAccSection").show();
             flagStatusCreateAccSec = true;
@@ -136,13 +143,13 @@
             }, 800);
     }
 
-    function createUser()
-    {
-        if (checkValidInputToCreateUser('txt_UserToCreate', 'txt_PassToCreate', 'txt_Pass2ToCreate'))
-        {
+    $("#createForm").on("submit", function () {
 
+        if (checkValidInputToCreateUser('txt_UserToCreate', 'txt_PassToCreate', 'txt_Pass2ToCreate')) {
+            MakeReadOnly();
+            alert("Pass all validation");
         }
-    }
+    });
 
     function checkValidInputToCreateUser(idUser, idPass, idPass2)
     {
