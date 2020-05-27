@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using MVC_Gas_Map.Models;
 namespace MVC_Gas_Map.Controllers
 {
     public class LoginController : Controller
@@ -21,7 +21,7 @@ namespace MVC_Gas_Map.Controllers
         }
 
         // GET: Login/Create
-        public ActionResult Create()
+        public ActionResult Create(string userId,User user)
         {
             return View();
         }

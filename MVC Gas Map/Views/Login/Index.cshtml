@@ -71,7 +71,12 @@
                                     <br />
                                 </div>
                                 <div style="margin-top: 1rem;display:none;" id="createAccSection">
-                                    @using (Ajax.BeginForm("Index", "Login",new AjaxOptions { HttpMethod = "POST", OnBegin= "createUser()" },new { id="createFrom"}))
+                                    @using (Ajax.BeginForm("Create", "Login",
+                                        new AjaxOptions
+                                        {   HttpMethod = "POST",
+                                            OnBegin = "createUser()" }
+                                        ,new
+                                        { id="createFrom"}))
                                     {
                                         <span class="ml-3">Tên đăng nhập</span>
                                         <div class="form-group">
@@ -142,7 +147,7 @@
 
     function createUser() {
         if (checkValidInputToCreateUser('txt_UserToCreate', 'txt_PassToCreate', 'txt_Pass2ToCreate')) {
-            alert("Pass all validation");
+            $('#btn_CreateUser').submit();
         }
     }
 
