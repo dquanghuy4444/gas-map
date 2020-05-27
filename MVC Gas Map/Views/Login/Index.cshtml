@@ -1,9 +1,9 @@
-﻿@model IEnumerable<MVC_Gas_Map.Models.User>
+﻿@model MVC_Gas_Map.Models.User
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-@*<link href="~/Css/StyleSheet1.css" rel="stylesheet" />*@
+
 <style type="text/css">
     .auto-style1 {
         text-align: center;
@@ -71,29 +71,45 @@
                                     <br />
                                 </div>
                                 <div style="margin-top: 1rem;display:none;" id="createAccSection">
-                                    @using (Ajax.BeginForm("Create", "Login",
-                                        new AjaxOptions
-                                        {   HttpMethod = "POST",
-                                            OnBegin = "createUser()" }
-                                        ,new
-                                        { id="createFrom"}))
-                                    {
-                                        <span class="ml-3">Tên đăng nhập</span>
-                                        <div class="form-group">
-                                            <input class="form-control form-control-user" id="txt_UserToCreate" placeholder="Nhập tên đăng nhập" value="" />
-                                        </div>
-                                        <span class="ml-3">Nhập mật khẩu</span>
-                                        <div class="form-group">
-                                            <input class="form-control form-control-user" id="txt_PassToCreate" placeholder="Nhập mật khẩu" type="password" value="" />
-                                        </div>
-                                        <span class="ml-3">Nhập lại mật khẩu</span>
-                                        <div class="form-group">
-                                            <input class="form-control form-control-user" id="txt_Pass2ToCreate" placeholder="Nhập mật khẩu lần 2" type="password" value="" />
-                                        </div>
-                                        <div class="form-group">
-                                            <input class="btn btn-primary btn-user btn-block" id="btn_CreateUser" type="submit" />
-                                        </div>
-                                    }
+                                    @*@using (Ajax.BeginForm("Create", "Login",
+            new AjaxOptions
+            {   HttpMethod = "POST"
+                }
+            ,new
+            { id="createFrom"}))
+        {
+            <span class="ml-3">Tên đăng nhập</span>
+            <div class="form-group">
+                @Html.TextBoxFor(model => model.UserID , new { @class = "form-control form-control-user", id= "txt_UserToCreate" })
+            </div>
+            <span class="ml-3">Nhập mật khẩu</span>
+            <div class="form-group">
+                @Html.PasswordFor(model => model.Password, new { @class = "form-control form-control-user", id = "txt_PassToCreate" })
+            </div>
+            <span class="ml-3">Nhập lại mật khẩu</span>
+            <div class="form-group">
+                <input class="form-control form-control-user" id="txt_Pass2ToCreate" type="password" value="" />
+            </div>
+            <div class="form-group">
+                <input class="btn btn-primary btn-user btn-block" id="btn_CreateUser" type="submit" />
+            </div>
+        }*@
+
+                                    <span class="ml-3">Tên đăng nhập</span>
+                                    <div class="form-group">
+                                        <input class="form-control form-control-user" id="txt_UserToCreate" type="text" value="" />
+                                    </div>
+                                    <span class="ml-3">Nhập mật khẩu</span>
+                                    <div class="form-group">
+                                        <input class="form-control form-control-user" id="txt_PassToCreate" type="password" value="" />
+                                    </div>
+                                    <span class="ml-3">Nhập lại mật khẩu</span>
+                                    <div class="form-group">
+                                        <input class="form-control form-control-user" id="txt_Pass2ToCreate" type="password" value="" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="btn btn-primary btn-user btn-block" id="btn_CreateUser" onclick="createUser()" type="submit" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -108,8 +124,6 @@
 </div>
 
 <script>
-    $(".loader").hide();
-    $("#introProject").hide();
 
     var flagStatusCreateAccSec = false;
     var mode = 0;
@@ -118,7 +132,20 @@
     if (search_params.has('mode')) {
         mode = 1
     }
+    window.onload = function () {
+        if (typeof (Storage) !== "undefined") {
+            var successMess = localStorage.getItem("successMess");
+            if (successMess != null) {
+                message_Success(successMess);
+                localStorage.removeItem("successMess");
+            }
+        }
+        else {
+            console.log("pohip");
+        }
+    }
 
+    //
     if (mode == 1) {
         $("#createAccSection").show();
         flagStatusCreateAccSec = true;
@@ -147,7 +174,26 @@
 
     function createUser() {
         if (checkValidInputToCreateUser('txt_UserToCreate', 'txt_PassToCreate', 'txt_Pass2ToCreate')) {
-            $('#btn_CreateUser').submit();
+            var userName = $('#txt_UserToCreate').val();
+            var passWord = $('#txt_PassToCreate').val();
+            var user = { UserName: userName, Password: passWord, PermissionID:0}
+
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                url: '/Login/Create',
+                async:false,
+                dataType: 'Json',
+                data: JSON.stringify(user),
+                complete: function (data) {
+                    console.log(data);
+                },
+                error: function (data) {
+                    console.log(data);
+                },
+            });
+            localStorage.setItem("successMess", JSON.stringify("Tạo tài khoản " + userName+" thành công") );
+            window.location.href = "/Login/Index";
         }
     }
 
@@ -191,7 +237,10 @@
                 return false;
             }
         }
-        setTimeout($('.notifyjs-wrapper').remove(), 2000);
+        //setTimeout($('.notifyjs-wrapper').remove(), 2000);
         return true;
     }
+
+    $(".loader").hide();
+    $("#introProject").hide();
 </script>

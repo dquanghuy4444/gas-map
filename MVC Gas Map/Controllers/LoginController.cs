@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using MVC_Gas_Map.Models;
@@ -19,29 +20,14 @@ namespace MVC_Gas_Map.Controllers
         {
             return View();
         }
-
+        
         // GET: Login/Create
-        public ActionResult Create(string userId,User user)
-        {
-            return View();
-        }
-
-        // POST: Login/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(User user)
         {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            HttpResponseMessage response = GlobalVariables.webApiClient.PostAsJsonAsync("User", user).Result;
+            return RedirectToAction("Index");
         }
-
         // GET: Login/Edit/5
         public ActionResult Edit(int id)
         {

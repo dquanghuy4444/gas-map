@@ -78,7 +78,7 @@ namespace API.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            userInSystem.CreatedDate = DateTime.Now;
             db.UserInSystems.Add(userInSystem);
             db.SaveChanges();
 

@@ -263,7 +263,7 @@
         <!-- End of Content Wrapper -->
     </div>
 
-    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/Sb.admin.min.js"></script>
     <script src="~/Scripts/notify.min.js"></script>
@@ -310,7 +310,15 @@
                     { position: "top center" }
                 );
             }
+        }
 
+        function message_Success(strMess)
+        {
+            $('.notifyjs-wrapper').remove();
+                $.notify(
+                    strMess,
+                    "success"
+                );
         }
     </script>
 </body>

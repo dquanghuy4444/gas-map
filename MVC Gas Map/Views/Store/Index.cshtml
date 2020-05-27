@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<MVC_Gas_Map.Models.Store>
 @{
     ViewBag.Title = "Trang chủ";
+
 }
 <!------>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
@@ -570,10 +571,10 @@
     //}
 
 
+
     // Window load
     window.onload = function () {
         $("#introProject").show();
-
         if (typeof (Storage) !== "undefined") {
             var curLocation = localStorage.getItem("curLocation");
             if (curLocation != null) {

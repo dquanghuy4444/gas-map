@@ -29,5 +29,6 @@ namespace API.Models
         public virtual DbSet<Guest> Guests { get; set; }
         public virtual DbSet<Store> Stores { get; set; }
         public virtual DbSet<UserInSystem> UserInSystems { get; set; }
+        public virtual DbSet<Image> Images { get; set; }
     }
 }

@@ -1,12 +1,147 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<div class="container mt-3" style="padding: 0px 13rem;">
+    <div class="card o-hidden border-0 shadow-lg my-5">
+        <h1 class="text-center mt-2">Thông tin khách hàng</h1>
+        <form style="padding:4rem 6rem 6rem">
+            <div class="col-md-8 col-xs-8 col-lg-8 col-sm-8">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">Họ và tên</label>
+                    <input type="text" name="fullname" class="form-control" id="GuestName" placeholder="Ex: Phạm Văn K" required>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlInput2">Ngày sinh</label>
+                    <input type="date" class="form-control" id="GuestBirth" name="birthday">
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlInput3">Số điện thoại</label>
+                    <input type="text" name="phone" class="form-control" id="GuestPhone" placeholder="Ex: 03277158868" required>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlInput4">Email</label>
+                    <input type="email" name="email" class="form-control" id="GuestEmail" placeholder="Ex: abc@gmail.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlSelect5">Giới tính</label>
+                    <select class="form-control" id="exampleFormControlSelect1">
+                        <option value="0">Male</option>
+                        <option value="1">Female</option>
+                        <option value="2">Other...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlInput6">Địa chỉ:</label>
+                    <input type="text" name="address" class="form-control" id="GuestAddress" placeholder="Ex: abcvzsdasd">
+                </div>
+            </div>
+            <div class="col-md-4 col-xs-4 col-lg-4 col-sm-4">
+                <div class="form-group">
+                    <div style="height: 30rem;width: 100%;position: absolute;border: 2px solid #cd8e8e;">
+                        <img src="https://anotherjavaduke.files.wordpress.com/2018/08/avataaars-2.png" style="position: relative;width: 100%;height: 100%;padding: 0.4rem;" />
+                    </div>
+                </div>
+                <div class="form-group" onload="myFunction()" style="margin-top: 31rem;">
+                    <input type="file" id="myFile" multiple size="50" onchange="myFunction()">
+                    <p id="demo"></p>
+                </div>
+
+            </div>
+            <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                <button type="button" class="btn btn-success" onclick="createGuestInfor()">Cập nhật thông tin</button>
+                <a href="/Store/Index" class="btn btn-danger">Thoát</a>
+            </div>
+        </form>
+    </div>
+</div>
 
 <script>
     $(".loader").hide();
     $("#introProject").hide();
+
+    //file include image
+     function myFunction(){
+      var x = document.getElementById("myFile");
+      var txt = "";
+      if ('files' in x) {
+        if (x.files.length == 0) {
+          txt = "Select one or more files.";
+        } else {
+          for (var i = 0; i < x.files.length; i++) {
+            txt += "<br><strong>" + (i+1) + ". file</strong><br>";
+            var file = x.files[i];
+            if ('name' in file) {
+              txt += "name: " + file.name + "<br>";
+            }
+            if ('size' in file) {
+              txt += "size: " + file.size + " bytes <br>";
+            }
+          }
+        }
+      }
+      else {
+        if (x.value == "") {
+          txt += "Select one or more files.";
+        } else {
+          txt += "The files property is not supported by your browser!";
+          txt  += "<br>The path of the selected file: " + x.value;
+        }
+      }
+      document.getElementById("demo").innerHTML = txt;
+    }
+
+    function checkValid() {
+        var strEmpty = "Chưa nhập thông tin";
+        var strFormatPhone = "Định dạng điện thoại sai";
+
+        var fullname = document.getElementById("GuestName").value;
+        var phone = document.getElementById("GuestPhone").value;
+        var email = document.getElementById("GuestEmail").value;
+        var addr = document.getElementById("GuestAddress").value;
+        var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+        var reg = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+
+        if ( fullname==="") {
+            message_Error("GuestName", strEmpty);
+            return false;
+        }
+
+        if (phone === "")
+        {
+            message_Error("GuestPhone", strEmpty);
+            return false;
+        }
+        else {
+            if (vnf_regex.test(phone) == false) {
+                message_Error("GuestPhone", strFormatPhone);
+                return false;
+            }
+        }
+
+        if (email === "") {
+            message_Error("GuestEmail", strEmpty);
+            return false;
+        }
+        else {
+            if (reg.test(email) == false) {
+                message_Error("GuestEmail", strEmpty);
+                return false;
+            }
+        }
+
+        if (addr === "") {
+            message_Error("GuestAddress", strEmpty);
+            return false;
+        }
+
+        return true;
+    }
+
+    function createGuestInfor() {
+        if (checkValid()) {
+
+        }
+    }
 </script>

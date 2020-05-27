@@ -12,16 +12,11 @@ namespace API.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Store
+    public partial class Image
     {
         public int ID { get; set; }
-        public string StoreID { get; set; }
-        public string StoreName { get; set; }
-        public string StoreAddress { get; set; }
-        public string StorePhone { get; set; }
-        public string StoreEmail { get; set; }
-        public string StoreDetail { get; set; }
-        public string UserID { get; set; }
-        public Nullable<System.DateTime> CreatedDate { get; set; }
+        public string ImageID { get; set; }
+        public string HostObjID { get; set; }
+        public string ImageSrc { get; set; }
     }
 }

@@ -55,5 +55,15 @@
     <EntitySet Name="Guests" EntityType="Self.Guest" />
     <EntitySet Name="Stores" EntityType="Self.Store" />
     <EntitySet Name="UserInSystems" EntityType="Self.UserInSystem" />
+    <EntitySet Name="Images" EntityType="Model.Image" />
   </EntityContainer>
+  <EntityType Name="Image">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ImageID" Type="String" MaxLength="11" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
+    <Property Name="HostObjID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ImageSrc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
 </Schema>
