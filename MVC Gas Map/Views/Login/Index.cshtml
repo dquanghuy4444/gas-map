@@ -33,66 +33,63 @@
                         <!-- Nested Row within Card Body -->
                         <div class="auto-style2">
                             <div class="p-5">
+                                <span class="ml-3">Tên đăng nhập</span>
+                                <div class="form-group">
+                                    <input class="form-control form-control-user" id="txt_UserToLogin" placeholder="Nhập tên đăng nhập" type="text" value="" />
+                                </div>
+                                <span class="ml-3">Mật khẩu</span>
+                                <div class="form-group">
+                                    <input class="form-control form-control-user" id="txt_PassToLogin" placeholder="Nhập mật khẩu" type="password" value="" />
 
-                                    <span class="ml-3">Tên đăng nhập</span>
-                                    <div class="form-group">
-                                        <input class="form-control form-control-user" id="txt_UserToLogin" placeholder="Nhập tên đăng nhập" type="text" value="" />
+                                </div>
+                                <div class="form-group">
+                                    <div class="custom-control custom-checkbox small">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck">
+                                        <asp:Label ID="lbl_tb" runat="server" ForeColor="Red"></asp:Label>
+                                        <br />
+                                        &nbsp;<label class="custom-control-label" for="customCheck">Remember Me</label>
                                     </div>
-                                    <span class="ml-3">Mật khẩu</span>
-                                    <div class="form-group">
-                                        <input class="form-control form-control-user" id="txt_PassToLogin" placeholder="Nhập mật khẩu" type="password" value="" />
+                                </div>
+                                <div>
+                                    <input class="btn btn-facebook btn-user btn-block" id="txt_username2" name="UserName" type="submit" value="Login" />
+                                    @*<asp:Button ID="btn_login" runat="server" class="btn btn-primary btn-user btn-block" Text="Login" OnClick="btn_login_Click" />*@
+                                </div>
+                                <hr>
+                                <a href="index.html" class="btn btn-google btn-user btn-block">
+                                    <i class="fa fa-google fa-fw"></i> Login with Google
+                                </a>
+                                <a href="https://www.facebook.com/dialog/oauth?client_id=594051934729967&redirect_uri=https://localhost:44342/loginfb.aspx" class="btn btn-facebook btn-user btn-block">
+                                    <i class="fa fa-facebook-f fa-fw"></i> Login with Facebook
+                                </a>
 
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="custom-control custom-checkbox small">
-                                            <input type="checkbox" class="custom-control-input" id="customCheck">
-                                            <asp:Label ID="lbl_tb" runat="server" ForeColor="Red"></asp:Label>
-                                            <br />
-                                            &nbsp;<label class="custom-control-label" for="customCheck">Remember Me</label>
+                                <hr>
+                                <div class="text-center">
+                                    <a class="small" href="forgot-password.html">Forgot Password?</a>
+                                </div>
+                                <div class="auto-style1">
+                                    <a href="#" id="btn_ToggleCreateAcc" onclick="toggleCreateAccSection()" class="small">Create an Account!</a>
+                                    <br />
+                                </div>
+                                <div style="margin-top: 1rem;display:none;" id="createAccSection">
+                                    @using (Ajax.BeginForm("Index", "Login",new AjaxOptions { HttpMethod = "POST", OnBegin= "createUser()" },new { id="createFrom"}))
+                                    {
+                                        <span class="ml-3">Tên đăng nhập</span>
+                                        <div class="form-group">
+                                            <input class="form-control form-control-user" id="txt_UserToCreate" placeholder="Nhập tên đăng nhập" value="" />
                                         </div>
+                                        <span class="ml-3">Nhập mật khẩu</span>
+                                        <div class="form-group">
+                                            <input class="form-control form-control-user" id="txt_PassToCreate" placeholder="Nhập mật khẩu" type="password" value="" />
                                         </div>
-                                        <div>
-                                            <input class="btn btn-facebook btn-user btn-block" id="txt_username2" name="UserName" type="submit" value="Login" />
-                                            @*<asp:Button ID="btn_login" runat="server" class="btn btn-primary btn-user btn-block" Text="Login" OnClick="btn_login_Click" />*@
+                                        <span class="ml-3">Nhập lại mật khẩu</span>
+                                        <div class="form-group">
+                                            <input class="form-control form-control-user" id="txt_Pass2ToCreate" placeholder="Nhập mật khẩu lần 2" type="password" value="" />
                                         </div>
-                                        <hr>
-                                        <a href="index.html" class="btn btn-google btn-user btn-block">
-                                            <i class="fa fa-google fa-fw"></i> Login with Google
-                                        </a>
-                                        <a href="https://www.facebook.com/dialog/oauth?client_id=594051934729967&redirect_uri=https://localhost:44342/loginfb.aspx" class="btn btn-facebook btn-user btn-block">
-                                            <i class="fa fa-facebook-f fa-fw"></i> Login with Facebook
-                                        </a>
-
-                                        <hr>
-                                        <div class="text-center">
-                                            <a class="small" href="forgot-password.html">Forgot Password?</a>
+                                        <div class="form-group">
+                                            <input class="btn btn-primary btn-user btn-block" id="btn_CreateUser" type="submit" />
                                         </div>
-                                        <div class="auto-style1">
-                                            <a href="#" id="btn_ToggleCreateAcc" onclick="toggleCreateAccSection()" class="small">Create an Account!</a>
-                                            <br />
-                                        </div>
-                                        <div style="margin-top: 1rem;display:none;" id="createAccSection">
-                                            @using (Html.BeginForm("Index","Login",FormMethod.Post,new { id="createForm",role="form"}))
-                                            {
-                                                <span class="ml-3">Tên đăng nhập</span>
-                                                <div class="form-group">
-                                                    <input class="form-control form-control-user" id="txt_UserToCreate" placeholder="Nhập tên đăng nhập" value="" />
-                                                </div>
-                                                <span class="ml-3">Nhập mật khẩu</span>
-                                                <div class="form-group">
-                                                    <input class="form-control form-control-user" id="txt_PassToCreate" placeholder="Nhập mật khẩu" type="password" value="" />
-                                                </div>
-                                                <span class="ml-3">Nhập lại mật khẩu</span>
-                                                <div class="form-group">
-                                                    <input class="form-control form-control-user" id="txt_Pass2ToCreate" placeholder="Nhập mật khẩu lần 2" type="password" value="" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <input class="btn btn-primary btn-user btn-block" id="btn_CreateUser" type="submit" />
-                                                    @*<button class="btn btn-primary btn-user btn-block" id="btn_CreateUser" onclick="createUser()">Create</button>*@
-                                                </div>
-                                            }
-
-                                        </div>
+                                    }
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -114,14 +111,14 @@
     var url = new URL(document.URL);
     var search_params = url.searchParams;
     if (search_params.has('mode')) {
-        mode=1
+        mode = 1
     }
 
-        if (mode == 1) {
-            $("#createAccSection").show();
-            flagStatusCreateAccSec = true;
-            scrollToIntroSection_FrLogin('createAccSection');
-        }
+    if (mode == 1) {
+        $("#createAccSection").show();
+        flagStatusCreateAccSec = true;
+        scrollToIntroSection_FrLogin('createAccSection');
+    }
 
     function toggleCreateAccSection() {
         if (!flagStatusCreateAccSec) {
@@ -134,25 +131,22 @@
             flagStatusCreateAccSec = false;
             scrollToIntroSection_FrLogin('loginin');
         }
-        }
-
-    function scrollToIntroSection_FrLogin(id) {
-            var targetElement = $('#'+id);
-            $([document.documentElement, document.body]).animate({
-                scrollTop: targetElement.offset().top
-            }, 800);
     }
 
-    $("#createForm").on("submit", function () {
+    function scrollToIntroSection_FrLogin(id) {
+        var targetElement = $('#' + id);
+        $([document.documentElement, document.body]).animate({
+            scrollTop: targetElement.offset().top
+        }, 800);
+    }
 
+    function createUser() {
         if (checkValidInputToCreateUser('txt_UserToCreate', 'txt_PassToCreate', 'txt_Pass2ToCreate')) {
-            MakeReadOnly();
             alert("Pass all validation");
         }
-    });
+    }
 
-    function checkValidInputToCreateUser(idUser, idPass, idPass2)
-    {
+    function checkValidInputToCreateUser(idUser, idPass, idPass2) {
         var strEmpty = "Chưa nhập thông tin";
         var strInputAgain = "Mật khẩu nhập lại không giống mật khẩu đầu tiên";
         var strLength = "Nhập thiếu .Thông tin phải bằng hoặc lớn hơn 6 kí tự";
@@ -162,8 +156,7 @@
             message_Error(idUser, strEmpty);
             return false;
         }
-        else if (strUser.length < 6)
-        {
+        else if (strUser.length < 6) {
             message_Error(idUser, strLength);
             return false;
         }
@@ -173,34 +166,27 @@
             message_Error(idPass, strEmpty);
             return false;
         }
-        else if (strPass.length < 6)
-        {
+        else if (strPass.length < 6) {
             message_Error(idPass, strLength);
             return false;
         }
 
-        if (idPass2 !== "")
-        {
+        if (idPass2 !== "") {
             var strPass2 = $('#' + idPass2).val();
-            if (strPass2 === "")
-            {
+            if (strPass2 === "") {
                 message_Error(idPass2, strEmpty);
                 return false;
             }
-            else if (strPass2.length < 6)
-            {
+            else if (strPass2.length < 6) {
                 message_Error(idPass2, strLength);
                 return false;
             }
-            else if (strPass !== strPass2)
-            {
+            else if (strPass !== strPass2) {
                 message_Error(idPass2, strInputAgain);
                 return false;
             }
         }
-
-        setTimeout($('.notifyjs-wrapper').remove(), 2000);      
+        setTimeout($('.notifyjs-wrapper').remove(), 2000);
         return true;
     }
-
 </script>

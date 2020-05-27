@@ -263,8 +263,7 @@
         <!-- End of Content Wrapper -->
     </div>
 
-
-    @*<script src="~/Scripts/jquery.min.js"></script>*@
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/Sb.admin.min.js"></script>
     <script src="~/Scripts/notify.min.js"></script>
@@ -297,16 +296,14 @@
 
     <script>
         function message_Error(id, strMess) {
-            if (id === '')
-            {
-                setTimeout($('.notifyjs-wrapper').remove(), 2000);              
+            if (id === '') {
+                setTimeout($('.notifyjs-wrapper').remove(), 2000);
                 $.notify(
                     strMess,
                     { position: "top-center" }
                 );
             }
-            else
-            {
+            else {
                 setTimeout($('.notifyjs-wrapper').remove(), 2000);
                 $("#" + id).notify(
                     strMess,
