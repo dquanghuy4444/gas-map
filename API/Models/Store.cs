@@ -21,6 +21,8 @@ namespace API.Models
         public string StorePhone { get; set; }
         public string StoreEmail { get; set; }
         public string StoreDetail { get; set; }
+        public string Latitude { get; set; }
+        public string Longtitude { get; set; }
         public string UserID { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
     }

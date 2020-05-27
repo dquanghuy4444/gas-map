@@ -40,7 +40,7 @@
             <div class="col-md-4 col-xs-4 col-lg-4 col-sm-4">
                 <div class="form-group">
                     <div style="height: 30rem;width: 100%;position: absolute;border: 2px solid #cd8e8e;">
-                        <img src="https://anotherjavaduke.files.wordpress.com/2018/08/avataaars-2.png" style="position: relative;width: 100%;height: 100%;padding: 0.4rem;" />
+                        <img src="~/Images/avataaars-2.png" style="position: relative;width: 100%;height: 100%;padding: 0.4rem;" />
                     </div>
                 </div>
                 <div class="form-group" onload="myFunction()" style="margin-top: 31rem;">
@@ -60,6 +60,11 @@
 <script>
     $(".loader").hide();
     $("#introProject").hide();
+
+    window.onload = function ()
+    {
+        showSuccessOrError();
+    }
 
     //file include image
      function myFunction(){

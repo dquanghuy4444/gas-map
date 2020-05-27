@@ -35,11 +35,11 @@
                             <div class="p-5">
                                 <span class="ml-3">Tên đăng nhập</span>
                                 <div class="form-group">
-                                    <input class="form-control form-control-user" id="txt_UserToLogin" placeholder="Nhập tên đăng nhập" type="text" value="" />
+                                    <input class="form-control form-control-user" id="txt_UserToLogin" type="text" value="" />
                                 </div>
                                 <span class="ml-3">Mật khẩu</span>
                                 <div class="form-group">
-                                    <input class="form-control form-control-user" id="txt_PassToLogin" placeholder="Nhập mật khẩu" type="password" value="" />
+                                    <input class="form-control form-control-user" id="txt_PassToLogin" type="password" value="" />
 
                                 </div>
                                 <div class="form-group">
@@ -47,11 +47,12 @@
                                         <input type="checkbox" class="custom-control-input" id="customCheck">
                                         <asp:Label ID="lbl_tb" runat="server" ForeColor="Red"></asp:Label>
                                         <br />
-                                        &nbsp;<label class="custom-control-label" for="customCheck">Remember Me</label>
+                                        &nbsp;
+                                        <label class="custom-control-label" for="customCheck">Remember Me</label>
                                     </div>
                                 </div>
                                 <div>
-                                    <input class="btn btn-facebook btn-user btn-block" id="txt_username2" name="UserName" type="submit" value="Login" />
+                                    <input class="btn btn-facebook btn-user btn-block" id="txt_username2" name="UserName" onclick="loginSystem()" type="submit" value="Đăng nhập" />
                                     @*<asp:Button ID="btn_login" runat="server" class="btn btn-primary btn-user btn-block" Text="Login" OnClick="btn_login_Click" />*@
                                 </div>
                                 <hr>
@@ -71,29 +72,29 @@
                                     <br />
                                 </div>
                                 <div style="margin-top: 1rem;display:none;" id="createAccSection">
-                                    @*@using (Ajax.BeginForm("Create", "Login",
-            new AjaxOptions
-            {   HttpMethod = "POST"
-                }
-            ,new
-            { id="createFrom"}))
-        {
-            <span class="ml-3">Tên đăng nhập</span>
-            <div class="form-group">
-                @Html.TextBoxFor(model => model.UserID , new { @class = "form-control form-control-user", id= "txt_UserToCreate" })
-            </div>
-            <span class="ml-3">Nhập mật khẩu</span>
-            <div class="form-group">
-                @Html.PasswordFor(model => model.Password, new { @class = "form-control form-control-user", id = "txt_PassToCreate" })
-            </div>
-            <span class="ml-3">Nhập lại mật khẩu</span>
-            <div class="form-group">
-                <input class="form-control form-control-user" id="txt_Pass2ToCreate" type="password" value="" />
-            </div>
-            <div class="form-group">
-                <input class="btn btn-primary btn-user btn-block" id="btn_CreateUser" type="submit" />
-            </div>
-        }*@
+                                                            @*@using (Ajax.BeginForm("Create", "Login",
+                                    new AjaxOptions
+                                    {   HttpMethod = "POST"
+                                        }
+                                    ,new
+                                    { id="createFrom"}))
+                                {
+                                    <span class="ml-3">Tên đăng nhập</span>
+                                    <div class="form-group">
+                                        @Html.TextBoxFor(model => model.UserID , new { @class = "form-control form-control-user", id= "txt_UserToCreate" })
+                                    </div>
+                                    <span class="ml-3">Nhập mật khẩu</span>
+                                    <div class="form-group">
+                                        @Html.PasswordFor(model => model.Password, new { @class = "form-control form-control-user", id = "txt_PassToCreate" })
+                                    </div>
+                                    <span class="ml-3">Nhập lại mật khẩu</span>
+                                    <div class="form-group">
+                                        <input class="form-control form-control-user" id="txt_Pass2ToCreate" type="password" value="" />
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="btn btn-primary btn-user btn-block" id="btn_CreateUser" type="submit" />
+                                    </div>
+                                }*@
 
                                     <span class="ml-3">Tên đăng nhập</span>
                                     <div class="form-group">
@@ -108,7 +109,7 @@
                                         <input class="form-control form-control-user" id="txt_Pass2ToCreate" type="password" value="" />
                                     </div>
                                     <div class="form-group">
-                                        <input class="btn btn-primary btn-user btn-block" id="btn_CreateUser" onclick="createUser()" type="submit" />
+                                        <input class="btn btn-primary btn-user btn-block" id="btn_CreateUser" onclick="createUser()" type="submit" value="Đăng kí" />
                                     </div>
                                 </div>
                             </div>
@@ -133,35 +134,34 @@
         mode = 1
     }
     window.onload = function () {
-        if (typeof (Storage) !== "undefined") {
-            var successMess = localStorage.getItem("successMess");
-            if (successMess != null) {
-                message_Success(successMess);
-                localStorage.removeItem("successMess");
-            }
+
+        showSuccessOrError();
+
+        if (mode == 1) {
+            toggleCreateAccSection();
         }
-        else {
-            console.log("pohip");
-        }
+        else
+            $('#txt_UserToLogin').focus();
     }
 
     //
-    if (mode == 1) {
-        $("#createAccSection").show();
-        flagStatusCreateAccSec = true;
-        scrollToIntroSection_FrLogin('createAccSection');
-    }
 
     function toggleCreateAccSection() {
         if (!flagStatusCreateAccSec) {
             $("#createAccSection").show();
             flagStatusCreateAccSec = true;
+            $('#txt_UserToCreate').focus();
             scrollToIntroSection_FrLogin('createAccSection');
         }
         else {
             $("#createAccSection").hide();
             flagStatusCreateAccSec = false;
             scrollToIntroSection_FrLogin('loginin');
+            $('#txt_UserToLogin').focus();
+
+            $('#txt_UserToCreate').val('');
+            $('#txt_PassToCreate').val('');
+            $('#txt_Pass2ToCreate').val('');
         }
     }
 
@@ -173,7 +173,9 @@
     }
 
     function createUser() {
-        if (checkValidInputToCreateUser('txt_UserToCreate', 'txt_PassToCreate', 'txt_Pass2ToCreate')) {
+        if (checkValidInputToCreateUser('txt_UserToCreate', 'txt_PassToCreate', 'txt_Pass2ToCreate'))
+        {
+            var status = 0;
             var userName = $('#txt_UserToCreate').val();
             var passWord = $('#txt_PassToCreate').val();
             var user = { UserName: userName, Password: passWord, PermissionID:0}
@@ -185,15 +187,26 @@
                 async:false,
                 dataType: 'Json',
                 data: JSON.stringify(user),
-                complete: function (data) {
-                    console.log(data);
+                success: function (data) {
+                    status = data.status;
                 },
                 error: function (data) {
-                    console.log(data);
+                    status = 2;
                 },
             });
-            localStorage.setItem("successMess", JSON.stringify("Tạo tài khoản " + userName+" thành công") );
-            window.location.href = "/Login/Index";
+            if (status == 0) {
+                localStorage.setItem("successMess", JSON.stringify("Tạo tài khoản " + userName + " thành công"));
+                window.location.href = "/Login/Index";
+            }
+            else if (status == 1) {
+                localStorage.setItem("errorMess", JSON.stringify("Tên tài khản đã tồn tại"));
+                window.location.href = "/Login/Index?mode=1";
+            }
+            else {
+                localStorage.setItem("errorMess", JSON.stringify("Tạo tài khoản thất bại"));
+                window.location.href = "/Login/Index?mode=1";
+            }
+
         }
     }
 
@@ -237,8 +250,43 @@
                 return false;
             }
         }
-        //setTimeout($('.notifyjs-wrapper').remove(), 2000);
         return true;
+    }
+
+    function loginSystem() {
+        if (checkValidInputToCreateUser('txt_UserToLogin', 'txt_PassToLogin', '')) {
+            var status = 0;
+            var userName = $('#txt_UserToLogin').val();
+            var passWord = $('#txt_PassToLogin').val();
+            var user = { UserName: userName, Password: passWord, }
+
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                url: '/Login/Get',
+                async: false,
+                dataType: 'Json',
+                data: JSON.stringify(user),
+                success: function (data) {
+                    status = data.status;
+                },
+                error: function (data) {
+                    status = 1;
+                },
+            });
+            if (status == 0) {
+                localStorage.setItem("successMess", JSON.stringify("Đăng nhập thành công"));
+                window.location.href = "/Guest/Index";
+            }
+            else if (status == 1) {
+                localStorage.setItem("errorMess", JSON.stringify("Tài khoản hoặc mật khẩu không đúng"));
+                window.location.href = "/Login/Index";
+            }
+            else {
+                localStorage.setItem("errorMess", JSON.stringify("Lỗi đăng nhập . Xin thử lại"));
+                window.location.href = "/Login/Index";
+            }
+        }
     }
 
     $(".loader").hide();

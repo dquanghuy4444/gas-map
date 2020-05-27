@@ -6,6 +6,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web.Http;
 using System.Web.Http.Description;
 using API.Models;
@@ -24,15 +25,19 @@ namespace API.Controllers
 
         // GET: api/User/5
         [ResponseType(typeof(UserInSystem))]
-        public IHttpActionResult GetUserInSystem(int id)
+        public IHttpActionResult GetUserInSystem(string username,string password)
         {
-            UserInSystem userInSystem = db.UserInSystems.Find(id);
+            if (username =="" || password=="")
+            {
+                return Content(HttpStatusCode.NotFound, ""); 
+            }
+            UserInSystem userInSystem = db.UserInSystems.FirstOrDefault(x=>x.UserName== username && x.UserName == password);
             if (userInSystem == null)
             {
-                return NotFound();
+                return Content(HttpStatusCode.Forbidden, "");
             }
 
-            return Ok(userInSystem);
+                return Content(HttpStatusCode.Accepted, "");
         }
 
         // PUT: api/User/5
@@ -77,6 +82,11 @@ namespace API.Controllers
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
+            }
+            var user = db.UserInSystems.FirstOrDefault(x => x.UserName == userInSystem.UserName);
+            if(user != null)
+            {
+                return Content(HttpStatusCode.Conflict, "Đã có user");
             }
             userInSystem.CreatedDate = DateTime.Now;
             db.UserInSystems.Add(userInSystem);

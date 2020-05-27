@@ -320,6 +320,26 @@
                     "success"
                 );
         }
+
+        function showSuccessOrError() {
+            if (typeof (Storage) !== "undefined") {
+                var successMess = localStorage.getItem("successMess");
+                if (successMess != null) {
+                    message_Success(successMess);
+                    localStorage.removeItem("successMess");
+                }
+                else {
+                    var errorMess = localStorage.getItem("errorMess");
+                    if (errorMess != null) {
+                        message_Error('', errorMess);
+                        localStorage.removeItem("errorMess");
+                    }
+                }
+            }
+            else {
+                console.log("pohip");
+            }
+        }
     </script>
 </body>
 </html>

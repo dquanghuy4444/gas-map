@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
@@ -23,11 +24,28 @@ namespace MVC_Gas_Map.Controllers
         
         // GET: Login/Create
         [HttpPost]
-        public ActionResult Create(User user)
+        public JsonResult Create(User user)
         {
             HttpResponseMessage response = GlobalVariables.webApiClient.PostAsJsonAsync("User", user).Result;
-            return RedirectToAction("Index");
+            if(response.StatusCode == HttpStatusCode.Created)
+                return Json(new { status = 0 });
+            else if (response.StatusCode == HttpStatusCode.Conflict)
+                return Json(new { status = 1 });
+            else return Json(new { status = 2 });
         }
+
+        // GET: Login/Create
+        [HttpPost]
+        public JsonResult Get(User user)
+        {
+            HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("User?username="+user.UserName+"&&password="+user.Password).Result;
+            if (response.StatusCode == HttpStatusCode.Accepted)
+                return Json(new { status = 0 });
+            else if (response.StatusCode == HttpStatusCode.Forbidden)
+                return Json(new { status = 1 });
+            else return Json(new { status = 2 });
+        }
+
         // GET: Login/Edit/5
         public ActionResult Edit(int id)
         {
