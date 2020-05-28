@@ -26,6 +26,7 @@ namespace MVC_Gas_Map.Controllers
         [HttpPost]
         public JsonResult Create(User user)
         {
+            user.CreatedDate = DateTime.Now;
             HttpResponseMessage response = GlobalVariables.webApiClient.PostAsJsonAsync("User", user).Result;
             if(response.StatusCode == HttpStatusCode.Created)
                 return Json(new { status = 0 });
@@ -34,13 +35,18 @@ namespace MVC_Gas_Map.Controllers
             else return Json(new { status = 2 });
         }
 
-        // GET: Login/Create
+        // GET: Login/Get
         [HttpPost]
         public JsonResult Get(User user)
         {
             HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("User?username="+user.UserName+"&&password="+user.Password).Result;
             if (response.StatusCode == HttpStatusCode.Accepted)
-                return Json(new { status = 0 });
+            {
+                var permissId = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+                //Session["userName"] = user.UserName;
+                return Json(new { status = 0,permissionID= permissId });
+            }
+
             else if (response.StatusCode == HttpStatusCode.Forbidden)
                 return Json(new { status = 1 });
             else return Json(new { status = 2 });

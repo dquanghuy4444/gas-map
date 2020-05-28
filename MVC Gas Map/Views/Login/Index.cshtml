@@ -135,7 +135,7 @@
     }
     window.onload = function () {
 
-        showSuccessOrError();
+        //showSuccessOrError();
 
         if (mode == 1) {
             toggleCreateAccSection();
@@ -175,10 +175,12 @@
     function createUser() {
         if (checkValidInputToCreateUser('txt_UserToCreate', 'txt_PassToCreate', 'txt_Pass2ToCreate'))
         {
-            var status = 0;
+            var status = 2;
+            var now = new Date();
+
             var userName = $('#txt_UserToCreate').val();
             var passWord = $('#txt_PassToCreate').val();
-            var user = { UserName: userName, Password: passWord, PermissionID:0}
+            var user = { UserName: userName, Password: passWord, PermissionID: 0};
 
             $.ajax({
                 type: 'POST',
@@ -255,7 +257,8 @@
 
     function loginSystem() {
         if (checkValidInputToCreateUser('txt_UserToLogin', 'txt_PassToLogin', '')) {
-            var status = 0;
+            var status = 1;
+            var permissionID = 0;
             var userName = $('#txt_UserToLogin').val();
             var passWord = $('#txt_PassToLogin').val();
             var user = { UserName: userName, Password: passWord, }
@@ -269,6 +272,7 @@
                 data: JSON.stringify(user),
                 success: function (data) {
                     status = data.status;
+                    permissionID = data.permissionID;
                 },
                 error: function (data) {
                     status = 2;
@@ -276,7 +280,10 @@
             });
             if (status == 0) {
                 localStorage.setItem("successMess", JSON.stringify("Đăng nhập thành công"));
-                window.location.href = "/Guest/Index";
+                if (permissionID==0)
+                    window.location.href = "/Guest/Index";
+                else
+                    window.location.href = "/Store/Index";
             }
             else if (status == 1) {
                 localStorage.setItem("errorMess", JSON.stringify("Tài khoản hoặc mật khẩu không đúng"));

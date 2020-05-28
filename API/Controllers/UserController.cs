@@ -23,7 +23,7 @@ namespace API.Controllers
             return db.UserInSystems;
         }
 
-        // GET: api/User/5
+        // GET: api/User?username=x&&password=x
         [ResponseType(typeof(UserInSystem))]
         public IHttpActionResult GetUserInSystem(string username,string password)
         {
@@ -31,13 +31,20 @@ namespace API.Controllers
             {
                 return Content(HttpStatusCode.NotFound, ""); 
             }
-            UserInSystem userInSystem = db.UserInSystems.FirstOrDefault(x=>x.UserName== username && x.UserName == password);
+            UserInSystem userInSystem = db.UserInSystems.FirstOrDefault(x=>x.UserName == username && x.Password == password);
             if (userInSystem == null)
             {
                 return Content(HttpStatusCode.Forbidden, "");
             }
-
-                return Content(HttpStatusCode.Accepted, "");
+            return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.Accepted)
+            {
+                Content = new StringContent
+                (
+                    userInSystem.PermissionID.ToString(),
+                    Encoding.UTF8,
+                    "text/html"
+                )
+            });
         }
 
         // PUT: api/User/5
@@ -88,7 +95,6 @@ namespace API.Controllers
             {
                 return Content(HttpStatusCode.Conflict, "Đã có user");
             }
-            userInSystem.CreatedDate = DateTime.Now;
             db.UserInSystems.Add(userInSystem);
             db.SaveChanges();
 

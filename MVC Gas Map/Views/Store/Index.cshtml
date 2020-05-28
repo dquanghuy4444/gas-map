@@ -702,7 +702,7 @@
 
         marker = new L.marker(coord, { icon: storeIcon });
 
-        console.log(marker);
+        //console.log(marker);
 
         marker.options.highlight = "permanent";
         //marker.addTo(mapObj);
@@ -726,7 +726,7 @@
             .setLatLng(e.latlng)
             .setContent(html)
             .openOn(mapObj);//hiện popup
-        console.log(e.latlng);
+        //console.log(e.latlng);
     }
     //
     function screenFull(map) {
@@ -761,7 +761,7 @@
                 if (1 == 1) {
                     var layerGroup = new L.layerGroup([osm2]);
                     var responsive = data.data;
-                    console.log(responsive.length);
+                    //console.log(responsive.length);
                     for (let i = 0; i < responsive.length; i++) {
                         if (responsive[i].StoreName == null) {
                             name = `Cửa hàng gas`;
