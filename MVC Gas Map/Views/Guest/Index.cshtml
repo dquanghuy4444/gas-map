@@ -60,6 +60,16 @@
     $(".loader").hide();
     $("#introProject").hide();
 
+    window.onload = function () {
+        loadGuestInfo();
+    }
+
+    function loadGuestInfo()
+    {
+        var userIDBySes = sessionStorage.getItem("UserID");
+
+    }
+
  
 
     //file include image
