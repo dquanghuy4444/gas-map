@@ -10,6 +10,7 @@ namespace MVC_Gas_Map.Controllers
 {
     public class LoginController : Controller
     {
+
         // GET: Login
         public ActionResult Index()
         {
@@ -43,7 +44,6 @@ namespace MVC_Gas_Map.Controllers
             if (response.StatusCode == HttpStatusCode.Accepted)
             {
                 var permissId = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
-                //Session["userName"] = user.UserName;
                 return Json(new { status = 0,permissionID= permissId });
             }
 

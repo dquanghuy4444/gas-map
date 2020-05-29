@@ -136,3 +136,49 @@ D:\MVC-Api-GasMap\MVC Gas Map\obj\Debug\MVC Gas Map.csproj.CoreCompileInputs.cac
 D:\MVC-Api-GasMap\MVC Gas Map\obj\Debug\MVC Gas Map.csproj.CopyComplete
 D:\MVC-Api-GasMap\MVC Gas Map\obj\Debug\MVC Gas Map.dll
 D:\MVC-Api-GasMap\MVC Gas Map\obj\Debug\MVC Gas Map.pdb
+G:\MVC-Api-GasMap\MVC Gas Map\bin\MVC Gas Map.dll.config
+G:\MVC-Api-GasMap\MVC Gas Map\bin\MVC Gas Map.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\MVC Gas Map.pdb
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Antlr3.Runtime.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Microsoft.AI.Agent.Intercept.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Microsoft.AI.DependencyCollector.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Microsoft.AI.PerfCounterCollector.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Microsoft.AI.ServerTelemetryChannel.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Microsoft.AI.Web.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Microsoft.AI.WindowsServer.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Microsoft.ApplicationInsights.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Microsoft.AspNet.TelemetryCorrelation.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Microsoft.Web.Infrastructure.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Newtonsoft.Json.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Diagnostics.DiagnosticSource.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Net.Http.Formatting.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Web.Helpers.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Web.Mvc.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Web.Optimization.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Web.Razor.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Web.WebPages.Deployment.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Web.WebPages.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Web.WebPages.Razor.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\WebGrease.dll
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Net.Http.Formatting.xml
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Web.Helpers.xml
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Web.Mvc.xml
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Web.Optimization.xml
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Web.Razor.xml
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Web.WebPages.xml
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Web.WebPages.Deployment.xml
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Web.WebPages.Razor.xml
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Newtonsoft.Json.xml
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Antlr3.Runtime.pdb
+G:\MVC-Api-GasMap\MVC Gas Map\bin\System.Diagnostics.DiagnosticSource.xml
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Microsoft.AspNet.TelemetryCorrelation.xml
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Microsoft.AI.DependencyCollector.xml
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Microsoft.AI.WindowsServer.xml
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Microsoft.AI.Web.xml
+G:\MVC-Api-GasMap\MVC Gas Map\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+G:\MVC-Api-GasMap\MVC Gas Map\obj\Debug\MVC Gas Map.csprojAssemblyReference.cache
+G:\MVC-Api-GasMap\MVC Gas Map\obj\Debug\MVC Gas Map.csproj.CoreCompileInputs.cache
+G:\MVC-Api-GasMap\MVC Gas Map\obj\Debug\MVC Gas Map.csproj.CopyComplete
+G:\MVC-Api-GasMap\MVC Gas Map\obj\Debug\MVC Gas Map.dll
+G:\MVC-Api-GasMap\MVC Gas Map\obj\Debug\MVC Gas Map.pdb

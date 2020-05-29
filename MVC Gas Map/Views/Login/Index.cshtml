@@ -59,7 +59,7 @@
                                 <a href="index.html" class="btn btn-google btn-user btn-block">
                                     <i class="fa fa-google fa-fw"></i> Login with Google
                                 </a>
-                                <a href="https://www.facebook.com/dialog/oauth?client_id=594051934729967&redirect_uri=https://localhost:44342/loginfb.aspx" class="btn btn-facebook btn-user btn-block">
+                                <a href="" class="btn btn-facebook btn-user btn-block">
                                     <i class="fa fa-facebook-f fa-fw"></i> Login with Facebook
                                 </a>
 
@@ -72,29 +72,29 @@
                                     <br />
                                 </div>
                                 <div style="margin-top: 1rem;display:none;" id="createAccSection">
-                                                            @*@using (Ajax.BeginForm("Create", "Login",
-                                    new AjaxOptions
-                                    {   HttpMethod = "POST"
-                                        }
-                                    ,new
-                                    { id="createFrom"}))
-                                {
-                                    <span class="ml-3">Tên đăng nhập</span>
-                                    <div class="form-group">
-                                        @Html.TextBoxFor(model => model.UserID , new { @class = "form-control form-control-user", id= "txt_UserToCreate" })
-                                    </div>
-                                    <span class="ml-3">Nhập mật khẩu</span>
-                                    <div class="form-group">
-                                        @Html.PasswordFor(model => model.Password, new { @class = "form-control form-control-user", id = "txt_PassToCreate" })
-                                    </div>
-                                    <span class="ml-3">Nhập lại mật khẩu</span>
-                                    <div class="form-group">
-                                        <input class="form-control form-control-user" id="txt_Pass2ToCreate" type="password" value="" />
-                                    </div>
-                                    <div class="form-group">
-                                        <input class="btn btn-primary btn-user btn-block" id="btn_CreateUser" type="submit" />
-                                    </div>
-                                }*@
+                                    @*@using (Ajax.BeginForm("Create", "Login",
+                                            new AjaxOptions
+                                            {   HttpMethod = "POST"
+                                                }
+                                            ,new
+                                            { id="createFrom"}))
+                                        {
+                                            <span class="ml-3">Tên đăng nhập</span>
+                                            <div class="form-group">
+                                                @Html.TextBoxFor(model => model.UserID , new { @class = "form-control form-control-user", id= "txt_UserToCreate" })
+                                            </div>
+                                            <span class="ml-3">Nhập mật khẩu</span>
+                                            <div class="form-group">
+                                                @Html.PasswordFor(model => model.Password, new { @class = "form-control form-control-user", id = "txt_PassToCreate" })
+                                            </div>
+                                            <span class="ml-3">Nhập lại mật khẩu</span>
+                                            <div class="form-group">
+                                                <input class="form-control form-control-user" id="txt_Pass2ToCreate" type="password" value="" />
+                                            </div>
+                                            <div class="form-group">
+                                                <input class="btn btn-primary btn-user btn-block" id="btn_CreateUser" type="submit" />
+                                            </div>
+                                        }*@
 
                                     <span class="ml-3">Tên đăng nhập</span>
                                     <div class="form-group">
@@ -116,11 +116,8 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-
         </div>
-
     </div>
 </div>
 
@@ -128,15 +125,19 @@
 
     var flagStatusCreateAccSec = false;
     var mode = 0;
+
     var url = new URL(document.URL);
     var search_params = url.searchParams;
-    if (search_params.has('mode')) {
-        mode = 1
+    if (search_params.has('mode')) mode = 1;
+
+    var userName = sessionStorage.getItem("UserName");
+    var permissionID = sessionStorage.getItem("PermissionID");
+
+    if (userName != null && permissionID != null) {
+        window.location.href = "/Error/PageNotFound";
     }
+
     window.onload = function () {
-
-        //showSuccessOrError();
-
         if (mode == 1) {
             toggleCreateAccSection();
         }
@@ -173,20 +174,21 @@
     }
 
     function createUser() {
-        if (checkValidInputToCreateUser('txt_UserToCreate', 'txt_PassToCreate', 'txt_Pass2ToCreate'))
-        {
+        if (checkValidInputToCreateUser('txt_UserToCreate', 'txt_PassToCreate', 'txt_Pass2ToCreate')) {
+            $(".loader").show();
             var status = 2;
             var now = new Date();
 
             var userName = $('#txt_UserToCreate').val();
             var passWord = $('#txt_PassToCreate').val();
-            var user = { UserName: userName, Password: passWord, PermissionID: 0};
+
+            var user = { UserName: userName, Password: passWord, PermissionID: 0 };
 
             $.ajax({
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
                 url: '/Login/Create',
-                async:false,
+                async: false,
                 dataType: 'Json',
                 data: JSON.stringify(user),
                 success: function (data) {
@@ -196,58 +198,40 @@
                     status = 2;
                 },
             });
-            if (status == 0) {
-                localStorage.setItem("successMess", JSON.stringify("Tạo tài khoản " + userName + " thành công"));
-                window.location.href = "/Login/Index";
+
+            switch (status) {
+                case 0:
+                    localStorage.setItem("successMess", JSON.stringify("Tạo tài khoản " + userName + " thành công"));
+                    window.location.href = "/Login/Index";
+                    break;
+                case 1:
+                    localStorage.setItem("errorMess", JSON.stringify("Tên tài khản đã tồn tại"));
+                    window.location.href = "/Login/Index?mode=1";
+                    break;
+                default:
+                    localStorage.setItem("errorMess", JSON.stringify("Tạo tài khoản thất bại"));
+                    window.location.href = "/Login/Index?mode=1";
+                    break;
             }
-            else if (status == 1) {
-                localStorage.setItem("errorMess", JSON.stringify("Tên tài khản đã tồn tại"));
-                window.location.href = "/Login/Index?mode=1";
-            }
-            else {
-                localStorage.setItem("errorMess", JSON.stringify("Tạo tài khoản thất bại"));
-                window.location.href = "/Login/Index?mode=1";
-            }
+
+            $(".loader").hide();
 
         }
     }
 
     function checkValidInputToCreateUser(idUser, idPass, idPass2) {
-        var strEmpty = "Chưa nhập thông tin";
+
         var strInputAgain = "Mật khẩu nhập lại không giống mật khẩu đầu tiên";
-        var strLength = "Nhập thiếu .Thông tin phải bằng hoặc lớn hơn 6 kí tự";
 
-        var strUser = $('#' + idUser).val();
-        if (strUser === "") {
-            message_Error(idUser, strEmpty);
-            return false;
-        }
-        else if (strUser.length < 6) {
-            message_Error(idUser, strLength);
-            return false;
-        }
+        if (!checkValidTxt(idUser)) return false;
 
-        var strPass = $('#' + idPass).val();
-        if (strPass === "") {
-            message_Error(idPass, strEmpty);
-            return false;
-        }
-        else if (strPass.length < 6) {
-            message_Error(idPass, strLength);
-            return false;
-        }
+        if (!checkValidTxt(idPass)) return false;
 
         if (idPass2 !== "") {
+            if (!checkValidTxt(idPass)) return false;
+            var strPass = $('#' + idPass).val();
             var strPass2 = $('#' + idPass2).val();
-            if (strPass2 === "") {
-                message_Error(idPass2, strEmpty);
-                return false;
-            }
-            else if (strPass2.length < 6) {
-                message_Error(idPass2, strLength);
-                return false;
-            }
-            else if (strPass !== strPass2) {
+            if (strPass !== strPass2) {
                 message_Error(idPass2, strInputAgain);
                 return false;
             }
@@ -255,13 +239,31 @@
         return true;
     }
 
+    function checkValidTxt(idTxt) {
+        var strEmpty = "Chưa nhập thông tin";
+        var strLength = "Nhập thiếu .Thông tin phải bằng hoặc lớn hơn 6 kí tự";
+        var strTxt = $('#' + idTxt).val();
+
+        if (strTxt === "") {
+            message_Error(idTxt, strEmpty);
+            return false;
+        }
+        else if (strTxt.length < 6) {
+            message_Error(idTxt, strLength);
+            return false;
+        }
+        return true;
+    }
+
     function loginSystem() {
         if (checkValidInputToCreateUser('txt_UserToLogin', 'txt_PassToLogin', '')) {
+            $(".loader").show();
+
             var status = 1;
             var permissionID = 0;
             var userName = $('#txt_UserToLogin').val();
             var passWord = $('#txt_PassToLogin').val();
-            var user = { UserName: userName, Password: passWord, }
+            var user = { UserName: userName, Password: passWord }
 
             $.ajax({
                 type: 'POST',
@@ -273,26 +275,32 @@
                 success: function (data) {
                     status = data.status;
                     permissionID = data.permissionID;
+
+                    sessionStorage.removeItem("UserName");
+                    sessionStorage.setItem("UserName", userName);
+                    sessionStorage.removeItem("PermissionID");
+                    sessionStorage.setItem("PermissionID", permissionID);
                 },
                 error: function (data) {
                     status = 2;
                 },
             });
-            if (status == 0) {
-                localStorage.setItem("successMess", JSON.stringify("Đăng nhập thành công"));
-                if (permissionID==0)
-                    window.location.href = "/Guest/Index";
-                else
-                    window.location.href = "/Store/Index";
+
+            switch (status) {
+                case 0:
+                    localStorage.setItem("successMess", JSON.stringify("Đăng nhập thành công"));
+                    window.location.href = (permissionID == 0) ? "/Guest/Index" : "/Store/Index";
+                    break;
+                case 1:
+                    localStorage.setItem("errorMess", JSON.stringify("Tài khoản hoặc mật khẩu không đúng"));
+                    window.location.href = "/Login/Index";
+                    break;
+                default:
+                    localStorage.setItem("errorMess", JSON.stringify("Lỗi đăng nhập . Xin thử lại"));
+                    window.location.href = "/Login/Index";
+                    break;
             }
-            else if (status == 1) {
-                localStorage.setItem("errorMess", JSON.stringify("Tài khoản hoặc mật khẩu không đúng"));
-                window.location.href = "/Login/Index";
-            }
-            else {
-                localStorage.setItem("errorMess", JSON.stringify("Lỗi đăng nhập . Xin thử lại"));
-                window.location.href = "/Login/Index";
-            }
+            $(".loader").hide();
         }
     }
 
