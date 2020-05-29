@@ -43,8 +43,11 @@ namespace MVC_Gas_Map.Controllers
             HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("User?username="+user.UserName+"&&password="+user.Password).Result;
             if (response.StatusCode == HttpStatusCode.Accepted)
             {
-                var permissId = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
-                return Json(new { status = 0,permissionID= permissId });
+                string strResponseMess=response.Content.ReadAsStringAsync().Result;
+                var arrResponseMess = strResponseMess.Split(';');
+                var permissID = Convert.ToInt32(arrResponseMess[0]);
+                var userID = arrResponseMess[1].ToString();
+                return Json(new { status = 0,permissionID = permissID ,userID = userID });
             }
 
             else if (response.StatusCode == HttpStatusCode.Forbidden)

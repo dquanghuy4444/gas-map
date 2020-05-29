@@ -26,7 +26,7 @@
             width: 100%;
             height: 100%;
             background-color: white;
-            background-image: url("https://images.squarespace-cdn.com/content/v1/5344a472e4b092b8f017d821/1454573550903-N17DKEYFJLDUV04XAX7V/ke17ZwdGBToddI8pDm48kPoswlzjSVMM-SxOp7CV59BZw-zPPgdn4jUwVcJE1ZvWQUxwkmyExglNqGp0IvTJZamWLI2zvYWH8K3-s_4yszcp2ryTI0HqTOaaUohrI8PI6FXy8c9PWtBlqAVlUS5izpdcIXDZqDYvprRqZ29Pw0o/untitled_2.gif?format=1500w");
+            background-image: url('../../Images/untitled_2.gif');
             background-repeat: no-repeat;
             background-position: center;
         }
@@ -40,7 +40,7 @@
             display: none; /* Hidden by default */
             position: fixed; /* Stay in place */
             /*z-index: 1;*/ /* Sit on top */
-            padding-top: 100px; /* Location of the box */
+            padding-top: 12rem; /* Location of the box */
             left: 0;
             top: 0;
             width: 100%; /* Full width */
@@ -57,13 +57,11 @@
             margin: auto;
             padding: 0;
             border: 1px solid #888;
-            width: 35%;
+            width: 24%;
             box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
             animation-name: animatetop;
-            animation-duration: 0.6s
+            animation-duration: 0.5s
         }
-
-        /* Add Animation */
 
         @@keyframes animatetop {
             from {
@@ -77,7 +75,6 @@
             }
         }
 
-        /* The Close Button */
         .close {
             color: white;
             float: right;
@@ -92,16 +89,9 @@
                 cursor: pointer;
             }
 
-        .modal-header {
-            padding: 2px 16px;
-        }
-
-        .modal-body {
-            padding: 2px 16px;
-        }
-
-        .modal-footer {
-            padding: 2px 16px;
+        .modal-body, .modal-header, .modal-footer {
+            padding: 3px 16px;
+            margin: 3px;
         }
     </style>
 </head>
@@ -187,7 +177,7 @@
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/fn_BT9fwg_E/60x60" alt="">
+                                        <img class="rounded-circle" src="" alt="">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div class="font-weight-bold">
@@ -197,7 +187,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/AU4VPcFN4LE/60x60" alt="">
+                                        <img class="rounded-circle" src="" alt="">
                                         <div class="status-indicator"></div>
                                     </div>
                                     <div>
@@ -207,7 +197,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/CS2uCrpNzJY/60x60" alt="">
+                                        <img class="rounded-circle" src="" alt="">
                                         <div class="status-indicator bg-warning"></div>
                                     </div>
                                     <div>
@@ -217,7 +207,7 @@
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60" alt="">
+                                        <img class="rounded-circle" src="" alt="">
                                         <div class="status-indicator bg-success"></div>
                                     </div>
                                     <div>
@@ -239,9 +229,9 @@
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="/Guest/Index">
                                     <i class="fa fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
+                                    Thông tin cá nhân
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fa fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -341,16 +331,17 @@
         <!-- Modal content -->
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Modal Header</h2>
+                <h2>Thông báo</h2>
                 <span class="close" style="color:black">&times;</span>
-
             </div>
             <div class="modal-body">
-                <p>Some text in the Modal Body</p>
-                <p>Some other text...</p>
+                <br />
+                <h4>Bạn có muốn thoát tài khoản này không ?</h4>
+                <br />
             </div>
-            <div class="modal-footer">
-                <h3>Modal Footer</h3>
+            <div class="modal-footer mb-2">
+                <button class="btn btn-success" onclick="logoutSystem()">Đồng ý</button>
+                <button class="btn btn-danger" onclick="closePopup()">Thoát</button>
             </div>
         </div>
 
@@ -361,6 +352,7 @@
     <script src="~/Scripts/Sb.admin.min.js"></script>
     <script src="~/Scripts/notify.min.js"></script>
     <script>
+
 
         function scrollToIntroSection() {
             var targetElement = $('#IntroSection');
@@ -389,6 +381,7 @@
     </script>
 
     <script>
+
 
         function message_Error(id, strMess) {
             if (id === '') {
@@ -434,18 +427,31 @@
             console.log("pohip");
         }
 
-        setInterval(
+        var interval=setInterval(
             function checkUser() {
-                var userName = sessionStorage.getItem("UserName");
+                var url = new URL(document.URL);
+                var pathName = url.pathname;
+                var userID = sessionStorage.getItem("UserID");
                 var permissionID = sessionStorage.getItem("PermissionID");
 
-                if (userName != null && permissionID != null) {
+                if (userID != null && permissionID != null) {
+
                     $("#loginArea").hide();
                     $("#userArea").show();
+                    if (pathName == "/Login/Index") {
+                        clearInterval(interval);
+                        window.location.href = "/Error/PageNotFound";
+                    }
                 }
                 else {
+                    clearInterval(interval);
+
+                    sessionStorage.removeItem("UserID");
+                    sessionStorage.removeItem("PermissionID");
+
                     $("#loginArea").show();
                     $("#userArea").hide();
+                    if (pathName == "/Guest/Index") window.location.href = "/Error/PageNotFound";
                 }
             }
             , 10);
@@ -455,27 +461,36 @@
     <script>
         // Get the modal
         var modal = document.getElementById("myModal");
-
         // Get the button that opens the modal
         var btn = document.getElementById("myBtn");
-
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
-
         // When the user clicks the button, open the modal
         btn.onclick = function () {
             modal.style.display = "block";
         }
 
+        function closePopup() {
+            modal.style.display = "none";
+        }
+
+        function logoutSystem() {
+            sessionStorage.removeItem("UserID");
+            sessionStorage.removeItem("PermissionID");
+
+            window.location.href = "/Store/Index";
+        }
+
+
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
             modal.style.display = "none";
         }
-
         // When the user clicks anywhere outside of the modal, close it
         window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = "none";
+
             }
         }
     </script>

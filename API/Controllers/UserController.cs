@@ -36,11 +36,13 @@ namespace API.Controllers
             {
                 return Content(HttpStatusCode.Forbidden, "");
             }
+            string strResponseMess = userInSystem.PermissionID.ToString();
+            strResponseMess+=";"+ userInSystem.UserID.ToString();
             return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.Accepted)
             {
                 Content = new StringContent
                 (
-                    userInSystem.PermissionID.ToString(),
+                    strResponseMess,
                     Encoding.UTF8,
                     "text/html"
                 )

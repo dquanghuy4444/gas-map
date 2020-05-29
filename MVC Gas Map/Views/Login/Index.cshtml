@@ -130,14 +130,8 @@
     var search_params = url.searchParams;
     if (search_params.has('mode')) mode = 1;
 
-    var userName = sessionStorage.getItem("UserName");
-    var permissionID = sessionStorage.getItem("PermissionID");
-
-    if (userName != null && permissionID != null) {
-        window.location.href = "/Error/PageNotFound";
-    }
-
     window.onload = function () {
+
         if (mode == 1) {
             toggleCreateAccSection();
         }
@@ -261,6 +255,7 @@
 
             var status = 1;
             var permissionID = 0;
+            var userID = null;
             var userName = $('#txt_UserToLogin').val();
             var passWord = $('#txt_PassToLogin').val();
             var user = { UserName: userName, Password: passWord }
@@ -275,11 +270,8 @@
                 success: function (data) {
                     status = data.status;
                     permissionID = data.permissionID;
+                    userID = data.userID;
 
-                    sessionStorage.removeItem("UserName");
-                    sessionStorage.setItem("UserName", userName);
-                    sessionStorage.removeItem("PermissionID");
-                    sessionStorage.setItem("PermissionID", permissionID);
                 },
                 error: function (data) {
                     status = 2;
@@ -288,6 +280,11 @@
 
             switch (status) {
                 case 0:
+                    sessionStorage.removeItem("UserID");
+                    sessionStorage.setItem("UserID", userID);
+                    sessionStorage.removeItem("PermissionID");
+                    sessionStorage.setItem("PermissionID", permissionID);
+
                     localStorage.setItem("successMess", JSON.stringify("Đăng nhập thành công"));
                     window.location.href = (permissionID == 0) ? "/Guest/Index" : "/Store/Index";
                     break;
