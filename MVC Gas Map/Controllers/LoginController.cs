@@ -47,7 +47,8 @@ namespace MVC_Gas_Map.Controllers
                 var arrResponseMess = strResponseMess.Split(';');
                 var permissID = Convert.ToInt32(arrResponseMess[0]);
                 var userID = arrResponseMess[1].ToString();
-                return Json(new { status = 0,permissionID = permissID ,userID = userID });
+                var guestName = arrResponseMess[2].ToString();
+                return Json(new { status = 0,permissionID = permissID ,userID = userID, guestName = guestName });
             }
 
             else if (response.StatusCode == HttpStatusCode.Forbidden)

@@ -36,8 +36,14 @@ namespace API.Controllers
             {
                 return Content(HttpStatusCode.Forbidden, "");
             }
+            Guest guest = db.Guests.FirstOrDefault(x => x.UserID == userInSystem.UserID);
+            if (guest == null)
+            {
+                return Content(HttpStatusCode.Forbidden, "");
+            }
             string strResponseMess = userInSystem.PermissionID.ToString();
-            strResponseMess+=";"+ userInSystem.UserID.ToString();
+            strResponseMess +=  ";" + userInSystem.UserID.ToString();
+            strResponseMess +=  ";" + guest.GuestName.ToString();
             return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.Accepted)
             {
                 Content = new StringContent
@@ -99,6 +105,22 @@ namespace API.Controllers
             }
             db.UserInSystems.Add(userInSystem);
             db.SaveChanges();
+            user = db.UserInSystems.FirstOrDefault(x => x.UserName == userInSystem.UserName);
+            if (user != null)
+            {
+                Guest guest = new Guest();
+                guest.UserID = user.UserID;
+                guest.CreatedDate = DateTime.Now;
+                guest.GuestName = "";
+                guest.GuestAddress = "";
+                guest.GuestPhone = "";
+                guest.GuestSex = 0;
+                guest.GuestEmail = "";
+                guest.GuestBirthday = DateTime.Today;
+
+                db.Guests.Add(guest);
+                db.SaveChanges();
+            }
 
             return CreatedAtRoute("DefaultApi", new { id = userInSystem.ID }, userInSystem);
         }

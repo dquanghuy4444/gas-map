@@ -224,7 +224,7 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 ">Người dùng</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 " id="guestName"></span>
                                 <img class="img-profile rounded-circle" src="~/Images/avataaars-2.png">
                             </a>
                             <!-- Dropdown - User Information -->
@@ -351,8 +351,8 @@
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/Sb.admin.min.js"></script>
     <script src="~/Scripts/notify.min.js"></script>
-    <script>
 
+    <script>
 
         function scrollToIntroSection() {
             var targetElement = $('#IntroSection');
@@ -361,27 +361,26 @@
             }, 1200);
         }
 
-        function getUrlParameters(parameter, staticURL, decode) {
+        //function getUrlParameters(parameter, staticURL, decode) {
 
-            var currLocation = (staticURL.length) ? staticURL : window.location.search,
-                parArr = currLocation.split("?")[1].split("&"),
-                returnBool = true;
+        //    var currLocation = (staticURL.length) ? staticURL : window.location.search,
+        //        parArr = currLocation.split("?")[1].split("&"),
+        //        returnBool = true;
 
-            for (var i = 0; i < parArr.length; i++) {
-                parr = parArr[i].split("=");
-                if (parr[0] == parameter) {
-                    return (decode) ? decodeURIComponent(parr[1]) : parr[1];
-                    returnBool = true;
-                } else {
-                    returnBool = false;
-                }
-            }
-            if (!returnBool) return false;
-        }
+        //    for (var i = 0; i < parArr.length; i++) {
+        //        parr = parArr[i].split("=");
+        //        if (parr[0] == parameter) {
+        //            return (decode) ? decodeURIComponent(parr[1]) : parr[1];
+        //            returnBool = true;
+        //        } else {
+        //            returnBool = false;
+        //        }
+        //    }
+        //    if (!returnBool) return false;
+        //}
     </script>
 
     <script>
-
 
         function message_Error(id, strMess) {
             if (id === '') {
@@ -427,14 +426,18 @@
             console.log("pohip");
         }
 
-        var interval=setInterval(
-            function checkUser() {
+        var interval = setInterval(
+            function () {
                 var url = new URL(document.URL);
                 var pathName = url.pathname;
-                var userID = sessionStorage.getItem("UserID");
-                var permissionID = sessionStorage.getItem("PermissionID");
+                var userIDBySes = sessionStorage.getItem("UserID");
+                var permissionIDBySes = sessionStorage.getItem("PermissionID");
+                var guestNameBySes = sessionStorage.getItem("GuestName");
 
-                if (userID != null && permissionID != null) {
+                if (userIDBySes != null && permissionIDBySes != null && guestNameBySes != null)
+                {
+                    var guestName = (guestNameBySes === "") ? "Người dùng" : guestNameBySes;
+                    $("#guestName").html(guestName);
 
                     $("#loginArea").hide();
                     $("#userArea").show();
@@ -445,10 +448,7 @@
                 }
                 else {
                     clearInterval(interval);
-
-                    sessionStorage.removeItem("UserID");
-                    sessionStorage.removeItem("PermissionID");
-
+                    sessionStorage.clear();
                     $("#loginArea").show();
                     $("#userArea").hide();
                     if (pathName == "/Guest/Index") window.location.href = "/Error/PageNotFound";
@@ -475,12 +475,10 @@
         }
 
         function logoutSystem() {
-            sessionStorage.removeItem("UserID");
-            sessionStorage.removeItem("PermissionID");
-
+            clearInterval(interval);
+            sessionStorage.clear();
             window.location.href = "/Store/Index";
         }
-
 
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
@@ -493,6 +491,8 @@
 
             }
         }
+
+
     </script>
 </body>
 </html>
