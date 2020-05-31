@@ -257,7 +257,7 @@
             var permissionID = 0;
             var userID = null;
             var guestName = null;
-
+            var imgSrc = null;
             var userName = $('#txt_UserToLogin').val();
             var passWord = $('#txt_PassToLogin').val();
             var user = { UserName: userName, Password: passWord }
@@ -270,11 +270,12 @@
                 dataType: 'Json',
                 data: JSON.stringify(user),
                 success: function (data) {
+                    console.log(data);
                     status = data.status;
                     permissionID = data.permissionID;
                     userID = data.userID;
                     guestName = data.guestName;
-
+                    imgSrc = data.imgSrc;
                 },
                 error: function (data) {
                     status = 2;
@@ -286,6 +287,7 @@
                     sessionStorage.setItem("UserID", userID);
                     sessionStorage.setItem("PermissionID", permissionID);
                     sessionStorage.setItem("GuestName", guestName);
+                    sessionStorage.setItem("ImgSrc", imgSrc);
 
                     localStorage.setItem("successMess", JSON.stringify("Đăng nhập thành công"));
                     window.location.href = (permissionID == 0) ? "/Guest/Index" : "/Store/Index";

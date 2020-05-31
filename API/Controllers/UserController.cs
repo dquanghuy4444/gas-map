@@ -41,9 +41,15 @@ namespace API.Controllers
             {
                 return Content(HttpStatusCode.Forbidden, "");
             }
+            Image img = db.Images.FirstOrDefault(x => x.HostObjID == guest.GuestID);
+            if (img == null)
+            {
+                return Content(HttpStatusCode.Forbidden, "");
+            }
             string strResponseMess = userInSystem.PermissionID.ToString();
             strResponseMess +=  ";" + userInSystem.UserID.ToString();
             strResponseMess +=  ";" + guest.GuestName.ToString();
+            strResponseMess += ";" + img.ImageSrc.ToString();
             return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.Accepted)
             {
                 Content = new StringContent
@@ -119,6 +125,15 @@ namespace API.Controllers
                 guest.GuestBirthday = DateTime.Today;
 
                 db.Guests.Add(guest);
+                db.SaveChanges();
+
+                var guestInSys = db.Guests.FirstOrDefault(x => x.UserID==user.UserID);
+
+                Image img = new Image();
+                img.HostObjID = guestInSys.GuestID;
+                img.ImageSrc = "/Images/avataaars-2.png";
+
+                db.Images.Add(img);
                 db.SaveChanges();
             }
 

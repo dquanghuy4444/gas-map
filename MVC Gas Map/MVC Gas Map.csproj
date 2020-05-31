@@ -148,6 +148,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Class\HashByMd5.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\GuestController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -157,11 +158,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="GlobalVariables.cs" />
+    <Compile Include="Models\Guest.cs" />
     <Compile Include="Models\Store.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\all.min.css" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
@@ -171,6 +174,7 @@
     <Content Include="Content\Control.MarkerHighLight.css" />
     <Content Include="Content\Control.MiniMap.css" />
     <Content Include="Content\Control.IconLayers.css" />
+    <Content Include="Content\fontawesome.min.css" />
     <Content Include="Content\Index.css" />
     <Content Include="Content\Sb.admin.min.css" />
     <Content Include="favicon.ico" />
@@ -199,6 +203,8 @@
     <Content Include="Images\IconLayer\openstreetmap_blackandwhite.png" />
     <Content Include="Images\IconLayer\openstreetmap_de.png" />
     <Content Include="Images\IconLayer\openstreetmap_mapnik.png" />
+    <Content Include="Images\IconLayer\pin-l-building+17a%402x.png" />
+    <Content Include="Images\IconLayer\pin-m-star-stroked+17a%402x.png" />
     <Content Include="Images\IconLayer\stamen_toner.png" />
     <Content Include="Images\toggle.png" />
     <Content Include="Images\toggle.svg" />

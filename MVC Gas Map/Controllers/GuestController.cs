@@ -1,8 +1,13 @@
-﻿using System;
+﻿using MVC_Gas_Map.Models;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace MVC_Gas_Map.Controllers
 {
@@ -42,10 +47,20 @@ namespace MVC_Gas_Map.Controllers
             }
         }
 
-        // GET: Guest/Edit/5
-        public ActionResult Edit(int id)
+        // GET: Guest/Edit
+        [HttpGet]
+        public JsonResult Edit(Guest guest)
         {
-            return View();
+            HttpResponseMessage response =  GlobalVariables.webApiClient.PutAsJsonAsync("Guests", guest).Result;
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                string strResponseMess = response.Content.ReadAsStringAsync().Result;
+                var arrResponseMess = strResponseMess.Split(';');
+                var permissID = Convert.ToInt32(arrResponseMess[0]);
+                var guestName = arrResponseMess[1].ToString();
+                return Json(new { status = 0 ,permissionId = permissID ,guestName = guestName }, JsonRequestBehavior.AllowGet);
+            }
+            else return Json(new { status = 1 }, JsonRequestBehavior.AllowGet);
         }
 
         // POST: Guest/Edit/5
@@ -84,6 +99,22 @@ namespace MVC_Gas_Map.Controllers
             {
                 return View();
             }
+        }
+
+        //GET: Login/Get
+        [HttpPost]
+        public JsonResult Get(string userID)
+        {
+            HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("guests?UserID=" + userID).Result;
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                var contents = response.Content.ReadAsStringAsync().Result;
+
+                var guestJson = JsonConvert.DeserializeObject<Guest>(contents);
+                return Json(guestJson);
+            }
+
+            else return Json(new { status = 1 });
         }
     }
 }

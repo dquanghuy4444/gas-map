@@ -225,7 +225,7 @@
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 " id="guestName"></span>
-                                <img class="img-profile rounded-circle" src="~/Images/avataaars-2.png">
+                                <img class="img-profile rounded-circle" id="imgAvatar" src="~/Images/avataaars-2.png">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -327,7 +327,6 @@
     </div>
 
     <div id="myModal" class="modal">
-
         <!-- Modal content -->
         <div class="modal-content">
             <div class="modal-header">
@@ -340,11 +339,28 @@
                 <br />
             </div>
             <div class="modal-footer mb-2">
-                <button class="btn btn-success" onclick="logoutSystem()">Đồng ý</button>
+                <button class="btn btn-success" id="btnConfirm" onclick="logoutSystem()">Đồng ý</button>
                 <button class="btn btn-danger" onclick="closePopup()">Thoát</button>
             </div>
         </div>
+    </div>
 
+    <div id="modelPermission" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Thông báo</h2>
+                <span class="close" style="color:black">&times;</span>
+            </div>
+            <div class="modal-body">
+                <br />
+                <h4>Bạn có muốn thoát tài khoản này không ?</h4>
+                <br />
+            </div>
+            <div class="modal-footer mb-2">
+                <button class="btn btn-danger" onclick="closePopup()">Thoát</button>
+            </div>
+        </div>
     </div>
 
     @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
@@ -353,6 +369,58 @@
     <script src="~/Scripts/notify.min.js"></script>
 
     <script>
+
+        $(window).on('load', function () {
+            // show success or error mess
+            if (typeof (Storage) !== "undefined") {
+                var successMess = localStorage.getItem("successMess");
+                if (successMess != null) {
+                    message_Success(successMess);
+                    localStorage.removeItem("successMess");
+                }
+                else {
+                    var errorMess = localStorage.getItem("errorMess");
+                    if (errorMess != null) {
+                        message_Error('', errorMess);
+                        localStorage.removeItem("errorMess");
+                    }
+                }
+            }
+            else {
+                console.log("pohip");
+            }
+        })
+
+        var interval = setInterval(
+            function () {
+                var url = new URL(document.URL);
+                var pathName = url.pathname;
+                var userIDBySes = sessionStorage.getItem("UserID");
+                var permissionIDBySes = sessionStorage.getItem("PermissionID");
+                var guestNameBySes = sessionStorage.getItem("GuestName");
+                var imgSrcBySes = sessionStorage.getItem("ImgSrc");
+
+                if (userIDBySes != null && permissionIDBySes != null && guestNameBySes != null && imgSrcBySes != null) {
+                    var guestName = (guestNameBySes === "") ? "Người dùng" : guestNameBySes;
+                    $("#guestName").html(guestName);
+
+                    $("#loginArea").hide();
+                    $("#userArea").show();
+                    if (pathName == "/Login/Index") {
+                        clearInterval(interval);
+                        window.location.href = "/Error/PageNotFound";
+                    }
+                }
+                else {
+                    clearInterval(interval);
+                    sessionStorage.clear();
+                    $("#loginArea").show();
+                    $("#userArea").hide();
+                    if (pathName == "/Guest/Index") window.location.href = "/Error/PageNotFound";
+                }
+
+            }
+            , 10);
 
         function scrollToIntroSection() {
             var targetElement = $('#IntroSection');
@@ -382,6 +450,10 @@
 
     <script>
 
+        var imgSrcBySes = sessionStorage.getItem("ImgSrc");
+        if (imgSrcBySes != null)
+            $("#imgAvatar").attr("src", imgSrcBySes);
+
         function message_Error(id, strMess) {
             if (id === '') {
                 setTimeout($('.notifyjs-wrapper').remove(), 2000);
@@ -407,64 +479,18 @@
             );
         }
 
-        // show success or error mess
-        if (typeof (Storage) !== "undefined") {
-            var successMess = localStorage.getItem("successMess");
-            if (successMess != null) {
-                message_Success(successMess);
-                localStorage.removeItem("successMess");
-            }
-            else {
-                var errorMess = localStorage.getItem("errorMess");
-                if (errorMess != null) {
-                    message_Error('', errorMess);
-                    localStorage.removeItem("errorMess");
-                }
-            }
-        }
-        else {
-            console.log("pohip");
-        }
-
-        var interval = setInterval(
-            function () {
-                var url = new URL(document.URL);
-                var pathName = url.pathname;
-                var userIDBySes = sessionStorage.getItem("UserID");
-                var permissionIDBySes = sessionStorage.getItem("PermissionID");
-                var guestNameBySes = sessionStorage.getItem("GuestName");
-
-                if (userIDBySes != null && permissionIDBySes != null && guestNameBySes != null)
-                {
-                    var guestName = (guestNameBySes === "") ? "Người dùng" : guestNameBySes;
-                    $("#guestName").html(guestName);
-
-                    $("#loginArea").hide();
-                    $("#userArea").show();
-                    if (pathName == "/Login/Index") {
-                        clearInterval(interval);
-                        window.location.href = "/Error/PageNotFound";
-                    }
-                }
-                else {
-                    clearInterval(interval);
-                    sessionStorage.clear();
-                    $("#loginArea").show();
-                    $("#userArea").hide();
-                    if (pathName == "/Guest/Index") window.location.href = "/Error/PageNotFound";
-                }
-            }
-            , 10);
-
     </script>
 
     <script>
         // Get the modal
         var modal = document.getElementById("myModal");
+        var modal2 = document.getElementById("modelPermission");
+        
         // Get the button that opens the modal
         var btn = document.getElementById("myBtn");
         // Get the <span> element that closes the modal
         var span = document.getElementsByClassName("close")[0];
+        var span2 = document.getElementsByClassName("close")[1];
         // When the user clicks the button, open the modal
         btn.onclick = function () {
             modal.style.display = "block";
@@ -472,6 +498,7 @@
 
         function closePopup() {
             modal.style.display = "none";
+            modal2.style.display = "none";
         }
 
         function logoutSystem() {
@@ -483,6 +510,10 @@
         // When the user clicks on <span> (x), close the modal
         span.onclick = function () {
             modal.style.display = "none";
+        }
+
+        span2.onclick = function () {
+            modal2.style.display = "none";
         }
         // When the user clicks anywhere outside of the modal, close it
         window.onclick = function (event) {

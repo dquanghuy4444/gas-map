@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 using MVC_Gas_Map.Models;
+using MVC_Gas_Map.Class;
 namespace MVC_Gas_Map.Controllers
 {
     public class LoginController : Controller
@@ -28,6 +29,7 @@ namespace MVC_Gas_Map.Controllers
         public JsonResult Create(User user)
         {
             user.CreatedDate = DateTime.Now;
+            user.Password = HashByMd5.CreateMD5(user.Password);
             HttpResponseMessage response = GlobalVariables.webApiClient.PostAsJsonAsync("User", user).Result;
             if(response.StatusCode == HttpStatusCode.Created)
                 return Json(new { status = 0 });
@@ -40,7 +42,8 @@ namespace MVC_Gas_Map.Controllers
         [HttpPost]
         public JsonResult Get(User user)
         {
-            HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("User?username="+user.UserName+"&&password="+user.Password).Result;
+            string strQuery= "username="+user.UserName+"&&password="+ HashByMd5.CreateMD5(user.Password); 
+            HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("User?"+strQuery).Result;
             if (response.StatusCode == HttpStatusCode.Accepted)
             {
                 string strResponseMess=response.Content.ReadAsStringAsync().Result;
@@ -48,7 +51,8 @@ namespace MVC_Gas_Map.Controllers
                 var permissID = Convert.ToInt32(arrResponseMess[0]);
                 var userID = arrResponseMess[1].ToString();
                 var guestName = arrResponseMess[2].ToString();
-                return Json(new { status = 0,permissionID = permissID ,userID = userID, guestName = guestName });
+                var imgSrc = arrResponseMess[3].ToString();
+                return Json(new { status = 0,permissionID = permissID ,userID = userID, guestName = guestName , imgSrc = imgSrc });
             }
 
             else if (response.StatusCode == HttpStatusCode.Forbidden)

@@ -22,11 +22,11 @@
                 </div>
                 <div class="form-group">
                     <label for="exampleFormControlInput4">Email</label>
-                    <input type="email" name="email" class="form-control" id="GuestEmail" placeholder=""abc@gmail.com" required>
+                    <input type="email" name="email" class="form-control" id="GuestEmail" placeholder="" abc@gmail.com" required>
                 </div>
                 <div class="form-group">
                     <label for="exampleFormControlSelect5">Giới tính</label>
-                    <select class="form-control" id="exampleFormControlSelect1">
+                    <select class="form-control" id="selectGuestSex">
                         <option value="0">Male</option>
                         <option value="1">Female</option>
                         <option value="2">Other...</option>
@@ -40,7 +40,7 @@
             <div class="col-md-4 col-xs-4 col-lg-4 col-sm-4">
                 <div class="form-group">
                     <div style="height: 30rem;width: 100%;position: absolute;border: 2px solid #cd8e8e;">
-                        <img src="~/Images/avataaars-2.png" style="position: relative;width: 100%;height: 100%;padding: 0.4rem;" />
+                        <img src="~/Images/avataaars-2.png" id="GuestImg" style="position: relative;width: 100%;height: 100%;padding: 0.4rem;" />
                     </div>
                 </div>
                 <div class="form-group" onload="myFunction()" style="margin-top: 31rem;">
@@ -56,54 +56,53 @@
     </div>
 </div>
 
+
+
 <script>
     $(".loader").hide();
     $("#introProject").hide();
 
-    window.onload = function () {
-        loadGuestInfo();
-    }
+    loadGuestInfo();
 
-    function loadGuestInfo()
-    {
+    function loadGuestInfo() {
         var userIDBySes = sessionStorage.getItem("UserID");
+        console.log(userIDBySes);
+        $.ajax({
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            url: '/Guest/Get?userid=' + userIDBySes,
+            async: false,
+            dataType: 'Json',
+            success: function (data) {
 
-    }
+                $('#GuestName').val(data.GuestName);
+                $('#GuestPhone').val(data.GuestPhone);
+                $('#GuestEmail').val(data.GuestEmail);
+                $('#GuestAddress').val(data.GuestAddress);
+                $("#GuestImg").attr("src", data.ImgSrc);
 
- 
+                var sex = data.GuestSex;
+                if (sex > 2 || sex < 0) sex = 0
+                $('#selectGuestSex').val(sex);
 
-    //file include image
-     function myFunction(){
-      var x = document.getElementById("myFile");
-      var txt = "";
-      if ('files' in x) {
-        if (x.files.length == 0) {
-          txt = "Select one or more files.";
-        } else {
-          for (var i = 0; i < x.files.length; i++) {
-            txt += "<br><strong>" + (i+1) + ". file</strong><br>";
-            var file = x.files[i];
-            if ('name' in file) {
-              txt += "name: " + file.name + "<br>";
-            }
-            if ('size' in file) {
-              txt += "size: " + file.size + " bytes <br>";
-            }
-          }
-        }
-      }
-      else {
-        if (x.value == "") {
-          txt += "Select one or more files.";
-        } else {
-          txt += "The files property is not supported by your browser!";
-          txt  += "<br>The path of the selected file: " + x.value;
-        }
-      }
-      document.getElementById("demo").innerHTML = txt;
+                var bdate = new Date(parseInt(data.GuestBirthday.substr(6)));
+                var month = bdate.getMonth() + 1;
+                if (month < 10) month = "0" + month;
+                var day = bdate.getDate();
+                if (day < 10) day = "0" + day;
+                var year = bdate.getFullYear();
+                var date = year + "-" + month + "-" + day;
+                $('#GuestBirth').val(date);
+            },
+            error: function (data) {
+                localStorage.setItem("successMess", JSON.stringify("Lỗi hệ thống"));
+            },
+        });
+
     }
 
     function checkValid() {
+        var strLength = "Tối đa 20 kí tự"
         var strEmpty = "Chưa nhập thông tin";
         var strFormatPhone = "Định dạng điện thoại sai";
 
@@ -111,16 +110,20 @@
         var phone = document.getElementById("GuestPhone").value;
         var email = document.getElementById("GuestEmail").value;
         var addr = document.getElementById("GuestAddress").value;
+
         var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
         var reg = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
 
-        if ( fullname==="") {
+        if (fullname === "") {
             message_Error("GuestName", strEmpty);
             return false;
         }
+        else if (fullname.length > 20) {
+            message_Error("GuestName", strLength);
+            return false;
+        }
 
-        if (phone === "")
-        {
+        if (phone === "") {
             message_Error("GuestPhone", strEmpty);
             return false;
         }
@@ -152,6 +155,56 @@
 
     function createGuestInfor() {
         if (checkValid()) {
+            $(".loader").show();
+            var status = 1;
+            var userIDBySes = sessionStorage.getItem("UserID");
+
+            var guestName = $('#GuestName').val();
+            var guestPhone = $('#GuestPhone').val();
+            var guestEmail = $('#GuestEmail').val();
+            var guestAddr = $('#GuestAddress').val();
+            var guestSex = $('#selectGuestSex').val();
+            var guestBirth = $('#GuestBirth').val();
+            var imgSrc = $('#GuestImg').attr('src');
+
+            var guest = {
+                GuestName: guestName,
+                GuestPhone: guestPhone,
+                GuestEmail: guestEmail,
+                GuestSex: guestSex,
+                GuestAddress: guestAddr,
+                GuestBirthday: guestBirth,
+                ImgSrc: imgSrc,
+                UserID: userIDBySes
+            }
+            console.log(guest);
+
+            $.ajax({
+                type: 'Get',
+                contentType: 'application/json; charset=utf-8',
+                url: '/Guest/Edit',
+                dataType: 'Json',
+                data: guest,
+                success: function (data)
+                {
+                    status = data.status;
+                    permissID = data.permissionId;
+                    sessionStorage.setItem("PermissionID", data.permissionId);
+                    sessionStorage.setItem("GuestName", data.guestName);
+
+                    $(".loader").hide();
+
+                    message_Success("Cập nhật thông tin thành công");
+                    if (permissID == 1) {
+                        setTimeout(function () {
+                            modal2.style.display = "block";
+                        }, 1800)
+                    }
+                },
+                error: function (data) {
+                    message_Error("", "Cập nhật thông tin thất bại")
+                },
+            });
 
         }
     }
