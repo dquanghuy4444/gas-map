@@ -102,8 +102,8 @@
             <div id="content">
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style="margin-bottom:0rem !important">
                     <a class="navbar-brand btn btn-danger" style="font-size:1.8rem;padding:1rem 2.4rem;" href="/Store/Index">Trang chủ</a>
-                    <a class="navbar-brand btn btn-group" href="#page-top">Trở thành đối tác cửa hàng</a>
-                    <a class="navbar-brand btn btn-group" href="#page-top">Khách hàng gọi gas</a>
+                    <a class="navbar-brand btn btn-group" id="btn_GoToCusPage" style="display:none;" href="#page-top">Gọi Gas</a>
+                    <a class="navbar-brand btn btn-group" id="btn_GoToStorePage" style="display:none;" href="#page-top">Quản lí cửa hàng</a>
                     <a class="navbar-brand btn btn-group" href="#" onclick="scrollToIntroSection()" id="introProject">Giới thiệu về chúng tôi</a>
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
@@ -354,8 +354,14 @@
             </div>
             <div class="modal-body">
                 <br />
-                <h4>Bạn có muốn thoát tài khoản này không ?</h4>
+                Tài khoản của bạn vẫn chưa chọn quyền tài khoản.Hãy chọn quyền tài khoản ở bên dưới:
                 <br />
+                <br />
+                <div class="text-center"    >
+                    <button class="btn btn-success" style="margin-right:1rem;" onclick="setPermission(2)">Quyền khách hàng</button>
+                    <button class="btn btn-success" onclick="setPermission(3)">Quyền cửa hàng</button>
+                </div>
+
             </div>
             <div class="modal-footer mb-2">
                 <button class="btn btn-danger" onclick="closePopup()">Thoát</button>
@@ -369,6 +375,10 @@
     <script src="~/Scripts/notify.min.js"></script>
 
     <script>
+
+        var imgSrcBySes = sessionStorage.getItem("ImgSrc");
+        if (imgSrcBySes != null)
+            $("#imgAvatar").attr("src", imgSrcBySes);
 
         $(window).on('load', function () {
             // show success or error mess
@@ -406,6 +416,15 @@
 
                     $("#loginArea").hide();
                     $("#userArea").show();
+                    if (permissionIDBySes == 2) {
+                        $("#btn_GoToCusPage").show();
+                        $("#btn_GoToStorePage").hide();
+                    }
+                    else if (permissionIDBySes == 3) {
+                        $("#btn_GoToCusPage").hide();
+                        $("#btn_GoToStorePage").show();
+                    }
+
                     if (pathName == "/Login/Index") {
                         clearInterval(interval);
                         window.location.href = "/Error/PageNotFound";
@@ -421,13 +440,6 @@
 
             }
             , 10);
-
-        function scrollToIntroSection() {
-            var targetElement = $('#IntroSection');
-            $([document.documentElement, document.body]).animate({
-                scrollTop: targetElement.offset().top
-            }, 1200);
-        }
 
         //function getUrlParameters(parameter, staticURL, decode) {
 
@@ -449,10 +461,31 @@
     </script>
 
     <script>
+        function setPermission(permissID) {
+            var userIDBySes = sessionStorage.getItem("UserID");
+            var user = {
+                UserID: userIDBySes,
+                PermissionID: permissID.toString()
+            }
 
-        var imgSrcBySes = sessionStorage.getItem("ImgSrc");
-        if (imgSrcBySes != null)
-            $("#imgAvatar").attr("src", imgSrcBySes);
+            $.ajax({
+                type: 'Get',
+                contentType: 'application/json; charset=utf-8',
+                url: '/Guest/SetPermissionID',
+                dataType: 'Json',
+                data: user,
+                success: function (data) {
+                    sessionStorage.setItem("PermissionID", permissID);
+                    modal2.style.display = "none";
+                    message_Success("Cập nhật quyền tài khoản thành công");
+                },
+                error: function (data) {
+                    message_Error("", "Cập nhật quyền tài khoản thất bại")
+                },
+            });
+
+
+        }
 
         function message_Error(id, strMess) {
             if (id === '') {
@@ -477,6 +510,13 @@
                 strMess,
                 "success"
             );
+        }
+
+        function scrollToIntroSection() {
+            var targetElement = $('#IntroSection');
+            $([document.documentElement, document.body]).animate({
+                scrollTop: targetElement.offset().top
+            }, 1200);
         }
 
     </script>
@@ -519,11 +559,8 @@
         window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = "none";
-
             }
         }
-
-
     </script>
 </body>
 </html>

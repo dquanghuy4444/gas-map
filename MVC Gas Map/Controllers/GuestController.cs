@@ -63,6 +63,16 @@ namespace MVC_Gas_Map.Controllers
             else return Json(new { status = 1 }, JsonRequestBehavior.AllowGet);
         }
 
+        // GET: Guest/Edit
+        [HttpGet]
+        public JsonResult SetPermissionID(User user)
+        {
+            HttpResponseMessage response = GlobalVariables.webApiClient.PutAsJsonAsync("User", user).Result;
+            if (response.StatusCode == HttpStatusCode.OK)
+                return Json(new { status = 0 }, JsonRequestBehavior.AllowGet);
+            else return Json(new { status = 1 }, JsonRequestBehavior.AllowGet);
+        }
+
         // POST: Guest/Edit/5
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)

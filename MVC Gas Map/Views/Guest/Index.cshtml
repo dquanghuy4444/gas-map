@@ -155,7 +155,6 @@
 
     function createGuestInfor() {
         if (checkValid()) {
-            $(".loader").show();
             var status = 1;
             var userIDBySes = sessionStorage.getItem("UserID");
 
@@ -189,12 +188,13 @@
                 {
                     status = data.status;
                     permissID = data.permissionId;
-                    sessionStorage.setItem("PermissionID", data.permissionId);
-                    sessionStorage.setItem("GuestName", data.guestName);
+                    if (data.permissionId != null)
+                        sessionStorage.setItem("PermissionID", data.permissionId);
+                    if (data.guestName != null)
+                        sessionStorage.setItem("GuestName", data.guestName);
+                    if (status == 0)
+                        message_Success("Cập nhật thông tin thành công");
 
-                    $(".loader").hide();
-
-                    message_Success("Cập nhật thông tin thành công");
                     if (permissID == 1) {
                         setTimeout(function () {
                             modal2.style.display = "block";

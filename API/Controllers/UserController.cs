@@ -63,37 +63,24 @@ namespace API.Controllers
 
         // PUT: api/User/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutUserInSystem(int id, UserInSystem userInSystem)
+        public IHttpActionResult PutUserInSystem( UserInSystem user)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            if (id != userInSystem.ID)
-            {
-                return BadRequest();
-            }
-
-            db.Entry(userInSystem).State = EntityState.Modified;
-
+            var userInDb = db.UserInSystems.FirstOrDefault(x => x.UserID == user.UserID);
+            userInDb.PermissionID = user.PermissionID;
             try
             {
+                db.Entry(userInDb).CurrentValues.SetValues(userInDb);
                 db.SaveChanges();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserInSystemExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
-
-            return StatusCode(HttpStatusCode.NoContent);
+            return Ok();
         }
 
         // POST: api/User
