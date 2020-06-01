@@ -233,6 +233,10 @@
                                     <i class="fa fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Thông tin cá nhân
                                 </a>
+                                <a class="dropdown-item" href="/User/Index">
+                                    <i class="fa fa-key fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Đổi mật khẩu
+                                </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fa fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Settings
@@ -537,6 +541,22 @@
             $([document.documentElement, document.body]).animate({
                 scrollTop: targetElement.offset().top
             }, 1200);
+        }
+
+        function checkValidTxt(idTxt) {
+            var strEmpty = "Chưa nhập thông tin";
+            var strLength = "Nhập thiếu .Thông tin phải bằng hoặc lớn hơn 6 kí tự";
+            var strTxt = $('#' + idTxt).val();
+
+            if (!strTxt) {
+                message_Error(idTxt, strEmpty);
+                return false;
+            }
+            else if (strTxt.length < 6) {
+                message_Error(idTxt, strLength);
+                return false;
+            }
+            return true;
         }
 
     </script>
