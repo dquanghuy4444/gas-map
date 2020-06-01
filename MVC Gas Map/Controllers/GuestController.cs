@@ -20,7 +20,7 @@ namespace MVC_Gas_Map.Controllers
         }
 
         // GET: Guest/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details()
         {
             return View();
         }

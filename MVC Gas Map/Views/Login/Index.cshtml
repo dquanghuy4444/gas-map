@@ -187,26 +187,23 @@
                 data: JSON.stringify(user),
                 success: function (data) {
                     status = data.status;
+
+                    switch (status) {
+                        case 0:
+                            localStorage.setItem("successMess", JSON.stringify("Tạo tài khoản " + userName + " thành công"));
+                            window.location.href = "/Login/Index";
+                            break;
+                        case 1:
+                            localStorage.setItem("errorMess", JSON.stringify("Tên tài khản đã tồn tại"));
+                            window.location.href = "/Login/Index?mode=1";
+                            break;
+                    }
                 },
                 error: function (data) {
-                    status = 2;
-                },
-            });
-
-            switch (status) {
-                case 0:
-                    localStorage.setItem("successMess", JSON.stringify("Tạo tài khoản " + userName + " thành công"));
-                    window.location.href = "/Login/Index";
-                    break;
-                case 1:
-                    localStorage.setItem("errorMess", JSON.stringify("Tên tài khản đã tồn tại"));
-                    window.location.href = "/Login/Index?mode=1";
-                    break;
-                default:
                     localStorage.setItem("errorMess", JSON.stringify("Tạo tài khoản thất bại"));
                     window.location.href = "/Login/Index?mode=1";
-                    break;
-            }
+                },
+            });
 
             $(".loader").hide();
 
@@ -238,7 +235,7 @@
         var strLength = "Nhập thiếu .Thông tin phải bằng hoặc lớn hơn 6 kí tự";
         var strTxt = $('#' + idTxt).val();
 
-        if (strTxt === "") {
+        if (!strTxt) {
             message_Error(idTxt, strEmpty);
             return false;
         }
@@ -250,7 +247,8 @@
     }
 
     function loginSystem() {
-        if (checkValidInputToCreateUser('txt_UserToLogin', 'txt_PassToLogin', '')) {
+        if (checkValidInputToCreateUser('txt_UserToLogin', 'txt_PassToLogin', ''))
+        {
             $(".loader").show();
 
             var status = 1;
@@ -276,31 +274,29 @@
                     userID = data.userID;
                     guestName = data.guestName;
                     imgSrc = data.imgSrc;
+
+                    switch (status) {
+                        case 0:
+                            sessionStorage.setItem("UserID", userID);
+                            sessionStorage.setItem("PermissionID", permissionID);
+                            sessionStorage.setItem("GuestName", guestName);
+                            sessionStorage.setItem("ImgSrc", imgSrc);
+
+                            localStorage.setItem("successMess", JSON.stringify("Đăng nhập thành công"));
+                            window.location.href = (permissionID == 0) ? "/Guest/Index" : "/Store/Index";
+                            break;
+                        case 1:
+                            localStorage.setItem("errorMess", JSON.stringify("Tài khoản hoặc mật khẩu không đúng"));
+                            window.location.href = "/Login/Index";
+                            break;
+                    }
                 },
                 error: function (data) {
-                    status = 2;
+                    localStorage.setItem("errorMess", JSON.stringify("Lỗi đăng nhập . Xin thử lại"));
+                    window.location.href = "/Login/Index";
                 },
             });
 
-            switch (status) {
-                case 0:
-                    sessionStorage.setItem("UserID", userID);
-                    sessionStorage.setItem("PermissionID", permissionID);
-                    sessionStorage.setItem("GuestName", guestName);
-                    sessionStorage.setItem("ImgSrc", imgSrc);
-
-                    localStorage.setItem("successMess", JSON.stringify("Đăng nhập thành công"));
-                    window.location.href = (permissionID == 0) ? "/Guest/Index" : "/Store/Index";
-                    break;
-                case 1:
-                    localStorage.setItem("errorMess", JSON.stringify("Tài khoản hoặc mật khẩu không đúng"));
-                    window.location.href = "/Login/Index";
-                    break;
-                default:
-                    localStorage.setItem("errorMess", JSON.stringify("Lỗi đăng nhập . Xin thử lại"));
-                    window.location.href = "/Login/Index";
-                    break;
-            }
             $(".loader").hide();
         }
     }

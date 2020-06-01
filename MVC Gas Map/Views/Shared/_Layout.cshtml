@@ -102,8 +102,8 @@
             <div id="content">
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style="margin-bottom:0rem !important">
                     <a class="navbar-brand btn btn-danger" style="font-size:1.8rem;padding:1rem 2.4rem;" href="/Store/Index">Trang chủ</a>
-                    <a class="navbar-brand btn btn-group" id="btn_GoToCusPage" style="display:none;" href="#page-top">Gọi Gas</a>
-                    <a class="navbar-brand btn btn-group" id="btn_GoToStorePage" style="display:none;" href="#page-top">Quản lí cửa hàng</a>
+                    <a class="navbar-brand btn btn-group" id="btn_GoToCusPage" style="display:none;" href="/Guest/Details">Gọi Gas</a>
+                    <a class="navbar-brand btn btn-group" id="btn_GoToStorePage" style="display:none;" href="/Store/Details">Quản lí cửa hàng</a>
                     <a class="navbar-brand btn btn-group" href="#" onclick="scrollToIntroSection()" id="introProject">Giới thiệu về chúng tôi</a>
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
@@ -405,41 +405,60 @@
             function () {
                 var url = new URL(document.URL);
                 var pathName = url.pathname;
+
                 var userIDBySes = sessionStorage.getItem("UserID");
                 var permissionIDBySes = sessionStorage.getItem("PermissionID");
                 var guestNameBySes = sessionStorage.getItem("GuestName");
                 var imgSrcBySes = sessionStorage.getItem("ImgSrc");
 
-                if (userIDBySes != null && permissionIDBySes != null && guestNameBySes != null && imgSrcBySes != null) {
+                if (userIDBySes && permissionIDBySes && guestNameBySes && imgSrcBySes) {
                     var guestName = (guestNameBySes === "") ? "Người dùng" : guestNameBySes;
                     $("#guestName").html(guestName);
 
                     $("#loginArea").hide();
                     $("#userArea").show();
-                    if (permissionIDBySes == 2) {
-                        $("#btn_GoToCusPage").show();
-                        $("#btn_GoToStorePage").hide();
-                    }
-                    else if (permissionIDBySes == 3) {
-                        $("#btn_GoToCusPage").hide();
-                        $("#btn_GoToStorePage").show();
-                    }
 
                     if (pathName == "/Login/Index") {
                         clearInterval(interval);
                         window.location.href = "/Error/PageNotFound";
                     }
+
+                    if (permissionIDBySes == 2)
+                    {
+                        $("#btn_GoToCusPage").show();
+                        $("#btn_GoToStorePage").hide();
+
+                        if (pathName == "/Store/Details")
+                        {
+                            clearInterval(interval);
+                            window.location.href = "/Error/PageNotFound";
+                        }
+                    }
+                    else if (permissionIDBySes == 3) {
+                        $("#btn_GoToCusPage").hide();
+                        $("#btn_GoToStorePage").show();
+
+                        if (pathName == "/Guest/Details") {
+                            clearInterval(interval);
+                            window.location.href = "/Error/PageNotFound";
+                        }
+                    }
+
                 }
-                else {
+                else
+                {
                     clearInterval(interval);
                     sessionStorage.clear();
                     $("#loginArea").show();
                     $("#userArea").hide();
-                    if (pathName == "/Guest/Index") window.location.href = "/Error/PageNotFound";
+
+                    //pathName == "/Guest/Index" || pathName == "/Store/Details" || pathName == "/Guest/Details"
+                    if (["/Guest/Index", "/Store/Details", "/Guest/Details"].indexOf(pathName) != - 1)
+                        window.location.href = "/Error/PageNotFound";
                 }
 
             }
-            , 10);
+            , 8e2);
 
         //function getUrlParameters(parameter, staticURL, decode) {
 
@@ -463,10 +482,11 @@
     <script>
         function setPermission(permissID) {
             var userIDBySes = sessionStorage.getItem("UserID");
-            var user = {
+            var user =
+            {
                 UserID: userIDBySes,
                 PermissionID: permissID.toString()
-            }
+            };
 
             $.ajax({
                 type: 'Get',

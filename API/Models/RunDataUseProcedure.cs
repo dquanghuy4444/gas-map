@@ -41,16 +41,6 @@ namespace API.Models
             return result;
         }
 
-        public static string getAmountOfStoresForCardInFormIndex()
-        {
-            string result = "";
-            sqlcon.Open();
-            SqlCommand com = new SqlCommand("getAmountOfStoresForCardInFormIndex", sqlcon);
-            com.CommandType = CommandType.StoredProcedure;
-            result = com.ExecuteScalar().ToString();
-            sqlcon.Close();
-            return result;
-        }
 
 
     }

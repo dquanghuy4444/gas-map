@@ -29,8 +29,12 @@ namespace API.Controllers
         [ResponseType(typeof(string))]
         public IHttpActionResult GetStore(int mode)
         {
-            //System.Threading.Thread.Sleep(10000);
-            string result = RunDataUseProcedure.getAmountOfStoresForCardInFormIndex();
+            string result = null;
+            if(mode==1)
+                result = db.Stores.Count().ToString();
+            else if(mode ==2)
+                result = db.UserInSystems.Count().ToString();
+
             return base.ResponseMessage(new HttpResponseMessage()
             {
                 Content = new StringContent(

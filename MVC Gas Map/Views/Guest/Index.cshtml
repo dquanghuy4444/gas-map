@@ -114,7 +114,7 @@
         var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
         var reg = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
 
-        if (fullname === "") {
+        if (!fullname) {
             message_Error("GuestName", strEmpty);
             return false;
         }
@@ -123,7 +123,7 @@
             return false;
         }
 
-        if (phone === "") {
+        if (!phone) {
             message_Error("GuestPhone", strEmpty);
             return false;
         }
@@ -134,7 +134,7 @@
             }
         }
 
-        if (email === "") {
+        if (!email) {
             message_Error("GuestEmail", strEmpty);
             return false;
         }
@@ -145,7 +145,7 @@
             }
         }
 
-        if (addr === "") {
+        if (!addr) {
             message_Error("GuestAddress", strEmpty);
             return false;
         }
@@ -188,14 +188,15 @@
                 {
                     status = data.status;
                     permissID = data.permissionId;
-                    if (data.permissionId != null)
+                    if (data.permissionId)
                         sessionStorage.setItem("PermissionID", data.permissionId);
-                    if (data.guestName != null)
+                    if (data.guestName)
                         sessionStorage.setItem("GuestName", data.guestName);
                     if (status == 0)
                         message_Success("Cập nhật thông tin thành công");
 
-                    if (permissID == 1) {
+                    if (permissID == 1)
+                    {
                         setTimeout(function () {
                             modal2.style.display = "block";
                         }, 1800)

@@ -203,8 +203,8 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Số lượng người truy cập website tính đến 18/5/2020</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">100</div>
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Số lượng người đăng kí tài khoản của website tính đến 18/5/2020</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><p id="amountOfUsers"></p></div>
                     </div>
                     <div class="col-auto">
                         <i class="fa fa fa-group fa-4x" style="color:#537fce"></i>
@@ -860,30 +860,35 @@
 </script>
 
 <script>
-            var amountOfStores = $('#amountOfStores');
-        var amountOfStos = null;
-        getDataForCardInFormIndex();
 
-        function getDataForCardInFormIndex() {
-            amountOfStos =@ViewBag.AmountOfStores
-                console.log(amountOfStos);
-                amountOfStores.html(amountOfStos);
-        }
-        function goToCurrentLocation()
-        {
-            navigator.geolocation.getCurrentPosition(
-            function (location) {
-                            var currentLocation = new L.LatLng(location.coords.latitude, location.coords.longitude);
-                            mapObj.setView(currentLocation, zoomLevel);
-                            var curLocation = [location.coords.latitude, location.coords.longitude];
-                            markerGroup.clearLayers();
-                            setMarkerCurrentLocation(curLocation);
-                            getAllStoresInDb();
-                            localStorage.removeItem("curLocation");
-                            localStorage.setItem("curLocation", curLocation);
-                        });
+    getDataForCardInFormIndex();
 
-        }
+    function getDataForCardInFormIndex() 
+    {
+        var amountOfStos =@ViewBag.AmountOfStores;
+        $('#amountOfStores').html(amountOfStos);
+
+        var amountOfUsers =@ViewBag.AmountOfUsers;
+        $('#amountOfUsers').html(amountOfUsers);
+    }
+
+    function goToCurrentLocation()
+    {
+        navigator.geolocation.getCurrentPosition
+            (
+            function (location)
+            {
+                var currentLocation = new L.LatLng(location.coords.latitude, location.coords.longitude);
+                mapObj.setView(currentLocation, zoomLevel);
+                var curLocation = [location.coords.latitude, location.coords.longitude];
+                markerGroup.clearLayers();
+                setMarkerCurrentLocation(curLocation);
+                getAllStoresInDb();
+                localStorage.removeItem("curLocation");
+                localStorage.setItem("curLocation", curLocation);
+            });
+
+    }
 </script>
 
 <script src="~/Scripts/Charts/Chart.min.js"></script>
