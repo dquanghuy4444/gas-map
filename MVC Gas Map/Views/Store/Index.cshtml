@@ -170,7 +170,6 @@
     <button onclick="goToCurrentLocation()" class="h3 mb-0 btn btn-default" style="background-color:#fdecec;"><i class="glyphicon glyphicon-tags mr-1 mt-1" style="color:#ca4d1f;font-size:19px;"></i>   <span style="font-weight: 500;font-size: initial;font-family: sans-serif;font-size:18px;">Vị trí của bạn</span></button>
 </div>
 <div class="@*container body-content*@" style="margin-top:0.1rem;">
-    @*@RenderBody()*@
     <div id="idGasMap"></div>
     <hr />
 </div>
@@ -747,10 +746,10 @@
         var popupOption = {
             className: "map-popup-content",
         };
-        var name = null;
+
 
         $.ajax({
-            type: 'post',
+            type: 'get',
             url: '/Store/getAllStores',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
@@ -759,6 +758,7 @@
             },
             success: function (data) {
                 if (1 == 1) {
+                    var name = null;
                     var layerGroup = new L.layerGroup([osm2]);
                     var responsive = data.data;
                     //console.log(responsive.length);

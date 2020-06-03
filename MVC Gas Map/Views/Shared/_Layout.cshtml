@@ -415,7 +415,7 @@
                 var guestNameBySes = sessionStorage.getItem("GuestName");
                 var imgSrcBySes = sessionStorage.getItem("ImgSrc");
 
-                if (userIDBySes && permissionIDBySes && guestNameBySes && imgSrcBySes) {
+                if (userIDBySes && permissionIDBySes && guestNameBySes != null && imgSrcBySes) {
                     var guestName = (guestNameBySes === "") ? "Người dùng" : guestNameBySes;
                     $("#guestName").html(guestName);
 
@@ -460,7 +460,6 @@
                     if (["/Guest/Index", "/Store/Details", "/Guest/Details"].indexOf(pathName) != - 1)
                         window.location.href = "/Error/PageNotFound";
                 }
-
             }
             , 8e2);
 

@@ -30,7 +30,7 @@ namespace MVC_Gas_Map.Controllers
             return View();
         }
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult getAllStores()
         {
             IEnumerable<Store> storeList;
