@@ -415,7 +415,8 @@
                 var guestNameBySes = sessionStorage.getItem("GuestName");
                 var imgSrcBySes = sessionStorage.getItem("ImgSrc");
 
-                if (userIDBySes && permissionIDBySes && guestNameBySes != null && imgSrcBySes) {
+                if (userIDBySes && permissionIDBySes && guestNameBySes != null && imgSrcBySes)
+                {
                     var guestName = (guestNameBySes === "") ? "Người dùng" : guestNameBySes;
                     $("#guestName").html(guestName);
 
@@ -431,6 +432,7 @@
                     {
                         $("#btn_GoToCusPage").show();
                         $("#btn_GoToStorePage").hide();
+                        modal2.style.display = "none";
 
                         if (pathName == "/Store/Details")
                         {
@@ -441,6 +443,7 @@
                     else if (permissionIDBySes == 3) {
                         $("#btn_GoToCusPage").hide();
                         $("#btn_GoToStorePage").show();
+                        modal2.style.display = "none";
 
                         if (pathName == "/Guest/Details") {
                             clearInterval(interval);
@@ -462,6 +465,18 @@
                 }
             }
             , 8e2);
+
+
+        var timeOut = setTimeout(
+            function () {
+                var permissionIDBySes = sessionStorage.getItem("PermissionID");
+                if (permissionIDBySes != null && permissionIDBySes == 1) {
+                    setTimeout(function () {
+                        modal2.style.display = "block";
+                    }, 1000);
+                }
+            }
+            , 7000)
 
         //function getUrlParameters(parameter, staticURL, decode) {
 
