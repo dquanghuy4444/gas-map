@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Coordinates">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CoordinatesID" Type="varchar" MaxLength="11" StoreGeneratedPattern="Computed" />
+    <Property Name="HostObjID" Type="nvarchar" MaxLength="50" />
+    <Property Name="Latitude" Type="nvarchar" MaxLength="50" />
+    <Property Name="Longtitude" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="Guest">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GuestID" Type="varchar" MaxLength="11" StoreGeneratedPattern="Computed" />
+    <Property Name="GuestName" Type="nvarchar" MaxLength="50" />
+    <Property Name="GuestPhone" Type="nvarchar" MaxLength="50" />
+    <Property Name="GuestEmail" Type="nvarchar" MaxLength="50" />
+    <Property Name="GuestSex" Type="int" />
+    <Property Name="GuestAddress" Type="nvarchar" MaxLength="200" />
+    <Property Name="GuestBirthday" Type="date" />
+    <Property Name="UserID" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Image">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ImageID" Type="varchar" MaxLength="11" StoreGeneratedPattern="Computed" />
+    <Property Name="HostObjID" Type="nvarchar" MaxLength="50" />
+    <Property Name="ImageSrc" Type="nvarchar(max)" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MVC Gas Map.dbo.Permission' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Permission">
+          <Property Name="PermissionID" Type="int" />
+          <Property Name="PermissionName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+        </EntityType>-->
+  <EntityType Name="Store">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StoreID" Type="varchar" MaxLength="11" StoreGeneratedPattern="Computed" />
+    <Property Name="StoreName" Type="nvarchar" MaxLength="50" />
+    <Property Name="StoreAddress" Type="nvarchar" MaxLength="150" />
+    <Property Name="StorePhone" Type="nvarchar" MaxLength="50" />
+    <Property Name="StoreEmail" Type="nvarchar" MaxLength="50" />
+    <Property Name="StoreDetail" Type="nvarchar" MaxLength="150" />
+    <Property Name="UserID" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityType Name="UserInSystem">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="varchar" MaxLength="12" StoreGeneratedPattern="Computed" />
+    <Property Name="UserName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Password" Type="nvarchar" MaxLength="50" />
+    <Property Name="PermissionID" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
+  <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="Coordinates" EntityType="Self.Coordinates" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Guest" EntityType="Self.Guest" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Image" EntityType="Self.Image" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Store" EntityType="Self.Store" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserInSystem" EntityType="Self.UserInSystem" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

@@ -59,12 +59,11 @@
 
 
 <script>
-    $(".loader").hide();
-    $("#introProject").hide();
-
     loadGuestInfo();
 
     function loadGuestInfo() {
+        $(".loader").show();
+
         var userIDBySes = sessionStorage.getItem("UserID");
         console.log(userIDBySes);
         $.ajax({
@@ -99,6 +98,7 @@
             },
         });
 
+        $(".loader").hide();
     }
 
     function checkValid() {

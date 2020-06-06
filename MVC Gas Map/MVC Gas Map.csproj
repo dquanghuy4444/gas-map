@@ -16,7 +16,8 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
-    <Use64BitIISExpress />
+    <Use64BitIISExpress>
+    </Use64BitIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -184,6 +185,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Images\111-1722.jpg" />
     <Content Include="Images\200.gif" />
+    <Content Include="Images\43-432523_image-black-tokyo-ghoul-clipart-black-and-white.png" />
     <Content Include="Images\92978289_651374272327767_5647810410020077568_n.png" />
     <Content Include="Images\avataaars-2.png" />
     <Content Include="Images\bct-1509.png" />
@@ -207,6 +209,7 @@
     <Content Include="Images\IconLayer\pin-l-building+17a%402x.png" />
     <Content Include="Images\IconLayer\pin-m-star-stroked+17a%402x.png" />
     <Content Include="Images\IconLayer\stamen_toner.png" />
+    <Content Include="Images\pngtree-shop-store-market-building-shopping-flat-color-icon-vector-png-image_1653492.jpg" />
     <Content Include="Images\toggle.png" />
     <Content Include="Images\toggle.svg" />
     <Content Include="Images\transparent-pixel.png" />
@@ -270,6 +273,7 @@
     <Content Include="Views\Guest\Details.cshtml" />
     <Content Include="Views\Store\Details.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\Store\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

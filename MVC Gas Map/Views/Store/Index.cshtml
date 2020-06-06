@@ -572,8 +572,10 @@
 
 
     // Window load
+
     window.onload = function () {
         $("#introProject").show();
+
         if (typeof (Storage) !== "undefined") {
             var curLocation = localStorage.getItem("curLocation");
             if (curLocation != null) {

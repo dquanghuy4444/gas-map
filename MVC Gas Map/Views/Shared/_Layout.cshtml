@@ -104,7 +104,7 @@
                     <a class="navbar-brand btn btn-danger" style="font-size:1.8rem;padding:1rem 2.4rem;" href="/Store/Index">Trang chủ</a>
                     <a class="navbar-brand btn btn-group" id="btn_GoToCusPage" style="display:none;" href="/Guest/Details">Gọi Gas</a>
                     <a class="navbar-brand btn btn-group" id="btn_GoToStorePage" style="display:none;" href="/Store/Details">Quản lí cửa hàng</a>
-                    <a class="navbar-brand btn btn-group" href="#" onclick="scrollToIntroSection()" id="introProject">Giới thiệu về chúng tôi</a>
+                    <a class="navbar-brand btn btn-group" href="#" onclick="scrollToSection(introProject)" id="introProject">Giới thiệu về chúng tôi</a>
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
@@ -229,6 +229,14 @@
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="/Guest/Details" id="callGasSetting">
+                                    <i class="fa fa-whatsapp fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Dịch vụ gọi gas
+                                </a>
+                                <a class="dropdown-item" href="/Store/Details" id="storeSetting">
+                                    <i class="fa fa-outdent fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Quản lí cửa hàng
+                                </a>
                                 <a class="dropdown-item" href="/Guest/Index">
                                     <i class="fa fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Thông tin cá nhân
@@ -379,12 +387,14 @@
     <script src="~/Scripts/notify.min.js"></script>
 
     <script>
+        $("#introProject").hide();
 
         var imgSrcBySes = sessionStorage.getItem("ImgSrc");
         if (imgSrcBySes != null)
             $("#imgAvatar").attr("src", imgSrcBySes);
 
-        $(window).on('load', function () {
+        $(window).on('load', function ()
+        {
             // show success or error mess
             if (typeof (Storage) !== "undefined") {
                 var successMess = localStorage.getItem("successMess");
@@ -403,69 +413,9 @@
             else {
                 console.log("pohip");
             }
+
+            $(".loader").hide();
         })
-
-        var interval = setInterval(
-            function () {
-                var url = new URL(document.URL);
-                var pathName = url.pathname;
-
-                var userIDBySes = sessionStorage.getItem("UserID");
-                var permissionIDBySes = sessionStorage.getItem("PermissionID");
-                var guestNameBySes = sessionStorage.getItem("GuestName");
-                var imgSrcBySes = sessionStorage.getItem("ImgSrc");
-
-                if (userIDBySes && permissionIDBySes && guestNameBySes != null && imgSrcBySes)
-                {
-                    var guestName = (guestNameBySes === "") ? "Người dùng" : guestNameBySes;
-                    $("#guestName").html(guestName);
-
-                    $("#loginArea").hide();
-                    $("#userArea").show();
-
-                    if (pathName == "/Login/Index") {
-                        clearInterval(interval);
-                        window.location.href = "/Error/PageNotFound";
-                    }
-
-                    if (permissionIDBySes == 2)
-                    {
-                        $("#btn_GoToCusPage").show();
-                        $("#btn_GoToStorePage").hide();
-                        modal2.style.display = "none";
-
-                        if (pathName == "/Store/Details")
-                        {
-                            clearInterval(interval);
-                            window.location.href = "/Error/PageNotFound";
-                        }
-                    }
-                    else if (permissionIDBySes == 3) {
-                        $("#btn_GoToCusPage").hide();
-                        $("#btn_GoToStorePage").show();
-                        modal2.style.display = "none";
-
-                        if (pathName == "/Guest/Details") {
-                            clearInterval(interval);
-                            window.location.href = "/Error/PageNotFound";
-                        }
-                    }
-
-                }
-                else
-                {
-                    clearInterval(interval);
-                    sessionStorage.clear();
-                    $("#loginArea").show();
-                    $("#userArea").hide();
-
-                    //pathName == "/Guest/Index" || pathName == "/Store/Details" || pathName == "/Guest/Details"
-                    if (["/Guest/Index", "/Store/Details", "/Guest/Details"].indexOf(pathName) != - 1)
-                        window.location.href = "/Error/PageNotFound";
-                }
-            }
-            , 8e2);
-
 
         var timeOut = setTimeout(
             function () {
@@ -495,6 +445,72 @@
         //    }
         //    if (!returnBool) return false;
         //}
+    </script>
+
+    <script>
+        var interval = setInterval(
+            function () {
+                var url = new URL(document.URL);
+                var pathName = url.pathname;
+
+                $("#loginArea").hide();
+                $("#btn_GoToStorePage").hide();
+                $("#btn_GoToCusPage").hide();
+                $("#userArea").hide();
+                $("#callGasSetting").hide();
+                $("#storeSetting").hide();
+
+                var userIDBySes = sessionStorage.getItem("UserID");
+                var permissionIDBySes = sessionStorage.getItem("PermissionID");
+                var guestNameBySes = sessionStorage.getItem("GuestName");
+                var imgSrcBySes = sessionStorage.getItem("ImgSrc");
+
+                if (userIDBySes && permissionIDBySes && guestNameBySes != null && imgSrcBySes) {
+                    var guestName = (guestNameBySes === "") ? "Người dùng" : guestNameBySes;
+                    $("#guestName").html(guestName);
+
+                    $("#userArea").show();
+
+                    if (pathName == "/Login/Index") {
+                        clearInterval(interval);
+                        window.location.href = "/Error/PageNotFound";
+                    }
+
+                    if (permissionIDBySes == 2) {
+                        $("#btn_GoToCusPage").show();
+                        $("#callGasSetting").show();
+
+                        modal2.style.display = "none";
+
+                        if (pathName == "/Store/Details") {
+                            clearInterval(interval);
+                            window.location.href = "/Error/PageNotFound";
+                        }
+                    }
+                    else if (permissionIDBySes == 3) {
+                        modal2.style.display = "none";
+
+                        $("#storeSetting").show();
+                        $("#btn_GoToStorePage").show();
+
+                        if (pathName == "/Guest/Details") {
+                            clearInterval(interval);
+                            window.location.href = "/Error/PageNotFound";
+                        }
+                    }
+                }
+                else {
+                    $("#loginArea").show();
+
+                    clearInterval(interval);
+                    sessionStorage.clear();
+
+                    //pathName == "/Guest/Index" || pathName == "/Store/Details" || pathName == "/Guest/Details"
+                    if (["/Guest/Index", "/Store/Details", "/Guest/Details", "/Store/Create"].indexOf(pathName) != - 1)
+                        window.location.href = "/Error/PageNotFound";
+                }
+            }
+            , 3e2);
     </script>
 
     <script>
@@ -550,11 +566,11 @@
             );
         }
 
-        function scrollToIntroSection() {
-            var targetElement = $('#IntroSection');
+        function scrollToSection(id) {
+            var targetElement = $('#' + id);
             $([document.documentElement, document.body]).animate({
                 scrollTop: targetElement.offset().top
-            }, 1200);
+            }, 900);
         }
 
         function checkValidTxt(idTxt) {
