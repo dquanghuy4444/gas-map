@@ -26,13 +26,13 @@
                 </div>
                 <div class="form-group">
                     <label for="exampleFormControlInput5">Giới thiệu về cửa hàng</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" id="StoreDetail"></textarea>
+                    <textarea class="form-control" rows="6" id="StoreDetail"></textarea>
                 </div>
             </div>
             <div class="col-md-3 col-xs-3 col-lg-3 col-sm-3">
                 <div class="form-group">
                     <div style="height: 30rem;width: 100%;position: absolute;border: 2px solid #cd8e8e;">
-                        <img src="~/Images/pngtree-shop-store-market-building-shopping-flat-color-icon-vector-png-image_1653492.jpg" id="GuestImg" style="position: relative;width: 100%;height: 100%;padding: 0.4rem;" />
+                        <img src="~/Images/pngtree-shop-store-market-building-shopping-flat-color-icon-vector-png-image_1653492.jpg" id="StoreImg" style="position: relative;width: 100%;height: 100%;padding: 0.4rem;" />
                     </div>
                 </div>
                 <div class="form-group" onload="myFunction()" style="margin-top: 31rem;">
@@ -41,11 +41,126 @@
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
-                <button type="button" class="btn btn-success" onclick="createGuestInfor()">Cập nhật thông tin</button>
+                <button type="button" class="btn btn-success" onclick="createStore()">Tạo cửa hàng</button>
                 <a href="/Store/Index" class="btn btn-danger">Thoát</a>
             </div>
         </form>
     </div>
 </div>
+
+<script>
+
+    function checkValid() {
+        var strLength = "Tối đa 36 kí tự"
+        var strEmpty = "Chưa nhập thông tin";
+        var strFormatPhone = "Định dạng điện thoại sai";
+
+        var name = document.getElementById("StoreName").value;
+        var phone = document.getElementById("StorePhone").value;
+        var email = document.getElementById("StoreEmail").value;
+        var addr = document.getElementById("StoreAddress").value;
+        var detail = document.getElementById("StoreDetail").value;
+
+        var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+        var reg = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+
+        if (!name) {
+            message_Error("StoreName", strEmpty);
+            return false;
+        }
+        else if (name.length > 36) {
+            message_Error("StoreName", strLength);
+            return false;
+        }
+
+        if (!phone) {
+            message_Error("StorePhone", strEmpty);
+            return false;
+        }
+        else {
+            if (vnf_regex.test(phone) == false) {
+                message_Error("StorePhone", strFormatPhone);
+                return false;
+            }
+        }
+
+        if (!email) {
+            message_Error("StoreEmail", strEmpty);
+            return false;
+        }
+        else {
+            if (reg.test(email) == false) {
+                message_Error("StoreEmail", strEmpty);
+                return false;
+            }
+        }
+
+        if (!addr) {
+            message_Error("StoreAddress", strEmpty);
+            return false;
+        }
+
+        if (!detail) {
+            message_Error("StoreDetail", strEmpty);
+            return false;
+        }
+
+        return true;
+    }
+
+    function createStore() {
+        if (checkValid()) {
+            var status = 1;
+            var userIDBySes = sessionStorage.getItem("UserID");
+
+            var storeName = $('#StoreName').val();
+            var storePhone = $('#StorePhone').val();
+            var storeEmail = $('#StoreEmail').val();
+            var storeAddress = $('#StoreAddress').val();
+            var storeDetail = $('#StoreDetail').val();
+            var imgSrc = $('#StoreImg').attr('src');
+
+            var store = {
+                StoreName: storeName,
+                StorePhone: storePhone,
+                StoreEmail: storeEmail,
+                StoreAddress: storeAddress,
+                StoreDetail: storeDetail,
+                ImgSrc: imgSrc,
+                UserID: userIDBySes,
+                Latitude: "1",
+                Longtitude: "12"
+            }
+            console.log(store);
+
+            $.ajax({
+                type: 'Get',
+                contentType: 'application/json; charset=utf-8',
+                url: '/Store/CreateStore',
+                dataType: 'Json',
+                data: store,
+                success: function (data) {
+                    console.log(data);
+                    debugger;
+                    status = data.status;
+                    message = data.message;
+
+                    switch (status) {
+                        case 0:
+                            message_Error("", message);
+                            break;
+                        case 1:
+                            localStorage.setItem("successMess", JSON.stringify(message));
+                            window.location.href = "/Store/Details";
+                            break;
+                    }
+                },
+                error: function (data) {
+                    message_Error("", "Cập nhật thông tin thất bại")
+                },
+            });
+        }
+    }
+</script>
 
 

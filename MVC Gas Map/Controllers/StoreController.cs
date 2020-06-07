@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
@@ -66,27 +67,44 @@ namespace MVC_Gas_Map.Controllers
             return Json(new { data = storeList }, JsonRequestBehavior.AllowGet);
         }
 
-        // GET: Store/Create
         public ActionResult Create()
         {
             return View();
+
+        }
+
+        // GET: Store/Create
+        public ActionResult CreateStore(Store store)
+        {
+            string message = "";
+            int flagCheckStatus = 1; //0:fail  1:success
+            store.CreatedDate = DateTime.Now;
+            HttpResponseMessage response = GlobalVariables.webApiClient.PostAsJsonAsync("Stores", store).Result;
+            if (response.StatusCode == HttpStatusCode.BadRequest)
+                flagCheckStatus = 0;
+            else if (response.StatusCode == HttpStatusCode.OK)
+                flagCheckStatus = 1;
+            message = response.Content.ReadAsStringAsync().Result;
+
+            return Json(new { status = flagCheckStatus, message= message }, JsonRequestBehavior.AllowGet);
+
         }
 
         // POST: Store/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
+        //[HttpPost]
+        //public ActionResult Create(FormCollection collection)
+        //{
+        //    try
+        //    {
+        //        // TODO: Add insert logic here
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //        return RedirectToAction("Index");
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
 
         // GET: Store/Edit/5
         public ActionResult Edit(int id)

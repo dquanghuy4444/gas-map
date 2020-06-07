@@ -246,6 +246,7 @@
                     data: JSON.stringify(user),
                     success: function (data) {
                         console.log(data);
+
                         status = data.status;
                         permissionID = data.permissionID;
                         userID = data.userID;
@@ -277,7 +278,7 @@
                 $(".loader").hide();
             }
             else
-                message_Error("", "Thông tin bạn nhập vào đang có chữ cái in hoa.Hã nhập lại !!!");
+                message_Error("", "Thông tin bạn nhập vào đang có chữ cái in hoa.Hãy nhập lại !!!");
         }
     }
 </script>

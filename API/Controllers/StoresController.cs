@@ -110,15 +110,69 @@ namespace API.Controllers
         [ResponseType(typeof(Store))]
         public IHttpActionResult PostStore(Store store)
         {
+            var storeIndb = new Store();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            storeIndb = db.Stores.FirstOrDefault(x => x.StoreName.ToLower() == store.StoreName.ToLower());
+            if(storeIndb !=null)
+            {
+                return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent
+                    (
+                        "Tên cửa hàng đã được sử dụng.Hãy đặt tên khác ",
+                        Encoding.UTF8,
+                        "text/html"
+                    )
+                });
+            }
+
+            var amountOfStoresOfUserID = db.Stores.Count(x => x.UserID == store.UserID);
+            if(amountOfStoresOfUserID>5)
+            {
+                return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent
+                    (
+                        "Bạn đã tạo quá giới hạn 5 cửa hàng .Không thể thêm được nữa",
+                        Encoding.UTF8,
+                        "text/html"
+                    )
+                });
+            }
+
             db.Stores.Add(store);
             db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = store.ID }, store);
+            storeIndb = db.Stores.FirstOrDefault(x => x.StoreName.ToLower() == store.StoreName.ToLower());
+
+            var coordinate = new Coordinate();
+            coordinate.HostObjID = storeIndb.StoreID;
+            coordinate.Latitude = storeIndb.Latitude;
+            coordinate.Longtitude = storeIndb.Longtitude;
+
+            db.Coordinates.Add(coordinate);
+            db.SaveChanges();
+
+            var image = new Image();
+            image.HostObjID = storeIndb.StoreID;
+            image.ImageSrc = store.ImgSrc;
+
+            db.Images.Add(image);
+            db.SaveChanges();
+
+            return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent
+                (
+                    "Bạn đã tạo cửa hàng thành công.",
+                    Encoding.UTF8,
+                    "text/html"
+                )
+            });
         }
 
         // DELETE: api/Stores/5
