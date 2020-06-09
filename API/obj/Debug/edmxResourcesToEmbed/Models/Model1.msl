@@ -4,11 +4,11 @@
     <EntitySetMapping Name="Coordinates">
       <EntityTypeMapping TypeName="Model.Coordinate">
         <MappingFragment StoreEntitySet="Coordinates">
+          <ScalarProperty Name="Longitude" ColumnName="Longitude" />
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="CoordinatesID" ColumnName="CoordinatesID" />
           <ScalarProperty Name="HostObjID" ColumnName="HostObjID" />
           <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-          <ScalarProperty Name="Longtitude" ColumnName="Longtitude" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -152,7 +152,7 @@ namespace API.Controllers
             var coordinate = new Coordinate();
             coordinate.HostObjID = storeIndb.StoreID;
             coordinate.Latitude = storeIndb.Latitude;
-            coordinate.Longtitude = storeIndb.Longtitude;
+            coordinate.Longitude = storeIndb.Longitude;
 
             db.Coordinates.Add(coordinate);
             db.SaveChanges();

@@ -31,7 +31,7 @@ namespace API.Models
                 store.StoreDetail = dataReader["StoreDetail"].ToString();
                 store.StoreName = dataReader["StoreName"].ToString();
                 store.StorePhone = dataReader["StorePhone"].ToString();
-                store.Longtitude = dataReader["Longtitude"].ToString();
+                store.Longitude = dataReader["Longitude"].ToString();
                 store.Latitude = dataReader["Latitude"].ToString();
                 store.UserID = dataReader["UserID"].ToString();
                 store.CreatedDate = Convert.ToDateTime(dataReader["CreatedDate"]);

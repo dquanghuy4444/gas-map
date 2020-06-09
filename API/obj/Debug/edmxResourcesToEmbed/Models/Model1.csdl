@@ -8,7 +8,7 @@
     <Property Name="CoordinatesID" Type="String" MaxLength="11" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
     <Property Name="HostObjID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="Latitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Longtitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Longitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="Guest">
     <Key>

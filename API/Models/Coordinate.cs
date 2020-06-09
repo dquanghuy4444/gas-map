@@ -18,6 +18,6 @@ namespace API.Models
         public string CoordinatesID { get; set; }
         public string HostObjID { get; set; }
         public string Latitude { get; set; }
-        public string Longtitude { get; set; }
+        public string Longitude { get; set; }
     }
 }

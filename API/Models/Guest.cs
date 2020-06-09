@@ -21,10 +21,9 @@ namespace API.Models
         public string GuestEmail { get; set; }
         public Nullable<int> GuestSex { get; set; }
         public string GuestAddress { get; set; }
-        public string ImgSrc { get; set; }
         public Nullable<System.DateTime> GuestBirthday { get; set; }
         public string UserID { get; set; }
+        public string ImgSrc { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
-
     }
 }

@@ -16,7 +16,7 @@ namespace MVC_Gas_Map.Models
         public string StoreDetail { get; set; }
         public string UserID { get; set; }
         public string Latitude { get; set; }
-        public string Longtitude { get; set; }
+        public string Longitude { get; set; }
         public string ImgSrc { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
     }

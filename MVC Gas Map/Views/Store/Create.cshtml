@@ -15,7 +15,7 @@
 <script src="~/Scripts/Control.MakiMarkers.js"></script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyBfQPm46M3j2joTFlHachk4RCXfeR7ZFWE"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyChLHxAJ7nlFF1A_phb7HEtDdwrCayYWyE"></script>
 <style>
     #idMap {
         width: 100%;
@@ -51,8 +51,8 @@
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
                             <div class="input-group" style="width:40%">
                                 <input type="text" class="form-control bg-light border-0 small" id="search_input" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-                                <input type="hidden" id="loc_lat" />
-                                <input type="hidden" id="loc_long" />
+                                <input type="hidden" id="latitude_input" />
+                                <input type="hidden" id="longitude_input" />
 
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" onclick="findByAddress()" type="button">
@@ -67,8 +67,8 @@
                         <div class="mt-2" style="font-size:1.2rem;font-weight:400;">
                             <span>Latitude:</span>
                             <span class="text-nowrap bd-highlight text-info" id="latitude_view">12312342423</span>
-                            <span class="ml-2">Longtitude:</span>
-                            <span class="text-nowrap bd-highlight text-info" id="longtitude_view">123123</span>
+                            <span class="ml-2">Longitude:</span>
+                            <span class="text-nowrap bd-highlight text-info" id="longitude_view">123123</span>
                             <br />
                             <span>Địa chỉ:</span>
                             <span class="text-nowrap bd-highlight text-info" id="addressOfGGMap">Số 401 Cổ Nhuế</span>
@@ -174,7 +174,7 @@
             var storeDetail = $('#StoreDetail').val();
             var imgSrc = $('#StoreImg').attr('src');
             var lat = $('#latitude_view').val();
-            var long = $('#longtitude_view').val();
+            var long = $('#longitude_view').val();
 
             var store = {
                 StoreName: storeName,
@@ -185,7 +185,7 @@
                 ImgSrc: imgSrc,
                 UserID: userIDBySes,
                 Latitude: lat,
-                Longtitude: long
+                Longitude: long
             }
             console.log(store);
 
@@ -363,19 +363,31 @@
         $('#StoreAddress').val(addrOfGGMap);
     });
 
-    //function findByAddress() {
-    //    $.get(location.protocol + '//nominatim.openstreetmap.org/search?format=json&q=' + 'Ha Noi',
-    //        function (data) {
-    //        console.log(data);
-    //    });
-    //}
-
-
     function findByAddress() {
-        $.get(location.protocol + '//maps.googleapis.com/maps/api/place/textsearch/json?query='+'401 Co Nhue'+'&sensor=false&language=vi&key=',
-            function (data) {
-                console.log(data);
-            });
+        //$.get(location.protocol + '//nominatim.openstreetmap.org/search?format=json&q=' + 'Ha Noi',
+        //    function (data) {
+        //    console.log(data);
+        //    });
+        var jsonUrl = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=401+C%E1%BB%95+Nhu%E1%BA%BF&sensor=false&language=vi&key=AIzaSyBfQPm46M3j2joTFlHachk4RCXfeR7ZFWE";
+        var myData;
+        getJsonData(jsonUrl, function (data) {
+            myData = data;
+        });
+    }
+
+    function getJsonData(url, callback) {
+        let request = new XMLHttpRequest;
+        let timer = setTimeout(function () {
+            getJsonData(url, callback);
+        }, 10000);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4 && request.status === 200) {
+                clearTimeout(timer);
+                return callback(JSON.parse(request.responseText));
+            }
+        }
+        request.open('GET', url);
+        request.send();
     }
 </script>
 
@@ -390,8 +402,8 @@
 
         google.maps.event.addListener(autocomplete, 'place_changed', function () {
             var near_place = autocomplete.getPlace();
-            document.getElementById('loc_lat').value = near_place.geometry.location.lat();
-            document.getElementById('loc_long').value = near_place.geometry.location.lng();
+            document.getElementById('latitude_input').value = near_place.geometry.location.lat();
+            document.getElementById('longitude_input').value = near_place.geometry.location.lng();
 
             document.getElementById('latitude_view').innerHTML = near_place.geometry.location.lat();
             document.getElementById('longitude_view').innerHTML = near_place.geometry.location.lng();
@@ -409,9 +421,9 @@
     var autocomplete;
     autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
         types: ['geocode'],
-        componentRestrictions: {
-            country: "USA"
-        }
+        //componentRestrictions: {
+        //    country: "DE"
+        //}
     });
 
 </script>

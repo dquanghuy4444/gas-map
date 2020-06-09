@@ -420,8 +420,8 @@
                         </button></div>`;
                         popupContent += `<div class='clearfix'></div>`;
 
-                        addMarker([Number(responsive[i].Latitude), Number(responsive[i].Longtitude)], popupContent, popupOption);
-                        layerGroup = addMarkerCircleInMiniMap(Number(responsive[i].Latitude), Number(responsive[i].Longtitude), layerGroup);
+                        addMarker([Number(responsive[i].Latitude), Number(responsive[i].Longitude)], popupContent, popupOption);
+                        layerGroup = addMarkerCircleInMiniMap(Number(responsive[i].Latitude), Number(responsive[i].Longitude), layerGroup);
                     }
                     //var miniMap = new L.Control.MiniMap(layerGroup, { toggleDisplay: true }).addTo(mapObj);
                     minimap.changeLayer(layerGroup);
