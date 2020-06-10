@@ -14,8 +14,21 @@
 <!------>
 <script src="~/Scripts/Control.MakiMarkers.js"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyChLHxAJ7nlFF1A_phb7HEtDdwrCayYWyE"></script>
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>*@
+@*<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=places&key=AIzaSyChLHxAJ7nlFF1A_phb7HEtDdwrCayYWyE"></script>*@
+
+<!-- Load Esri Leaflet from CDN -->
+<script src="https://unpkg.com/esri-leaflet@2.4.1/dist/esri-leaflet.js"
+        integrity="sha512-xY2smLIHKirD03vHKDJ2u4pqeHA7OQZZ27EjtqmuhDguxiUvdsOuXMwkg16PQrm9cgTmXtoxA6kwr8KBy3cdcw=="
+        crossorigin=""></script>
+
+<!-- Load Esri Leaflet Geocoder from CDN -->
+<link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@2.3.3/dist/esri-leaflet-geocoder.css"
+      integrity="sha512-IM3Hs+feyi40yZhDH6kV8vQMg4Fh20s9OzInIIAc4nx7aMYMfo+IenRUekoYsHZqGkREUgx0VvlEsgm7nCDW9g=="
+      crossorigin="">
+<script src="https://unpkg.com/esri-leaflet-geocoder@2.3.3/dist/esri-leaflet-geocoder.js"
+        integrity="sha512-HrFUyCEtIpxZloTgEKKMq4RFYhxjJkCiF5sDxuAokklOeZ68U2NPfh4MFtyIVWlsKtVbK5GD2/JzFyAfvT5ejA=="
+        crossorigin=""></script>
 <style>
     #idMap {
         width: 100%;
@@ -49,7 +62,7 @@
                 <div class="form-group" style="border: 1.3px solid #c3c3d7;border-radius: 0.4rem;">
                     <div class="mt-2 ml-2 mb-2 mr-2">
                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <div class="input-group" style="width:40%">
+                            @*<div class="input-group" style="width:40%">
                                 <input type="text" class="form-control bg-light border-0 small" id="search_input" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
                                 <input type="hidden" id="latitude_input" />
                                 <input type="hidden" id="longitude_input" />
@@ -59,20 +72,20 @@
                                         <i class="fa fa-search fa-sm"></i>
                                     </button>
                                 </div>
-                            </div>
+                            </div>*@
                             <button onclick="goToCurrentLocation()" class="h3 mt-1 btn btn-default" style="background-color:#fdecec;"><i class="glyphicon glyphicon-tags mr-1 mt-1" style="color:#ca4d1f;font-size:1rem;"></i>   <span style="font-weight: 500;font-size: initial;font-family: sans-serif;font-size:1rem;">Vị trí của bạn</span></button>
                         </div>
 
                         <div id="idMap" class="mt-2"></div>
-                        <div class="mt-2" style="font-size:1.2rem;font-weight:400;">
+                        <div class="mt-2" id="latAndLongArea" style="font-size:1.2rem;font-weight:400;display:none;">
                             <span>Latitude:</span>
-                            <span class="text-nowrap bd-highlight text-info" id="latitude_view">12312342423</span>
+                            <span class="text-nowrap bd-highlight text-info" id="latitude_view"></span>
                             <span class="ml-2">Longitude:</span>
-                            <span class="text-nowrap bd-highlight text-info" id="longitude_view">123123</span>
+                            <span class="text-nowrap bd-highlight text-info" id="longitude_view"></span>
                             <br />
-                            <span>Địa chỉ:</span>
+                            @*<span>Địa chỉ:</span>
                             <span class="text-nowrap bd-highlight text-info" id="addressOfGGMap">Số 401 Cổ Nhuế</span>
-                            <button class="btn btn-primary" id="btn_GetAddressOfGGMap"><i class="glyphicon glyphicon-plus"></i> Lấy địa chỉ này </button>
+                            <button class="btn btn-primary" id="btn_GetAddressOfGGMap"><i class="glyphicon glyphicon-plus"></i> Lấy địa chỉ này </button>*@
                         </div>
 
                     </div>
@@ -103,7 +116,7 @@
 </div>
 
 <script>
-
+    var flagGetLatLn = false;
     function checkValid() {
         var strLength = "Tối đa 36 kí tự"
         var strEmpty = "Chưa nhập thông tin";
@@ -164,57 +177,60 @@
 
     function createStore() {
         if (checkValid()) {
-            var status = 1;
-            var userIDBySes = sessionStorage.getItem("UserID");
+            if (flagGetLatLn) {
+                var userIDBySes = sessionStorage.getItem("UserID");
 
-            var storeName = $('#StoreName').val();
-            var storePhone = $('#StorePhone').val();
-            var storeEmail = $('#StoreEmail').val();
-            var storeAddress = $('#StoreAddress').val();
-            var storeDetail = $('#StoreDetail').val();
-            var imgSrc = $('#StoreImg').attr('src');
-            var lat = $('#latitude_view').val();
-            var long = $('#longitude_view').val();
+                var storeName = $('#StoreName').val();
+                var storePhone = $('#StorePhone').val();
+                var storeEmail = $('#StoreEmail').val();
+                var storeAddress = $('#StoreAddress').val();
+                var storeDetail = $('#StoreDetail').val();
+                var imgSrc = $('#StoreImg').attr('src');
+                var lat = $('#latitude_view').html();
+                var long = $('#longitude_view').html();
 
-            var store = {
-                StoreName: storeName,
-                StorePhone: storePhone,
-                StoreEmail: storeEmail,
-                StoreAddress: storeAddress,
-                StoreDetail: storeDetail,
-                ImgSrc: imgSrc,
-                UserID: userIDBySes,
-                Latitude: lat,
-                Longitude: long
+                var store = {
+                    StoreName: storeName,
+                    StorePhone: storePhone,
+                    StoreEmail: storeEmail,
+                    StoreAddress: storeAddress,
+                    StoreDetail: storeDetail,
+                    ImgSrc: imgSrc,
+                    UserID: userIDBySes,
+                    Latitude: lat,
+                    Longitude: long
+                }
+                console.log(store);
+
+                $.ajax({
+                    type: 'Get',
+                    contentType: 'application/json; charset=utf-8',
+                    url: '/Store/CreateStore',
+                    dataType: 'Json',
+                    data: store,
+                    success: function (data) {
+                        console.log(data);
+
+                        var status = data.status;
+                        var message = data.message;
+
+                        switch (status) {
+                            case 0:
+                                message_Error("", message);
+                                break;
+                            case 1:
+                                localStorage.setItem("successMess", JSON.stringify(message));
+                                window.location.href = "/Store/Details";
+                                break;
+                        }
+                    },
+                    error: function (data) {
+                        message_Error("", "Cập nhật thông tin thất bại")
+                    },
+                });
             }
-            console.log(store);
-
-            $.ajax({
-                type: 'Get',
-                contentType: 'application/json; charset=utf-8',
-                url: '/Store/CreateStore',
-                dataType: 'Json',
-                data: store,
-                success: function (data) {
-                    console.log(data);
-
-                    status = data.status;
-                    message = data.message;
-
-                    switch (status) {
-                        case 0:
-                            message_Error("", message);
-                            break;
-                        case 1:
-                            localStorage.setItem("successMess", JSON.stringify(message));
-                            window.location.href = "/Store/Details";
-                            break;
-                    }
-                },
-                error: function (data) {
-                    message_Error("", "Cập nhật thông tin thất bại")
-                },
-            });
+            else
+                message_Error("", "Bạn chưa lấy tọa độ cửa hàng .");
         }
     }
 </script>
@@ -297,6 +313,17 @@
         //////////////
         setMarkerCurrentLocation(defaultCoord)
         ///////////////////
+
+        var searchControl = L.esri.Geocoding.geosearch().addTo(mapObj);
+
+        var results = L.layerGroup().addTo(mapObj);
+
+        searchControl.on('results', function (data) {
+            results.clearLayers();
+            for (var i = data.results.length - 1; i >= 0; i--) {
+                results.addLayer(L.marker(data.results[i].latlng));
+            }
+        });
     };
 
 
@@ -304,7 +331,7 @@
         long = e.latlng.lng.toFixed(5);//lấy giá trị long
         lat = e.latlng.lat.toFixed(5);//lấy giá trị lat
         var html = `<h4>Toạ độ (` + lat + `,` + long + `)</h4>
-        <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="showPopUp()"><i class="glyphicon glyphicon-plus"></i> Lấy toạ độ này </button>`;
+        <button class="btn btn-primary" onclick="getLatAndLong()"><i class="glyphicon glyphicon-plus"></i> Lấy toạ độ này </button>`;
         popup
             .setLatLng(e.latlng)
             .setContent(html)
@@ -316,14 +343,14 @@
     function goToCurrentLocation() {
         navigator.geolocation.getCurrentPosition
             (
-            function (location) {
-                var currentLocation = new L.LatLng(location.coords.latitude, location.coords.longitude);
-                mapObj.setView(currentLocation, zoomLevel);
-                var curLocation = [location.coords.latitude, location.coords.longitude];
-                setMarkerCurrentLocation(curLocation);
-                localStorage.removeItem("curLocation");
-                localStorage.setItem("curLocation", curLocation);
-            });
+                function (location) {
+                    var currentLocation = new L.LatLng(location.coords.latitude, location.coords.longitude);
+                    mapObj.setView(currentLocation, zoomLevel);
+                    var curLocation = [location.coords.latitude, location.coords.longitude];
+                    setMarkerCurrentLocation(curLocation);
+                    localStorage.removeItem("curLocation");
+                    localStorage.setItem("curLocation", curLocation);
+                });
 
     }
 
@@ -337,14 +364,14 @@
 
         marker = new L.marker(defaultCoord, { icon: locationIcon });
 
-        $('#StoreLat').html(defaultCoord[0]);
-        $('#StoreLong').html(defaultCoord[1]);
+        lat = defaultCoord[0];
+        long = defaultCoord[1];
         marker.options.highlight = "permanent";
         mapObj.markers = marker;
         var popup = L.popup();
 
         var strHtml = "<span>Đây là vị trí của bạn </span>";
-        strHtml += `<br><button class="btn btn-primary text-center" data-toggle="modal" data-target="#exampleModal" onclick="showPopUp()"><i class="glyphicon glyphicon-plus"></i> Lấy toạ độ này </button>`;
+        strHtml += `<br><button class="btn btn-primary text-center" data-toggle="modal" data-target="#exampleModal" onclick="getLatAndLong()"><i class="glyphicon glyphicon-plus"></i> Lấy toạ độ này </button>`;
 
         popup.setContent(strHtml);
 
@@ -356,24 +383,30 @@
 </script>
 
 <script>
-    $('#btn_GetAddressOfGGMap').click(function ()
-    {
+    $('#btn_GetAddressOfGGMap').click(function () {
         var addrOfGGMap = $('#addressOfGGMap').html();
         console.log(addrOfGGMap);
         $('#StoreAddress').val(addrOfGGMap);
     });
 
-    function findByAddress() {
-        //$.get(location.protocol + '//nominatim.openstreetmap.org/search?format=json&q=' + 'Ha Noi',
-        //    function (data) {
-        //    console.log(data);
-        //    });
-        var jsonUrl = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=401+C%E1%BB%95+Nhu%E1%BA%BF&sensor=false&language=vi&key=AIzaSyBfQPm46M3j2joTFlHachk4RCXfeR7ZFWE";
-        var myData;
-        getJsonData(jsonUrl, function (data) {
-            myData = data;
-        });
+    function getLatAndLong() {
+        flagGetLatLn = true;
+        $('#latAndLongArea').show()
+        $('#latitude_view').html(lat);
+        $('#longitude_view').html(long);
     }
+
+    //function findByAddress() {
+    //    //$.get(location.protocol + '//nominatim.openstreetmap.org/search?format=json&q=' + 'Ha Noi',
+    //    //    function (data) {
+    //    //    console.log(data);
+    //    //    });
+    //    var jsonUrl = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=401+C%E1%BB%95+Nhu%E1%BA%BF&sensor=false&language=vi&key=AIzaSyBfQPm46M3j2joTFlHachk4RCXfeR7ZFWE";
+    //    var myData;
+    //    getJsonData(jsonUrl, function (data) {
+    //        myData = data;
+    //    });
+    //}
 
     function getJsonData(url, callback) {
         let request = new XMLHttpRequest;
@@ -391,7 +424,7 @@
     }
 </script>
 
-<script>
+@*<script>
     var searchInput = 'search_input';
 
     $(document).ready(function () {
@@ -426,5 +459,5 @@
         //}
     });
 
-</script>
+</script>*@
 
