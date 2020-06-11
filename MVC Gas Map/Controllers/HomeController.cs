@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 
@@ -10,6 +11,14 @@ namespace MVC_Gas_Map.Controllers
     {
         public ActionResult Index()
         {
+            HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("Stores?mode=1").Result;
+            string amountOfStores = response.Content.ReadAsStringAsync().Result;
+            ViewBag.AmountOfStores = amountOfStores;
+
+            response = GlobalVariables.webApiClient.GetAsync("Stores?mode=2").Result;
+            string amountOfUsers = response.Content.ReadAsStringAsync().Result;
+            ViewBag.AmountOfUsers = amountOfUsers;
+
             return View();
         }
 

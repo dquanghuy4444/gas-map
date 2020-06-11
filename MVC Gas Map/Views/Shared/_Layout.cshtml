@@ -101,7 +101,7 @@
         <div id="content-wrapper" class="d-flex flex-column">
             <div id="content">
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style="margin-bottom:0rem !important">
-                    <a class="navbar-brand btn btn-danger" style="font-size:1.8rem;padding:1rem 2.4rem;" href="/Store/Index">Trang chủ</a>
+                    <a class="navbar-brand btn btn-danger" style="font-size:1.8rem;padding:1rem 2.4rem;" href="/Home/Index">Trang chủ</a>
                     <a class="navbar-brand btn btn-group" id="btn_GoToCusPage" style="display:none;" href="/Guest/Details">Gọi Gas</a>
                     <a class="navbar-brand btn btn-group" id="btn_GoToStorePage" style="display:none;" href="/Store/Details">Quản lí cửa hàng</a>
                     <a class="navbar-brand btn btn-group" href="#" onclick="scrollToSection("introProject")" style="display:none;" id="introProject">Giới thiệu về chúng tôi</a>
@@ -245,7 +245,7 @@
                                     <i class="fa fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Thông tin cá nhân
                                 </a>
-                                <a class="dropdown-item" href="/User/Index">
+                                <a class="dropdown-item" href="/User/Edit">
                                     <i class="fa fa-key fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Đổi mật khẩu
                                 </a>
@@ -488,7 +488,6 @@
 
                         modal2.style.display = "none";
 
-
                     }
                     else if (permissionIDBySes == 3 || permissionIDBySes == 4) {
                         modal2.style.display = "none";
@@ -498,7 +497,6 @@
                         $("#createStoreSetting").show();
                         $("#btn_GoToStorePage").show();                      
 
-
                         if (pathName == "/Store/Details") {
                             if (permissionIDBySes == 3)
                                 $('#noStoreArea').show();
@@ -507,18 +505,28 @@
                         }
                     }
                 }
-                else {
+                else
+                {
                     $("#loginArea").show();
 
                     clearInterval(interval);
                     sessionStorage.clear();
 
+                    var array404Page =
+                    [
+                        "/Guest/Index",
+                        "/Guest/Details",
+                        "/Store/Details",
+                            "/Store/Create",
+                            "/User/Edit",
+                    ]
+
                     //pathName == "/Guest/Index" || pathName == "/Store/Details" || pathName == "/Guest/Details"
-                    if (["/Guest/Index", "/Store/Details", "/Guest/Details", "/Store/Create"].indexOf(pathName) != - 1)
+                    if (array404Page.indexOf(pathName) != - 1)
                         window.location.href = "/Error/PageNotFound";
                 }
             }
-            , 3e2);
+            , 2e2);
 
         function goTo404Page(pathName, pathNameNotFound, interval) {
             if (pathName == pathNameNotFound) {
@@ -552,8 +560,6 @@
                     message_Error("", "Cập nhật quyền tài khoản thất bại")
                 },
             });
-
-
         }
 
         function message_Error(id, strMess) {
@@ -603,6 +609,24 @@
             }
             return true;
         }
+
+        //check caplock
+        var flagCheckCapLock = true;
+        var strCapLock = "Cap Lock đang bật.Hãy tắt để nhập thông tin";
+
+        function checkCapLock(idTxt) {
+            var txt = document.getElementById(idTxt);
+            txt.addEventListener("keyup", function (event) {
+                if (event.getModifierState("CapsLock")) {
+                    flagCheckCapLock = false;
+                    message_Error(idTxt, strCapLock);
+
+                } else {
+                    flagCheckCapLock = true;
+                    $('.notifyjs-wrapper').remove();
+                }
+            });
+        }
     </script>
 
     <script>
@@ -628,7 +652,7 @@
         function logoutSystem() {
             clearInterval(interval);
             sessionStorage.clear();
-            window.location.href = "/Store/Index";
+            window.location.href = "/Home/Index";
         }
 
         // When the user clicks on <span> (x), close the modal

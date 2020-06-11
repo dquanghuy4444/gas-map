@@ -14,15 +14,7 @@ namespace MVC_Gas_Map.Controllers
         // GET: Store
         [HandleError]
         public ActionResult Index()
-        {
-            HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("Stores?mode=1").Result;
-            string amountOfStores = response.Content.ReadAsStringAsync().Result ;
-            ViewBag.AmountOfStores = amountOfStores;
-
-            response = GlobalVariables.webApiClient.GetAsync("Stores?mode=2").Result;
-            string amountOfUsers = response.Content.ReadAsStringAsync().Result;
-            ViewBag.AmountOfUsers = amountOfUsers;
-
+        { 
             return View();
         }
 

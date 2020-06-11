@@ -1,6 +1,10 @@
-﻿using System;
+﻿using MVC_Gas_Map.Models;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -43,25 +47,23 @@ namespace MVC_Gas_Map.Controllers
         }
 
         // GET: User/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Edit()
         {
             return View();
         }
 
         // POST: User/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(string newPass,User user)
         {
-            try
-            {
-                // TODO: Add update logic here
+            var formData = new MultipartFormDataContent();
+            formData.Add(new StringContent(JsonConvert.SerializeObject(newPass)), "newPass");
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            //add config to form data
+            formData.Add(new StringContent(JsonConvert.SerializeObject(user)), "user");
+
+            HttpResponseMessage response = GlobalVariables.webApiClient.PutAsync("User", formData).Result;
+            return Json(new { status = 0 });
         }
 
         // GET: User/Delete/5

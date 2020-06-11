@@ -20,97 +20,95 @@
         padding-right: .75rem;
     }
 </style>
-<div>
-    <div class="container">
+<div class="container">
 
-        <!-- Outer Row -->
-        <div class="row justify-content-center">
+    <!-- Outer Row -->
+    <div class="row justify-content-center">
 
-            <div class="col-xl-5 col-md-5">
+        <div class="col-xl-5 col-md-5">
 
-                <div class="card o-hidden border-0 shadow-lg my-5" id="loginin">
-                    <div class="card-body p-0">
-                        <!-- Nested Row within Card Body -->
-                        <div class="auto-style2">
-                            <div class="p-5">
+            <div class="card o-hidden border-0 shadow-lg my-5" id="loginin">
+                <div class="card-body p-0">
+                    <!-- Nested Row within Card Body -->
+                    <div class="auto-style2">
+                        <div class="p-5">
+                            <span class="ml-3">Tên đăng nhập</span>
+                            <div class="form-group">
+                                <input class="form-control form-control-user" id="txt_UserToLogin" type="text" value="" />
+                            </div>
+                            <span class="ml-3">Mật khẩu</span>
+                            <div class="form-group">
+                                <input class="form-control form-control-user" id="txt_PassToLogin" type="password" value="" />
+
+                            </div>
+                            <div class="form-group">
+                                <div class="custom-control custom-checkbox small">
+                                    <input type="checkbox" class="custom-control-input" id="customCheck">
+                                    <asp:Label ID="lbl_tb" runat="server" ForeColor="Red"></asp:Label>
+                                    <br />
+                                    &nbsp;
+                                    <label class="custom-control-label" for="customCheck">Remember Me</label>
+                                </div>
+                            </div>
+                            <div>
+                                <input class="btn btn-facebook btn-user btn-block" id="txt_username2" name="UserName" onclick="loginSystem()" type="submit" value="Đăng nhập" />
+                                @*<asp:Button ID="btn_login" runat="server" class="btn btn-primary btn-user btn-block" Text="Login" OnClick="btn_login_Click" />*@
+                            </div>
+                            <hr>
+                            <a href="index.html" class="btn btn-google btn-user btn-block">
+                                <i class="fa fa-google fa-fw"></i> Login with Google
+                            </a>
+                            <a href="" class="btn btn-facebook btn-user btn-block">
+                                <i class="fa fa-facebook-f fa-fw"></i> Login with Facebook
+                            </a>
+
+                            <hr>
+                            <div class="text-center">
+                                <a class="small" href="forgot-password.html">Forgot Password?</a>
+                            </div>
+                            <div class="auto-style1">
+                                <a href="#" id="btn_ToggleCreateAcc" onclick="toggleCreateAccSection()" class="small">Create an Account!</a>
+                                <br />
+                            </div>
+                            <div style="margin-top: 1rem;display:none;" id="createAccSection">
+                                @*@using (Ajax.BeginForm("Create", "Login",
+                                        new AjaxOptions
+                                        {   HttpMethod = "POST"
+                                            }
+                                        ,new
+                                        { id="createFrom"}))
+                                    {
+                                        <span class="ml-3">Tên đăng nhập</span>
+                                        <div class="form-group">
+                                            @Html.TextBoxFor(model => model.UserID , new { @class = "form-control form-control-user", id= "txt_UserToCreate" })
+                                        </div>
+                                        <span class="ml-3">Nhập mật khẩu</span>
+                                        <div class="form-group">
+                                            @Html.PasswordFor(model => model.Password, new { @class = "form-control form-control-user", id = "txt_PassToCreate" })
+                                        </div>
+                                        <span class="ml-3">Nhập lại mật khẩu</span>
+                                        <div class="form-group">
+                                            <input class="form-control form-control-user" id="txt_Pass2ToCreate" type="password" value="" />
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="btn btn-primary btn-user btn-block" id="btn_CreateUser" type="submit" />
+                                        </div>
+                                    }*@
+
                                 <span class="ml-3">Tên đăng nhập</span>
                                 <div class="form-group">
-                                    <input class="form-control form-control-user" id="txt_UserToLogin" type="text" value="" />
+                                    <input class="form-control form-control-user" id="txt_UserToCreate" type="text" value="" />
                                 </div>
-                                <span class="ml-3">Mật khẩu</span>
+                                <span class="ml-3">Nhập mật khẩu</span>
                                 <div class="form-group">
-                                    <input class="form-control form-control-user" id="txt_PassToLogin" type="password" value="" />
-
+                                    <input class="form-control form-control-user" id="txt_PassToCreate" type="password" value="" />
+                                </div>
+                                <span class="ml-3">Nhập lại mật khẩu</span>
+                                <div class="form-group">
+                                    <input class="form-control form-control-user" id="txt_Pass2ToCreate" type="password" value="" />
                                 </div>
                                 <div class="form-group">
-                                    <div class="custom-control custom-checkbox small">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck">
-                                        <asp:Label ID="lbl_tb" runat="server" ForeColor="Red"></asp:Label>
-                                        <br />
-                                        &nbsp;
-                                        <label class="custom-control-label" for="customCheck">Remember Me</label>
-                                    </div>
-                                </div>
-                                <div>
-                                    <input class="btn btn-facebook btn-user btn-block" id="txt_username2" name="UserName" onclick="loginSystem()" type="submit" value="Đăng nhập" />
-                                    @*<asp:Button ID="btn_login" runat="server" class="btn btn-primary btn-user btn-block" Text="Login" OnClick="btn_login_Click" />*@
-                                </div>
-                                <hr>
-                                <a href="index.html" class="btn btn-google btn-user btn-block">
-                                    <i class="fa fa-google fa-fw"></i> Login with Google
-                                </a>
-                                <a href="" class="btn btn-facebook btn-user btn-block">
-                                    <i class="fa fa-facebook-f fa-fw"></i> Login with Facebook
-                                </a>
-
-                                <hr>
-                                <div class="text-center">
-                                    <a class="small" href="forgot-password.html">Forgot Password?</a>
-                                </div>
-                                <div class="auto-style1">
-                                    <a href="#" id="btn_ToggleCreateAcc" onclick="toggleCreateAccSection()" class="small">Create an Account!</a>
-                                    <br />
-                                </div>
-                                <div style="margin-top: 1rem;display:none;" id="createAccSection">
-                                    @*@using (Ajax.BeginForm("Create", "Login",
-                                            new AjaxOptions
-                                            {   HttpMethod = "POST"
-                                                }
-                                            ,new
-                                            { id="createFrom"}))
-                                        {
-                                            <span class="ml-3">Tên đăng nhập</span>
-                                            <div class="form-group">
-                                                @Html.TextBoxFor(model => model.UserID , new { @class = "form-control form-control-user", id= "txt_UserToCreate" })
-                                            </div>
-                                            <span class="ml-3">Nhập mật khẩu</span>
-                                            <div class="form-group">
-                                                @Html.PasswordFor(model => model.Password, new { @class = "form-control form-control-user", id = "txt_PassToCreate" })
-                                            </div>
-                                            <span class="ml-3">Nhập lại mật khẩu</span>
-                                            <div class="form-group">
-                                                <input class="form-control form-control-user" id="txt_Pass2ToCreate" type="password" value="" />
-                                            </div>
-                                            <div class="form-group">
-                                                <input class="btn btn-primary btn-user btn-block" id="btn_CreateUser" type="submit" />
-                                            </div>
-                                        }*@
-
-                                    <span class="ml-3">Tên đăng nhập</span>
-                                    <div class="form-group">
-                                        <input class="form-control form-control-user" id="txt_UserToCreate" type="text" value="" />
-                                    </div>
-                                    <span class="ml-3">Nhập mật khẩu</span>
-                                    <div class="form-group">
-                                        <input class="form-control form-control-user" id="txt_PassToCreate" type="password" value="" />
-                                    </div>
-                                    <span class="ml-3">Nhập lại mật khẩu</span>
-                                    <div class="form-group">
-                                        <input class="form-control form-control-user" id="txt_Pass2ToCreate" type="password" value="" />
-                                    </div>
-                                    <div class="form-group">
-                                        <input class="btn btn-primary btn-user btn-block" id="btn_CreateUser" onclick="createUser()" type="submit" value="Đăng kí" />
-                                    </div>
+                                    <input class="btn btn-primary btn-user btn-block" id="btn_CreateUser" onclick="createUser()" type="submit" value="Đăng kí" />
                                 </div>
                             </div>
                         </div>
@@ -137,6 +135,12 @@
         }
         else
             $('#txt_UserToLogin').focus();
+
+        checkCapLock("txt_UserToLogin");
+        checkCapLock("txt_PassToLogin");
+        checkCapLock("txt_UserToCreate");
+        checkCapLock("txt_PassToCreate");
+        checkCapLock("txt_Pass2ToCreate");
     }
 
     //
@@ -223,8 +227,7 @@
     }
 
     function loginSystem() {
-        if (checkValidInputToCreateUser('txt_UserToLogin', 'txt_PassToLogin', ''))
-        {
+        if (checkValidInputToCreateUser('txt_UserToLogin', 'txt_PassToLogin', '')) {
             if (flagCheckCapLock) {
                 $(".loader").show();
 
@@ -261,7 +264,7 @@
                                 sessionStorage.setItem("ImgSrc", imgSrc);
 
                                 localStorage.setItem("successMess", JSON.stringify("Đăng nhập thành công"));
-                                window.location.href = (permissionID == 0) ? "/Guest/Index" : "/Store/Index";
+                                window.location.href = (permissionID == 0) ? "/Guest/Index" : "/Home/Index";
                                 break;
                             case 1:
                                 localStorage.setItem("errorMess", JSON.stringify("Tài khoản hoặc mật khẩu không đúng"));
@@ -281,31 +284,4 @@
                 message_Error("", "Thông tin bạn nhập vào đang có chữ cái in hoa.Hãy nhập lại !!!");
         }
     }
-</script>
-
-<script>
-    //check caplock
-    var strCapLock = "Cap Lock đang bật.Hãy tắt để nhập thông tin";
-
-    checkCapLock("txt_UserToLogin");
-    checkCapLock("txt_PassToLogin");
-    checkCapLock("txt_UserToCreate");
-    checkCapLock("txt_PassToCreate");
-    checkCapLock("txt_Pass2ToCreate");
-
-    function checkCapLock(idTxt) {
-        var txt = document.getElementById(idTxt);
-        txt.addEventListener("keyup", function (event) {
-            if (event.getModifierState("CapsLock")) {
-                flagCheckCapLock = false;
-                message_Error(idTxt, strCapLock);
-
-            } else {
-                flagCheckCapLock = true;
-                $('.notifyjs-wrapper').remove();
-            }
-        });
-    }
-
-
 </script>

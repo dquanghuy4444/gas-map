@@ -107,6 +107,32 @@ namespace API.Controllers
             return Ok();
         }
 
+        // PUT: api/User/5
+        [ResponseType(typeof(void))]
+        public IHttpActionResult PutUserInSystem(string newPass, UserInSystem user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var userInDb = db.UserInSystems.FirstOrDefault(x => x.UserID == user.UserID && x.Password==user.Password);
+            if(userInDb == null)
+            {
+                return BadRequest();
+            }
+            userInDb.Password = newPass;
+            try
+            {
+                db.Entry(userInDb).CurrentValues.SetValues(userInDb);
+                db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return NotFound();
+            }
+            return Ok();
+        }
+
         // POST: api/User
         [ResponseType(typeof(UserInSystem))]
         public IHttpActionResult PostUserInSystem(UserInSystem userInSystem)

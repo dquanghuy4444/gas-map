@@ -1,0 +1,126 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+    .auto-style1 {
+        text-align: center;
+        font-family: "Segoe UI";
+    }
+
+    .auto-style2 {
+        position: relative;
+        width: 100%;
+        flex: 0 0 50%;
+        left: 0px;
+        top: 0px;
+        padding-left: .75rem;
+        padding-right: .75rem;
+    }
+</style>
+<div class="container">
+    <div class="row justify-content-center">
+            <div class="col-xl-5 col-md-5">
+                <div class="card o-hidden border-0 shadow-lg my-5" id="loginin">
+                    <div class="card-body p-0">
+                        <!-- Nested Row within Card Body -->
+                        <div class="auto-style2">
+                            <div class="p-5">
+                                <span class="ml-3">Mật khẩu cũ</span>
+                                <div class="form-group">
+                                    <input class="form-control form-control-user" id="txt_OldPass" type="password" value="" />
+                                </div>
+                                <span class="ml-3">Mật khẩu mới</span>
+                                <div class="form-group">
+                                    <input class="form-control form-control-user" id="txt_NewPass" type="password" value="" />
+                                </div>
+                                <span class="ml-3">Nhập lại mật khẩu</span>
+                                <div class="form-group">
+                                    <input class="form-control form-control-user" id="txt_NewPass2" type="password" value="" />
+                                </div>
+                                <hr>
+                                <div class="form-group">
+                                    <input class="btn btn-primary btn-user" onclick="changePass()" type="submit" value="Thay đổi" style="width:25%;">
+                                    <a href="/Home/Index" class="btn btn-primary btn-danger">Thoát</a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<script>
+
+    window.onload = function () {
+        checkCapLock("txt_OldPass");
+        checkCapLock("txt_NewPass");
+        checkCapLock("txt_NewPass2");
+    }
+
+    function changePass() {
+        if (checkValidInput('txt_OldPass', 'txt_NewPass', 'txt_NewPass2')) {
+            $(".loader").show();
+            var userIDBySes = sessionStorage.getItem("UserID");
+            var oldPass = $('#txt_OldPass').val();
+            var newPass = $('#txt_NewPass').val();
+
+            var user = { UserID: userIDBySes, Password: oldPass }
+
+            var dataToSend = JSON.stringify({
+                'newPass': newPass,
+                'user': user
+            });
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json; charset=utf-8',
+                url: '/User/Edit',
+                async: false,
+                dataType: 'Json',
+                data: dataToSend,
+                success: function (data) {
+                    var status = data.status;
+
+                    switch (status) {
+                        case 0:
+                            localStorage.setItem("successMess", JSON.stringify("Thay đổi mật khẩu thành công"));
+                            window.location.href = "/Home/Index";
+                            break;
+                        case 1:
+                            localStorage.setItem("errorMess", JSON.stringify("Mật khẩu cũ không đúng"));
+                            window.location.href = "/User/Edit";
+                            break;
+                    }
+                },
+                error: function (data) {
+                    localStorage.setItem("errorMess", JSON.stringify("Thay đổi mật khẩu thất bại"));
+                    window.location.href = "/User/Edit";
+                },
+            });
+            $(".loader").hide();
+        }
+    }
+
+    function checkValidInput(idOldPass, idNewPass, idNewPass2) {
+
+        var strInputAgain = "Mật khẩu nhập lại không giống mật khẩu đầu tiên";
+
+        if (!checkValidTxt(idOldPass)) return false;
+
+        if (!checkValidTxt(idNewPass)) return false;
+
+        if (idNewPass2 !== "") {
+            var strPass = $('#' + idNewPass).val();
+            var strPass2 = $('#' + idNewPass2).val();
+            if (strPass !== strPass2) {
+                message_Error(idNewPass2, strInputAgain);
+                return false;
+            }
+        }
+        return true;
+    }
+</script>
