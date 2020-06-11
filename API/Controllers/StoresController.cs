@@ -164,6 +164,12 @@ namespace API.Controllers
             db.Images.Add(image);
             db.SaveChanges();
 
+            var userInDb= db.UserInSystems.FirstOrDefault(x => x.UserID==store.UserID);
+            if(Convert.ToInt32(userInDb.PermissionID)==3)
+                userInDb.PermissionID="4";
+            db.Entry(userInDb).CurrentValues.SetValues(userInDb);
+            db.SaveChanges();
+
             return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.OK)
             {
                 Content = new StringContent

@@ -213,6 +213,7 @@
 
                         var status = data.status;
                         var message = data.message;
+                        var permissID = data.permissionID;
 
                         switch (status) {
                             case 0:
@@ -220,7 +221,10 @@
                                 break;
                             case 1:
                                 localStorage.setItem("successMess", JSON.stringify(message));
-                                window.location.href = "/Store/Details";
+                                clearInterval(interval);
+                                sessionStorage.setItem("PermissionID", permissID);
+                                setTimeout(function () { window.location.href = "/Store/Details"; }, 1800);
+
                                 break;
                         }
                     },

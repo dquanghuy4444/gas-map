@@ -77,16 +77,31 @@ namespace MVC_Gas_Map.Controllers
         public ActionResult CreateStore(Store store)
         {
             string message = "";
-            int flagCheckStatus = 1; //0:fail  1:success
+            int permissionID = 3;
+            int flagCheckStatus = 0; //0:fail  1:success
             store.CreatedDate = DateTime.Now;
-            HttpResponseMessage response = GlobalVariables.webApiClient.PostAsJsonAsync("Stores", store).Result;
-            if (response.StatusCode == HttpStatusCode.BadRequest)
-                flagCheckStatus = 0;
-            else if (response.StatusCode == HttpStatusCode.OK)
-                flagCheckStatus = 1;
-            message = response.Content.ReadAsStringAsync().Result;
+            try
+            {
+                HttpResponseMessage response = GlobalVariables.webApiClient.PostAsJsonAsync("Stores", store).Result;
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                    flagCheckStatus = 0;
+                else if (response.StatusCode == HttpStatusCode.OK)
+                    flagCheckStatus = 1;
+                message = response.Content.ReadAsStringAsync().Result;
 
-            return Json(new { status = flagCheckStatus, message= message }, JsonRequestBehavior.AllowGet);
+                response = GlobalVariables.webApiClient.GetAsync("User?userID=" + store.UserID).Result;
+                if (response.StatusCode == HttpStatusCode.Accepted)
+                    permissionID = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
+
+            }
+            catch
+            {
+                 message = "";
+                 permissionID = 3;
+                 flagCheckStatus = 0; //0:fail  1:success
+            }
+
+            return Json(new { status = flagCheckStatus, message= message, permissionID= permissionID }, JsonRequestBehavior.AllowGet);
 
         }
 

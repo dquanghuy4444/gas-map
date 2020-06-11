@@ -4,9 +4,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="text-center" style="margin:11rem 0;">
+<div class="text-center" id="noStoreArea" style="margin:11rem 0;display:none;">
     <img src="~/Images/43-432523_image-black-tokyo-ghoul-clipart-black-and-white.png" width="12%"/>
     <h1 class="text-gray-500 mt-5">Bạn chưa tạo thông tin cửa hàng nào .</h1>
+    <h2 class="text-gray-500 ">Tạo tại <a href="/Store/Create" class="text-wrap text-uppercase">đây</a></h2>
+</div>
+
+<div  id="storesArea" style="margin:11rem 0;display:none;">
+    <img src="~/Images/43-432523_image-black-tokyo-ghoul-clipart-black-and-white.png" width="12%" />
+    <h1 class="text-gray-500 mt-5">Bạn đã có thông tin cửa hàng nào .</h1>
     <h2 class="text-gray-500 ">Tạo tại <a href="/Store/Create" class="text-wrap text-uppercase">đây</a></h2>
 </div>
 

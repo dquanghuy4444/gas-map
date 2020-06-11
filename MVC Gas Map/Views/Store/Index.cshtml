@@ -684,7 +684,7 @@
         return layerGroup;
     }
 
-    function addMarker(coord, popupContent, popupOptionObj, markerObj) {
+    function addMarker(coord, popupContent, popupOptionObj) {
         if (!popupOptionObj) {
             popupOptionObj = {};
         }
@@ -718,15 +718,15 @@
     }
 
     function onMapClick(e) {
-        long = e.latlng.lng.toFixed(5);//lấy giá trị long
-        lat = e.latlng.lat.toFixed(5);//lấy giá trị lat
-        var html = `<h4>Toạ độ (` + lat + `,` + long + `)</h4>
-        <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="showPopUp()"><i class="glyphicon glyphicon-plus"></i> Tạo phòng </button>`;
-        popup
-            .setLatLng(e.latlng)
-            .setContent(html)
-            .openOn(mapObj);//hiện popup
-        //console.log(e.latlng);
+        //long = e.latlng.lng.toFixed(5);//lấy giá trị long
+        //lat = e.latlng.lat.toFixed(5);//lấy giá trị lat
+        //var html = `<h4>Toạ độ (` + lat + `,` + long + `)</h4>
+        //<button class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" onclick="showPopUp()"><i class="glyphicon glyphicon-plus"></i> Tạo phòng </button>`;
+        //popup
+        //    .setLatLng(e.latlng)
+        //    .setContent(html)
+        //    .openOn(mapObj);//hiện popup
+        ////console.log(e.latlng);
     }
     //
     function screenFull(map) {
@@ -762,7 +762,7 @@
                     var name = null;
                     var layerGroup = new L.layerGroup([osm2]);
                     var responsive = data.data;
-                    //console.log(responsive.length);
+                    console.log(responsive);
                     for (let i = 0; i < responsive.length; i++) {
                         if (responsive[i].StoreName == null) {
                             name = `Cửa hàng gas`;

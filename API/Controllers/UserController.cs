@@ -31,12 +31,12 @@ namespace API.Controllers
             {
                 return Content(HttpStatusCode.NotFound, ""); 
             }
-            UserInSystem userInSystem = db.UserInSystems.FirstOrDefault(x=>x.UserName == username && x.Password == password);
-            if (userInSystem == null)
+            UserInSystem userInDb = db.UserInSystems.FirstOrDefault(x=>x.UserName == username && x.Password == password);
+            if (userInDb == null)
             {
                 return Content(HttpStatusCode.Forbidden, "");
             }
-            Guest guest = db.Guests.FirstOrDefault(x => x.UserID == userInSystem.UserID);
+            Guest guest = db.Guests.FirstOrDefault(x => x.UserID == userInDb.UserID);
             if (guest == null)
             {
                 return Content(HttpStatusCode.Forbidden, "");
@@ -46,8 +46,8 @@ namespace API.Controllers
             {
                 return Content(HttpStatusCode.Forbidden, "");
             }
-            string strResponseMess = userInSystem.PermissionID.ToString();
-            strResponseMess +=  ";" + userInSystem.UserID.ToString();
+            string strResponseMess = userInDb.PermissionID.ToString();
+            strResponseMess +=  ";" + userInDb.UserID.ToString();
             strResponseMess +=  ";" + guest.GuestName.ToString();
             strResponseMess += ";" + img.ImageSrc.ToString();
             return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.Accepted)
@@ -55,6 +55,30 @@ namespace API.Controllers
                 Content = new StringContent
                 (
                     strResponseMess,
+                    Encoding.UTF8,
+                    "text/html"
+                )
+            });
+        }
+
+        // GET: api/User?userID=x
+        [ResponseType(typeof(UserInSystem))]
+        public IHttpActionResult GetUserInSystem(string userID)
+        {
+            if (userID == "")
+            {
+                return Content(HttpStatusCode.NotFound, "");
+            }
+            UserInSystem userInDb = db.UserInSystems.FirstOrDefault(x => x.UserID == userID);
+            if (userInDb == null)
+            {
+                return Content(HttpStatusCode.Forbidden, "");
+            }
+            return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.Accepted)
+            {
+                Content = new StringContent
+                (
+                    userInDb.PermissionID,
                     Encoding.UTF8,
                     "text/html"
                 )

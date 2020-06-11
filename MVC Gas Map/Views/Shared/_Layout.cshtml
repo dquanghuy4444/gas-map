@@ -104,7 +104,7 @@
                     <a class="navbar-brand btn btn-danger" style="font-size:1.8rem;padding:1rem 2.4rem;" href="/Store/Index">Trang chủ</a>
                     <a class="navbar-brand btn btn-group" id="btn_GoToCusPage" style="display:none;" href="/Guest/Details">Gọi Gas</a>
                     <a class="navbar-brand btn btn-group" id="btn_GoToStorePage" style="display:none;" href="/Store/Details">Quản lí cửa hàng</a>
-                    <a class="navbar-brand btn btn-group" href="#" onclick="scrollToSection("introProject")" id="introProject">Giới thiệu về chúng tôi</a>
+                    <a class="navbar-brand btn btn-group" href="#" onclick="scrollToSection("introProject")" style="display:none;" id="introProject">Giới thiệu về chúng tôi</a>
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
@@ -236,6 +236,10 @@
                                 <a class="dropdown-item" href="/Store/Details" id="storeSetting">
                                     <i class="fa fa-outdent fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Quản lí cửa hàng
+                                </a>
+                                <a class="dropdown-item" href="/Store/Create" id="createStoreSetting">
+                                    <i class="fa fa-plus fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Thêm mới cửa hàng
                                 </a>
                                 <a class="dropdown-item" href="/Guest/Index">
                                     <i class="fa fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -387,7 +391,11 @@
     <script src="~/Scripts/notify.min.js"></script>
 
     <script>
-        $("#introProject").hide();
+        var DEFAULT_NAME_GUEST = "Người dùng";
+    </script>
+
+    <script>
+        //$("#introProject").hide();
 
         var imgSrcBySes = sessionStorage.getItem("ImgSrc");
         if (imgSrcBySes != null)
@@ -466,36 +474,36 @@
                 var imgSrcBySes = sessionStorage.getItem("ImgSrc");
 
                 if (userIDBySes && permissionIDBySes && guestNameBySes != null && imgSrcBySes) {
-                    var guestName = (guestNameBySes === "") ? "Người dùng" : guestNameBySes;
+                    goTo404Page(pathName, "/Login/Index", this);
+
+                    var guestName = (guestNameBySes === "") ? DEFAULT_NAME_GUEST : guestNameBySes;
                     $("#guestName").html(guestName);
 
                     $("#userArea").show();
 
-                    if (pathName == "/Login/Index") {
-                        clearInterval(interval);
-                        window.location.href = "/Error/PageNotFound";
-                    }
-
                     if (permissionIDBySes == 2) {
+                        goTo404Page(pathName, "/Store/Details", this);
                         $("#btn_GoToCusPage").show();
                         $("#callGasSetting").show();
 
                         modal2.style.display = "none";
 
-                        if (pathName == "/Store/Details") {
-                            clearInterval(interval);
-                            window.location.href = "/Error/PageNotFound";
-                        }
+
                     }
-                    else if (permissionIDBySes == 3) {
+                    else if (permissionIDBySes == 3 || permissionIDBySes == 4) {
                         modal2.style.display = "none";
+                        goTo404Page(pathName, "/Guest/Details", this);
 
                         $("#storeSetting").show();
-                        $("#btn_GoToStorePage").show();
+                        $("#createStoreSetting").show();
+                        $("#btn_GoToStorePage").show();                      
 
-                        if (pathName == "/Guest/Details") {
-                            clearInterval(interval);
-                            window.location.href = "/Error/PageNotFound";
+
+                        if (pathName == "/Store/Details") {
+                            if (permissionIDBySes == 3)
+                                $('#noStoreArea').show();
+                            else
+                                $('#storesArea').show();
                         }
                     }
                 }
@@ -511,6 +519,13 @@
                 }
             }
             , 3e2);
+
+        function goTo404Page(pathName, pathNameNotFound, interval) {
+            if (pathName == pathNameNotFound) {
+                clearInterval(interval);
+                window.location.href = "/Error/PageNotFound";
+            }
+        }
     </script>
 
     <script>
@@ -588,7 +603,6 @@
             }
             return true;
         }
-
     </script>
 
     <script>
