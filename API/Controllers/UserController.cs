@@ -61,6 +61,24 @@ namespace API.Controllers
             });
         }
 
+        // GET: api/User?mode=x
+        [ResponseType(typeof(UserInSystem))]
+        public IHttpActionResult GetUserInSystem(int mode)
+        {
+            string result = null;
+            if (mode == 1)
+                result = db.UserInSystems.Count().ToString();
+
+            return base.ResponseMessage(new HttpResponseMessage()
+            {
+                Content = new StringContent(
+                    result,
+                    Encoding.UTF8,
+                    "text/html"
+                )
+            });
+        }
+
         // GET: api/User?userID=x
         [ResponseType(typeof(UserInSystem))]
         public IHttpActionResult GetUserInSystem(string userID)
@@ -89,47 +107,42 @@ namespace API.Controllers
         [ResponseType(typeof(void))]
         public IHttpActionResult PutUserInSystem( UserInSystem user)
         {
+            var userInDb = new UserInSystem();
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var userInDb = db.UserInSystems.FirstOrDefault(x => x.UserID == user.UserID);
-            userInDb.PermissionID = user.PermissionID;
-            try
+            if(user.Password.Length ==0 || user.NewPassword.Length ==0)
             {
-                db.Entry(userInDb).CurrentValues.SetValues(userInDb);
-                db.SaveChanges();
+                userInDb = db.UserInSystems.FirstOrDefault(x => x.UserID == user.UserID);
+                if(userInDb == null) return NotFound();
+                userInDb.PermissionID = user.PermissionID;
+                try
+                {
+                    db.Entry(userInDb).CurrentValues.SetValues(userInDb);
+                    db.SaveChanges();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return NotFound();
+                }
             }
-            catch (DbUpdateConcurrencyException)
+            else
             {
-                return NotFound();
+                userInDb = db.UserInSystems.FirstOrDefault(x => x.UserID == user.UserID && x.Password==user.Password);
+                if (userInDb == null) return BadRequest();
+                userInDb.Password = user.NewPassword;
+                try
+                {
+                    db.Entry(userInDb).CurrentValues.SetValues(userInDb);
+                    db.SaveChanges();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return NotFound();
+                }
             }
-            return Ok();
-        }
 
-        // PUT: api/User/5
-        [ResponseType(typeof(void))]
-        public IHttpActionResult PutUserInSystem(string newPass, UserInSystem user)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-            var userInDb = db.UserInSystems.FirstOrDefault(x => x.UserID == user.UserID && x.Password==user.Password);
-            if(userInDb == null)
-            {
-                return BadRequest();
-            }
-            userInDb.Password = newPass;
-            try
-            {
-                db.Entry(userInDb).CurrentValues.SetValues(userInDb);
-                db.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return NotFound();
-            }
             return Ok();
         }
 

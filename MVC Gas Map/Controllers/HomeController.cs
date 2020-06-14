@@ -15,7 +15,7 @@ namespace MVC_Gas_Map.Controllers
             string amountOfStores = response.Content.ReadAsStringAsync().Result;
             ViewBag.AmountOfStores = amountOfStores;
 
-            response = GlobalVariables.webApiClient.GetAsync("Stores?mode=2").Result;
+            response = GlobalVariables.webApiClient.GetAsync("User?mode=1").Result;
             string amountOfUsers = response.Content.ReadAsStringAsync().Result;
             ViewBag.AmountOfUsers = amountOfUsers;
 

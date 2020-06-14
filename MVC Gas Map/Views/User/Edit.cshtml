@@ -69,19 +69,19 @@
             var oldPass = $('#txt_OldPass').val();
             var newPass = $('#txt_NewPass').val();
 
-            var user = { UserID: userIDBySes, Password: oldPass }
+            var user = { UserID: userIDBySes, Password: oldPass, NewPassword: newPass }
 
-            var dataToSend = JSON.stringify({
-                'newPass': newPass,
-                'user': user
-            });
+            //var dataToSend = JSON.stringify({
+            //    'newPass': newPass,
+            //    'user': user
+            //});
             $.ajax({
                 type: 'POST',
                 contentType: 'application/json; charset=utf-8',
                 url: '/User/Edit',
                 async: false,
                 dataType: 'Json',
-                data: dataToSend,
+                data: JSON.stringify(user),
                 success: function (data) {
                     var status = data.status;
 

@@ -49,13 +49,13 @@ namespace API.Controllers
         [ResponseType(typeof(Store))]
         public IHttpActionResult GetStore(string storeid)
         {
-            var view = RunDataUseProcedure.getStoreInfor(storeid);
-            if (view == null)
+            var store = RunDataUseProcedure.getStoreInfor(storeid);
+            if (store == null)
             {
                 return NotFound();
             }
 
-            return Json(view);
+            return Json(store);
         }
 
         //// GET: api/Stores/5

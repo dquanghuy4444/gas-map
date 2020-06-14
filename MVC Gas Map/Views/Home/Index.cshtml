@@ -26,6 +26,12 @@
 <script src="~/Scripts/Control.MakiMarkers.js"></script>
 <!------>
 <!------>
+<!-- Load Esri Leaflet from CDN -->
+<script src="https://unpkg.com/esri-leaflet@2.4.1/dist/esri-leaflet.js" integrity="sha512-xY2smLIHKirD03vHKDJ2u4pqeHA7OQZZ27EjtqmuhDguxiUvdsOuXMwkg16PQrm9cgTmXtoxA6kwr8KBy3cdcw==" crossorigin=""></script>
+
+<!-- Load Esri Leaflet Geocoder from CDN -->
+<link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@2.3.3/dist/esri-leaflet-geocoder.css" integrity="sha512-IM3Hs+feyi40yZhDH6kV8vQMg4Fh20s9OzInIIAc4nx7aMYMfo+IenRUekoYsHZqGkREUgx0VvlEsgm7nCDW9g==" crossorigin="">
+<script src="https://unpkg.com/esri-leaflet-geocoder@2.3.3/dist/esri-leaflet-geocoder.js" integrity="sha512-HrFUyCEtIpxZloTgEKKMq4RFYhxjJkCiF5sDxuAokklOeZ68U2NPfh4MFtyIVWlsKtVbK5GD2/JzFyAfvT5ejA==" crossorigin=""></script>
 
 <style>
     .leaflet-popup-content {
@@ -202,7 +208,7 @@
             <div class="card-body">
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Số lượng người đăng kí tài khoản của website tính đến 18/5/2020</div>
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Số lượng người đăng kí tài khoản của website tính đến @DateTime.Now.ToString("dd/MM/yyyy")</div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800"><p id="amountOfUsers"></p></div>
                     </div>
                     <div class="col-auto">
@@ -627,6 +633,16 @@
         var layerGroup = new L.layerGroup([osm2]);
         minimap = new L.Control.MiniMap(layerGroup, { toggleDisplay: true }).addTo(mapObj);
 
+        var searchControl = L.esri.Geocoding.geosearch().addTo(mapObj);
+
+        var results = L.layerGroup().addTo(mapObj);
+
+        searchControl.on('results', function (data) {
+            results.clearLayers();
+            for (var i = data.results.length - 1; i >= 0; i--) {
+                results.addLayer(L.marker(data.results[i].latlng));
+            }
+        });
 
         getAllStoresInDb();
         markerGroup = L.layerGroup().addTo(mapObj);
@@ -751,7 +767,7 @@
 
         $.ajax({
             type: 'get',
-            url: '/Store/getAllStores',
+            url: '/Store/GetAllStores',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
             beforeSend: function () {
@@ -834,7 +850,7 @@
 
         $.ajax({
             type: 'POST',
-            url: '/Store/getDetailStore?storeId=' + storeId,
+            url: '/Store/GetDetailStore?storeId=' + storeId,
             dataType: 'JSON',
             success: function (data) {
                 if (1 === 1) {

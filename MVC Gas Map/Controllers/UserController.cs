@@ -1,8 +1,10 @@
-﻿using MVC_Gas_Map.Models;
+﻿using MVC_Gas_Map.Class;
+using MVC_Gas_Map.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Web;
@@ -54,15 +56,13 @@ namespace MVC_Gas_Map.Controllers
 
         // POST: User/Edit/5
         [HttpPost]
-        public ActionResult Edit(string newPass,User user)
+        public ActionResult Edit(User user)
         {
-            var formData = new MultipartFormDataContent();
-            formData.Add(new StringContent(JsonConvert.SerializeObject(newPass)), "newPass");
-
-            //add config to form data
-            formData.Add(new StringContent(JsonConvert.SerializeObject(user)), "user");
-
-            HttpResponseMessage response = GlobalVariables.webApiClient.PutAsync("User", formData).Result;
+            user.Password = HashByMd5.CreateMD5(user.Password);
+            user.NewPassword = HashByMd5.CreateMD5(user.NewPassword);
+            HttpResponseMessage response = GlobalVariables.webApiClient.PutAsJsonAsync("User", user).Result;
+            if (response.StatusCode == HttpStatusCode.BadRequest)
+                return Json(new { status = 1 });
             return Json(new { status = 0 });
         }
 

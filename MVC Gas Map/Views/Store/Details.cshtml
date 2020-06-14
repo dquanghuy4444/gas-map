@@ -17,4 +17,15 @@
 </div>
 
 <script>
+    var permissionIDBySes = sessionStorage.getItem("PermissionID");
+
+    window.onload=function () {
+        if (permissionIDBySes == 3)
+            $('#noStoreArea').show();
+        else {
+            $('#storesArea').show();
+
+        }
+    }
+        
 </script>

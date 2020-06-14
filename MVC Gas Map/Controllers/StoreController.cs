@@ -24,6 +24,24 @@ namespace MVC_Gas_Map.Controllers
         }
 
         [HttpGet]
+        public ActionResult GetAllStores()
+        {
+            IEnumerable<Store> storeList;
+            try
+            {
+                HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("Stores").Result;
+                storeList = response.Content.ReadAsAsync<IEnumerable<Store>>().Result;
+            }
+            catch
+            {
+                storeList = null;
+            }
+            //return View(storeList);
+            return Json(new { data = storeList }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpGet]
         public ActionResult getAllStores()
         {
             IEnumerable<Store> storeList;
@@ -43,20 +61,20 @@ namespace MVC_Gas_Map.Controllers
 
         // GET: Store/Details/5
         [HttpPost]
-        public ActionResult getDetailStore(string storeId)
+        public ActionResult GetDetailStore(string storeId)
         {
-            IEnumerable<Store> storeList;
+            IEnumerable<Store> store;
             HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("Stores?storeId="+storeId).Result;
             try
             {
-                storeList = response.Content.ReadAsAsync<IEnumerable<Store>>().Result;
+                store = response.Content.ReadAsAsync<IEnumerable<Store>>().Result;
             }
             catch
             {
-                storeList = null;
+                store = null;
             }
             //return View(storeList);
-            return Json(new { data = storeList }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = store }, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult Create()
