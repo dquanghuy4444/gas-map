@@ -25,6 +25,30 @@ namespace API.Controllers
             return Json(view);
         }
 
+        // GET: api/Stores
+        [ResponseType(typeof(Store))]
+        public IHttpActionResult GetStores(string userID)
+        {
+            var storeList = db.Stores.Where(x => x.UserID == userID).ToList();
+
+            for(int i=0;i<storeList.Count;i++)
+            {
+                var storeID = storeList[i].StoreID;
+                var coord = db.Coordinates.FirstOrDefault(x => x.HostObjID == storeID);
+                if(coord !=null)
+                {
+                    storeList[i].Latitude = coord.Latitude;
+                    storeList[i].Longitude = coord.Longitude;
+                }
+                var img = db.Images.FirstOrDefault(x => x.HostObjID == storeID);
+                if (img != null)
+                {
+                    storeList[i].ImgSrc = img.ImageSrc;
+                }
+            }
+            return Json(storeList);
+        }
+
         // GET : api/Stores?mode=0
         [ResponseType(typeof(string))]
         public IHttpActionResult GetStore(int mode)
@@ -32,9 +56,6 @@ namespace API.Controllers
             string result = null;
             if(mode==1)
                 result = db.Stores.Count().ToString();
-            else if(mode ==2)
-                result = db.UserInSystems.Count().ToString();
-
             return base.ResponseMessage(new HttpResponseMessage()
             {
                 Content = new StringContent(
@@ -58,18 +79,6 @@ namespace API.Controllers
             return Json(store);
         }
 
-        //// GET: api/Stores/5
-        //[ResponseType(typeof(Store))]
-        //public IHttpActionResult GetStore(int id)
-        //{
-        //    Store store = db.Stores.Find(id);
-        //    if (store == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return Ok(store);
-        //}
 
         // PUT: api/Stores/5
         [ResponseType(typeof(void))]

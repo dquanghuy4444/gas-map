@@ -391,7 +391,11 @@
     <script src="~/Scripts/notify.min.js"></script>
 
     <script>
-        var DEFAULT_NAME_GUEST = "Người dùng";
+        const STR_DEFAULT_NAME_GUEST = "Người dùng";
+        const STR_WARNING_EMPTY = "Chưa nhập thông tin";
+        const STR_MESS_ERROR_LOAD_FAIL = "Truy cập dữ liệu thất bại";
+        const STR_HREF_ERROR_404_PAGE = "/Error/PageNotFound";
+
     </script>
 
     <script>
@@ -511,13 +515,13 @@
                         "/Guest/Index",
                         "/Guest/Details",
                         "/Store/Details",
-                            "/Store/Create",
-                            "/User/Edit",
+                        "/Store/Create",
+                        "/User/Edit",
                     ]
 
                     //pathName == "/Guest/Index" || pathName == "/Store/Details" || pathName == "/Guest/Details"
                     if (array404Page.indexOf(pathName) != - 1)
-                        window.location.href = "/Error/PageNotFound";
+                        window.location.href = STR_HREF_ERROR_404_PAGE;
                 }
             }
             , 2e2);
@@ -525,7 +529,7 @@
         function goTo404Page(pathName, pathNameNotFound, interval) {
             if (pathName == pathNameNotFound) {
                 clearInterval(interval);
-                window.location.href = "/Error/PageNotFound";
+                window.location.href = STR_HREF_ERROR_404_PAGE;
             }
         }
     </script>
@@ -589,16 +593,15 @@
         }
 
         function checkValidTxt(idTxt) {
-            var strEmpty = "Chưa nhập thông tin";
             var strLength = "Nhập thiếu .Thông tin phải bằng hoặc lớn hơn 6 kí tự";
             var strTxt = $('#' + idTxt).val();
 
             if (!strTxt) {
-                message_Error(idTxt, strEmpty);
+                message_Error(idTxt, STR_WARNING_EMPTY);
                 return false;
             }
             else if (strTxt.length < 6) {
-                message_Error(idTxt, strLength);
+                message_Error(idTxt, STR_WARNING_EMPTY);
                 return false;
             }
             return true;

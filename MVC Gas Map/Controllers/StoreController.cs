@@ -42,20 +42,20 @@ namespace MVC_Gas_Map.Controllers
 
 
         [HttpGet]
-        public ActionResult getAllStores()
+        public ActionResult GetAllStoresOfUserID(string userID)
         {
-            IEnumerable<Store> storeList;
+            List<Store> list;
             try
             {
-                HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("Stores").Result;
-                storeList = response.Content.ReadAsAsync<IEnumerable<Store>>().Result;
+                HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("Stores?userID=" + userID).Result;
+                list = response.Content.ReadAsAsync<List<Store>>().Result;
             }
             catch
             {
-                storeList = null;
+                list = null;
             }
             //return View(storeList);
-            return Json(new { data = storeList }, JsonRequestBehavior.AllowGet);
+            return Json(new { data = list }, JsonRequestBehavior.AllowGet);
         }
 
 

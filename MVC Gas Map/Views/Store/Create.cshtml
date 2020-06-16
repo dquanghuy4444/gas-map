@@ -113,7 +113,6 @@
     var flagGetLatLn = false;
     function checkValid() {
         var strLength = "Tối đa 36 kí tự"
-        var strEmpty = "Chưa nhập thông tin";
         var strFormatPhone = "Định dạng điện thoại sai";
 
         var name = document.getElementById("StoreName").value;
@@ -126,7 +125,7 @@
         var reg = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
 
         if (!name) {
-            message_Error("StoreName", strEmpty);
+            message_Error("StoreName", STR_WARNING_EMPTY);
             return false;
         }
         else if (name.length > 36) {
@@ -135,7 +134,7 @@
         }
 
         if (!phone) {
-            message_Error("StorePhone", strEmpty);
+            message_Error("StorePhone", STR_WARNING_EMPTY);
             return false;
         }
         else {
@@ -146,23 +145,23 @@
         }
 
         if (!email) {
-            message_Error("StoreEmail", strEmpty);
+            message_Error("StoreEmail", STR_WARNING_EMPTY);
             return false;
         }
         else {
             if (reg.test(email) == false) {
-                message_Error("StoreEmail", strEmpty);
+                message_Error("StoreEmail", STR_WARNING_EMPTY);
                 return false;
             }
         }
 
         if (!addr) {
-            message_Error("StoreAddress", strEmpty);
+            message_Error("StoreAddress", STR_WARNING_EMPTY);
             return false;
         }
 
         if (!detail) {
-            message_Error("StoreDetail", strEmpty);
+            message_Error("StoreDetail", STR_WARNING_EMPTY);
             return false;
         }
 

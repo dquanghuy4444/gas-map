@@ -231,30 +231,25 @@
             if (flagCheckCapLock) {
                 $(".loader").show();
 
-                var status = 1;
-                var permissionID = 0;
-                var userID = null;
-                var guestName = null;
-                var imgSrc = null;
                 var userName = $('#txt_UserToLogin').val();
                 var passWord = $('#txt_PassToLogin').val();
-                var user = { UserName: userName, Password: passWord }
+                //var user = { UserName: userName, Password: passWord }
 
                 $.ajax({
-                    type: 'POST',
+                    type: 'Get',
+                    processData: true,
                     contentType: 'application/json; charset=utf-8',
-                    url: '/Login/Get',
-                    async: false,
+                    url: '/Login/Get?pass=' + passWord + '&userName=' + userName,
                     dataType: 'Json',
-                    data: JSON.stringify(user),
+                    cache: false,
                     success: function (data) {
                         console.log(data);
 
-                        status = data.status;
-                        permissionID = data.permissionID;
-                        userID = data.userID;
-                        guestName = data.guestName;
-                        imgSrc = data.imgSrc;
+                        var status = data.status;
+                        var permissionID = data.permissionID;
+                        var userID = data.userID;
+                        var guestName = data.guestName;
+                        var imgSrc = data.imgSrc;
 
                         switch (status) {
                             case 0:

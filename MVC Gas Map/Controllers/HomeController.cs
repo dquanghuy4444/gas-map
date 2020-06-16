@@ -11,6 +11,12 @@ namespace MVC_Gas_Map.Controllers
     {
         public ActionResult Index()
         {
+
+            return View();
+        }
+
+        public ActionResult Intro()
+        {
             HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("Stores?mode=1").Result;
             string amountOfStores = response.Content.ReadAsStringAsync().Result;
             ViewBag.AmountOfStores = amountOfStores;
@@ -18,7 +24,6 @@ namespace MVC_Gas_Map.Controllers
             response = GlobalVariables.webApiClient.GetAsync("User?mode=1").Result;
             string amountOfUsers = response.Content.ReadAsStringAsync().Result;
             ViewBag.AmountOfUsers = amountOfUsers;
-
             return View();
         }
 

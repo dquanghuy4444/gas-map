@@ -37,12 +37,12 @@ namespace MVC_Gas_Map.Controllers
                 return Json(new { status = 1 });
             else return Json(new { status = 2 });
         }
-
+        
         // GET: Login/Get
-        [HttpPost]
-        public JsonResult Get(User user)
+        [HttpGet]
+        public JsonResult Get(string pass,string userName)
         {
-            string strQuery= "username="+user.UserName+"&&password="+ HashByMd5.CreateMD5(user.Password); 
+            string strQuery= "username="+ userName + "&&password="+ HashByMd5.CreateMD5(pass); 
             HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("User?"+strQuery).Result;
             if (response.StatusCode == HttpStatusCode.Accepted)
             {
@@ -52,7 +52,7 @@ namespace MVC_Gas_Map.Controllers
                 var userID = arrResponseMess[1].ToString();
                 var guestName = arrResponseMess[2].ToString();
                 var imgSrc = arrResponseMess[3].ToString();
-                return Json(new { status = 0,permissionID = permissID ,userID = userID, guestName = guestName , imgSrc = imgSrc });
+                return Json(new { status = 0 ,permissionID = permissID ,userID = userID, guestName = guestName , imgSrc = imgSrc }, JsonRequestBehavior.AllowGet);
             }
 
             else if (response.StatusCode == HttpStatusCode.Forbidden)

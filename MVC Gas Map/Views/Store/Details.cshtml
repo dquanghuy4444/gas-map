@@ -1,31 +1,214 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<style>
+    .collapsible {
+        background-color: #f3e8e8;
+        color: black;
+        cursor: pointer;
+        padding: 1.3rem;
+        width: 100%;
+        border: none;
+        text-align: left;
+        outline: none;
+        font-size: 1.5rem;
+    }
 
+        .active, .collapsible:hover {
+            background-color: #cbadad;
+        }
+
+        .collapsible:after {
+            content: '\002B';
+            color: black;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+            font-size: 1.5rem;
+        }
+
+    .active:after {
+        content: "\2212";
+    }
+
+    .content {
+        padding: 0 1.5rem;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.2s ease-out;
+        /*background-color: #f1f1f1;*/
+    }
+</style>
 <div class="text-center" id="noStoreArea" style="margin:11rem 0;display:none;">
-    <img src="~/Images/43-432523_image-black-tokyo-ghoul-clipart-black-and-white.png" width="12%"/>
+    <img src="~/Images/43-432523_image-black-tokyo-ghoul-clipart-black-and-white.png" width="12%" />
     <h1 class="text-gray-500 mt-5">Bạn chưa tạo thông tin cửa hàng nào .</h1>
     <h2 class="text-gray-500 ">Tạo tại <a href="/Store/Create" class="text-wrap text-uppercase">đây</a></h2>
 </div>
 
-<div  id="storesArea" style="margin:11rem 0;display:none;">
-    <img src="~/Images/43-432523_image-black-tokyo-ghoul-clipart-black-and-white.png" width="12%" />
-    <h1 class="text-gray-500 mt-5">Bạn đã có thông tin cửa hàng nào .</h1>
-    <h2 class="text-gray-500 ">Tạo tại <a href="/Store/Create" class="text-wrap text-uppercase">đây</a></h2>
+<div id="storesArea" class="mb-4" style="margin-top:3rem;">
+    <button class="collapsible">Khách hàng quanh đây</button>
+    hgfhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
+    <button class="collapsible mt-1">Đơn hàng hiện có</button>
+    <div class="content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+    <button class="collapsible mt-1">Thông tin sản phẩm</button>
+    <div class="content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+    <button class="collapsible mt-1">Quản lí kinh doanh cửa hàng</button>
+    <div class="content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+    <button class="collapsible mt-1">Thông tin cửa hàng</button>
+    <div class="content" style="padding:0 4rem;">
+        <div class="card o-hidden border-0 shadow-lg my-5">
+            <h1 class="text-center mt-2">Thông tin cửa hàng</h1>
+            <form style="padding:4rem 6rem 6rem">
+                <div class="col-md-9 col-xs-9 col-lg-9 col-sm-9">
+                    <div class="form-group">
+                        <label for="exampleFormControlInput1">Tên cửa hàng</label>
+                        <input type="text" name="fullname" class="form-control" id="StoreName" placeholder="Cửa hàng gas" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlInput2">Số điện thoại</label>
+                        <input type="text" name="phone" class="form-control" id="StorePhone" placeholder="1900" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlInput3">Email</label>
+                        <input type="email" name="email" class="form-control" id="StoreEmail" placeholder="" abc@gmail.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlInput4">Địa chỉ</label>
+                        <input type="email" name="email" class="form-control" id="StoreAddress" placeholder="" abc,def" required>
+                    </div>
+
+                    <label for="exampleFormControlInput4">Gim toạ độ cửa hàng</label>
+                    <div class="form-group" style="border: 1.3px solid #c3c3d7;border-radius: 0.4rem;">
+                        <div class="mt-2 ml-2 mb-2 mr-2">
+                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                @*<div class="input-group" style="width:40%">
+                                        <input type="text" class="form-control bg-light border-0 small" id="search_input" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                                        <input type="hidden" id="latitude_input" />
+                                        <input type="hidden" id="longitude_input" />
+
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" onclick="findByAddress()" type="button">
+                                                <i class="fa fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>*@
+                                <button onclick="goToCurrentLocation()" class="h3 mt-1 btn btn-default" style="background-color:#fdecec;"><i class="glyphicon glyphicon-tags mr-1 mt-1" style="color:#ca4d1f;font-size:1rem;"></i>   <span style="font-weight: 500;font-size: initial;font-family: sans-serif;font-size:1rem;">Vị trí của bạn</span></button>
+                            </div>
+
+                            <div id="idMap" class="mt-2"></div>
+                            <div class="mt-2" id="latAndLongArea" style="font-size:1.2rem;font-weight:400;display:none;">
+                                <span>Latitude:</span>
+                                <span class="text-nowrap bd-highlight text-info" id="latitude_view"></span>
+                                <span class="ml-2">Longitude:</span>
+                                <span class="text-nowrap bd-highlight text-info" id="longitude_view"></span>
+                                <br />
+                                @*<span>Địa chỉ:</span>
+                                    <span class="text-nowrap bd-highlight text-info" id="addressOfGGMap">Số 401 Cổ Nhuế</span>
+                                    <button class="btn btn-primary" id="btn_GetAddressOfGGMap"><i class="glyphicon glyphicon-plus"></i> Lấy địa chỉ này </button>*@
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlInput5">Giới thiệu về cửa hàng</label>
+                        <textarea class="form-control" rows="6" id="StoreDetail"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-3 col-lg-3 col-sm-3">
+                    <div class="form-group">
+                        <div style="height: 30rem;width: 100%;position: absolute;border: 2px solid #cd8e8e;">
+                            <img src="~/Images/pngtree-shop-store-market-building-shopping-flat-color-icon-vector-png-image_1653492.jpg" id="StoreImg" style="position: relative;width: 100%;height: 100%;padding: 0.4rem;" />
+                        </div>
+                    </div>
+                    <div class="form-group" onload="myFunction()" style="margin-top: 31rem;">
+                        <input type="file" id="myFile" multiple size="50" onchange="myFunction()">
+                        <p id="demo"></p>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                    <button type="button" class="btn btn-success" onclick="createStore()">Tạo cửa hàng</button>
+                    <a href="/Home/Index" class="btn btn-danger">Thoát</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
 
 <script>
+    var storeID = null;
+    var storeList = null;
+    var userIDBySes = null;
     var permissionIDBySes = sessionStorage.getItem("PermissionID");
 
-    window.onload=function () {
+
+    window.onload = function () {
         if (permissionIDBySes == 3)
             $('#noStoreArea').show();
         else {
             $('#storesArea').show();
-
+            loadData();
         }
     }
-        
+</script>
+
+<script>
+    function loadData() {
+        userIDBySes = sessionStorage.getItem("UserID");
+
+        $.ajax({
+            async: false,
+            type: 'Get',
+            contentType: 'application/json; charset=utf-8',
+            url: '/Store/GetAllStoresOfUserID?userID=' + userIDBySes,
+            dataType: 'Json',
+            success: function (data) {
+                var storeList = data.data;
+                renderHtmlForStore(storeList[0]);
+
+                sessionStorage.setItem("StoreList", JSON.stringify(storeList));
+            },
+            error: function (data) {
+                message_Error("", STR_MESS_ERROR_LOAD_FAIL);
+            },
+        });
+        storeList = JSON.parse(sessionStorage.StoreList);
+    }
+
+    function renderHtmlForStore(store) {
+        console.log(store);
+    }
+</script>
+
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    coll[0].classList.toggle("active");
+    var content = coll[0].nextElementSibling;
+    if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+    } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+    }
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
+    }
 </script>
