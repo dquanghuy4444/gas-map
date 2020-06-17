@@ -83,6 +83,12 @@ namespace MVC_Gas_Map.Controllers
 
         }
 
+        public ActionResult CreateAndEdit()
+        {
+            return View();
+
+        }
+
         // GET: Store/Create
         public ActionResult CreateStore(Store store)
         {
@@ -102,7 +108,6 @@ namespace MVC_Gas_Map.Controllers
                 response = GlobalVariables.webApiClient.GetAsync("User?userID=" + store.UserID).Result;
                 if (response.StatusCode == HttpStatusCode.Accepted)
                     permissionID = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
-
             }
             catch
             {
@@ -115,28 +120,29 @@ namespace MVC_Gas_Map.Controllers
 
         }
 
-        // POST: Store/Create
-        //[HttpPost]
-        //public ActionResult Create(FormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add insert logic here
-
-        //        return RedirectToAction("Index");
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
-
         // GET: Store/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult EditStore(Store store)
         {
-            return View();
+            string message = "";
+            int flagCheckStatus = 0; //0:fail  1:success
+            try
+            {
+                HttpResponseMessage response = GlobalVariables.webApiClient.PutAsJsonAsync("Stores", store).Result;
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                    flagCheckStatus = 0;
+                else if (response.StatusCode == HttpStatusCode.OK)
+                    flagCheckStatus = 1;
+                message = response.Content.ReadAsStringAsync().Result;
+            }
+            catch
+            {
+                message = "";
+                flagCheckStatus = 0; //0:fail  1:success
+            }
+            return Json(new { status = flagCheckStatus, message = message}, JsonRequestBehavior.AllowGet);
         }
 
+    
         // POST: Store/Edit/5
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)

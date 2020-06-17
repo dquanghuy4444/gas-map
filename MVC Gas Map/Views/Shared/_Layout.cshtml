@@ -4,11 +4,81 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gọi gas nhanh như gọi đò</title>
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    <link href="~/Content/Sb.admin.min.css" rel="stylesheet" />
+    <link href="~/Content/Bootstrap/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/SbAmin/Sb.admin.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-    <script src="~/Scripts/jquery.min.js"></script>
+    <script src="~/Scripts/Jquery/jquery.min.js"></script>
+    <script src="~/Scripts/Common/Variable.js"></script>
+    <script src="~/Scripts/Bootstrap/bootstrap.min.js"></script>
+    <script src="~/Scripts/SbAdmin/Sb.admin.min.js"></script>
+    <script src="~/Scripts/Notify/notify.min.js"></script>
+    <script>
+
+        function message_Success(strMess) {
+            $('.notifyjs-wrapper').remove();
+            $.notify(
+                strMess,
+                "success"
+            );
+        }
+
+        function scrollToSection(id) {
+            var targetElement = $('#' + id);
+            $([document.documentElement, document.body]).animate({
+                scrollTop: targetElement.offset().top
+            }, 900);
+        }
+
+        function checkValidTxt(idTxt) {
+            var strLength = "Nhập thiếu .Thông tin phải bằng hoặc lớn hơn 6 kí tự";
+            var strTxt = $('#' + idTxt).val();
+
+            if (!strTxt) {
+                message_Error(idTxt, STR_WARNING_EMPTY);
+                return false;
+            }
+            else if (strTxt.length < 6) {
+                message_Error(idTxt, STR_WARNING_EMPTY);
+                return false;
+            }
+            return true;
+        }
+
+        //check caplock
+        var flagCheckCapLock = true;
+        var strCapLock = "Cap Lock đang bật.Hãy tắt để nhập thông tin";
+
+        function checkCapLock(idTxt) {
+            var txt = document.getElementById(idTxt);
+            txt.addEventListener("keyup", function (event) {
+                if (event.getModifierState("CapsLock")) {
+                    flagCheckCapLock = false;
+                    message_Error(idTxt, strCapLock);
+
+                } else {
+                    flagCheckCapLock = true;
+                    $('.notifyjs-wrapper').remove();
+                }
+            });
+        }
+        function message_Error(id, strMess) {
+            if (id === '') {
+                setTimeout($('.notifyjs-wrapper').remove(), 2000);
+                $.notify(
+                    strMess,
+                    { position: "top-center" }
+                );
+            }
+            else {
+                setTimeout($('.notifyjs-wrapper').remove(), 2000);
+                $("#" + id).notify(
+                    strMess,
+                    { position: "top center" }
+                );
+            }
+        }
+    </script>
     <style>
 
         .imgSocialNet {
@@ -94,6 +164,7 @@
             margin: 3px;
         }
     </style>
+
 </head>
 <body id="page-top">
     <div class="loader"></div>
@@ -104,7 +175,7 @@
                     <a class="navbar-brand btn btn-danger" style="font-size:1.8rem;padding:1rem 2.4rem;" href="/Home/Index">Trang chủ</a>
                     <a class="navbar-brand btn btn-group" id="btn_GoToCusPage" style="display:none;" href="/Guest/Details">Gọi Gas</a>
                     <a class="navbar-brand btn btn-group" id="btn_GoToStorePage" style="display:none;" href="/Store/Details">Quản lí cửa hàng</a>
-                    <a class="navbar-brand btn btn-group" href="#" onclick="scrollToSection("introProject")" style="display:none;" id="introProject">Giới thiệu về chúng tôi</a>
+                    <a class="navbar-brand btn btn-group" href="#" style="display:none;" onclick="scrollToSection('IntroSection')" id="introProject">Giới thiệu về chúng tôi</a>
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
@@ -373,7 +444,7 @@
                 Tài khoản của bạn vẫn chưa chọn quyền tài khoản.Hãy chọn quyền tài khoản ở bên dưới:
                 <br />
                 <br />
-                <div class="text-center"    >
+                <div class="text-center">
                     <button class="btn btn-success" style="margin-right:1rem;" onclick="setPermission(2)">Quyền khách hàng</button>
                     <button class="btn btn-success" onclick="setPermission(3)">Quyền cửa hàng</button>
                 </div>
@@ -385,28 +456,14 @@
         </div>
     </div>
 
-    @*<script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>*@
-    <script src="~/Scripts/bootstrap.min.js"></script>
-    <script src="~/Scripts/Sb.admin.min.js"></script>
-    <script src="~/Scripts/notify.min.js"></script>
 
     <script>
-        const STR_DEFAULT_NAME_GUEST = "Người dùng";
-        const STR_WARNING_EMPTY = "Chưa nhập thông tin";
-        const STR_MESS_ERROR_LOAD_FAIL = "Truy cập dữ liệu thất bại";
-        const STR_HREF_ERROR_404_PAGE = "/Error/PageNotFound";
-
-    </script>
-
-    <script>
-        //$("#introProject").hide();
 
         var imgSrcBySes = sessionStorage.getItem("ImgSrc");
         if (imgSrcBySes != null)
             $("#imgAvatar").attr("src", imgSrcBySes);
 
-        $(window).on('load', function ()
-        {
+        $(window).on('load', function () {
             // show success or error mess
             if (typeof (Storage) !== "undefined") {
                 var successMess = localStorage.getItem("successMess");
@@ -499,25 +556,24 @@
 
                         $("#storeSetting").show();
                         $("#createStoreSetting").show();
-                        $("#btn_GoToStorePage").show();                      
+                        $("#btn_GoToStorePage").show();
 
                     }
                 }
-                else
-                {
+                else {
                     $("#loginArea").show();
 
                     clearInterval(interval);
                     sessionStorage.clear();
 
                     var array404Page =
-                    [
-                        "/Guest/Index",
-                        "/Guest/Details",
-                        "/Store/Details",
-                        "/Store/Create",
-                        "/User/Edit",
-                    ]
+                        [
+                            "/Guest/Index",
+                            "/Guest/Details",
+                            "/Store/Details",
+                            "/Store/Create",
+                            "/User/Edit",
+                        ]
 
                     //pathName == "/Guest/Index" || pathName == "/Store/Details" || pathName == "/Guest/Details"
                     if (array404Page.indexOf(pathName) != - 1)
@@ -559,78 +615,13 @@
                 },
             });
         }
-
-        function message_Error(id, strMess) {
-            if (id === '') {
-                setTimeout($('.notifyjs-wrapper').remove(), 2000);
-                $.notify(
-                    strMess,
-                    { position: "top-center" }
-                );
-            }
-            else {
-                setTimeout($('.notifyjs-wrapper').remove(), 2000);
-                $("#" + id).notify(
-                    strMess,
-                    { position: "top center" }
-                );
-            }
-        }
-
-        function message_Success(strMess) {
-            $('.notifyjs-wrapper').remove();
-            $.notify(
-                strMess,
-                "success"
-            );
-        }
-
-        function scrollToSection(id) {
-            var targetElement = $('#' + id);
-            $([document.documentElement, document.body]).animate({
-                scrollTop: targetElement.offset().top
-            }, 900);
-        }
-
-        function checkValidTxt(idTxt) {
-            var strLength = "Nhập thiếu .Thông tin phải bằng hoặc lớn hơn 6 kí tự";
-            var strTxt = $('#' + idTxt).val();
-
-            if (!strTxt) {
-                message_Error(idTxt, STR_WARNING_EMPTY);
-                return false;
-            }
-            else if (strTxt.length < 6) {
-                message_Error(idTxt, STR_WARNING_EMPTY);
-                return false;
-            }
-            return true;
-        }
-
-        //check caplock
-        var flagCheckCapLock = true;
-        var strCapLock = "Cap Lock đang bật.Hãy tắt để nhập thông tin";
-
-        function checkCapLock(idTxt) {
-            var txt = document.getElementById(idTxt);
-            txt.addEventListener("keyup", function (event) {
-                if (event.getModifierState("CapsLock")) {
-                    flagCheckCapLock = false;
-                    message_Error(idTxt, strCapLock);
-
-                } else {
-                    flagCheckCapLock = true;
-                    $('.notifyjs-wrapper').remove();
-                }
-            });
-        }
     </script>
 
     <script>
         // Get the modal
         var modal = document.getElementById("myModal");
         var modal2 = document.getElementById("modelPermission");
-        
+
         // Get the button that opens the modal
         var btn = document.getElementById("myBtn");
         // Get the <span> element that closes the modal
@@ -667,5 +658,6 @@
             }
         }
     </script>
+
 </body>
 </html>
