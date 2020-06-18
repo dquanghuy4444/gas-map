@@ -9,76 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <script src="~/Scripts/Jquery/jquery.min.js"></script>
-    <script src="~/Scripts/Common/Variable.js"></script>
-    <script src="~/Scripts/Bootstrap/bootstrap.min.js"></script>
-    <script src="~/Scripts/SbAdmin/Sb.admin.min.js"></script>
-    <script src="~/Scripts/Notify/notify.min.js"></script>
-    <script>
 
-        function message_Success(strMess) {
-            $('.notifyjs-wrapper').remove();
-            $.notify(
-                strMess,
-                "success"
-            );
-        }
-
-        function scrollToSection(id) {
-            var targetElement = $('#' + id);
-            $([document.documentElement, document.body]).animate({
-                scrollTop: targetElement.offset().top
-            }, 900);
-        }
-
-        function checkValidTxt(idTxt) {
-            var strLength = "Nhập thiếu .Thông tin phải bằng hoặc lớn hơn 6 kí tự";
-            var strTxt = $('#' + idTxt).val();
-
-            if (!strTxt) {
-                message_Error(idTxt, STR_WARNING_EMPTY);
-                return false;
-            }
-            else if (strTxt.length < 6) {
-                message_Error(idTxt, STR_WARNING_EMPTY);
-                return false;
-            }
-            return true;
-        }
-
-        //check caplock
-        var flagCheckCapLock = true;
-        var strCapLock = "Cap Lock đang bật.Hãy tắt để nhập thông tin";
-
-        function checkCapLock(idTxt) {
-            var txt = document.getElementById(idTxt);
-            txt.addEventListener("keyup", function (event) {
-                if (event.getModifierState("CapsLock")) {
-                    flagCheckCapLock = false;
-                    message_Error(idTxt, strCapLock);
-
-                } else {
-                    flagCheckCapLock = true;
-                    $('.notifyjs-wrapper').remove();
-                }
-            });
-        }
-        function message_Error(id, strMess) {
-            if (id === '') {
-                setTimeout($('.notifyjs-wrapper').remove(), 2000);
-                $.notify(
-                    strMess,
-                    { position: "top-center" }
-                );
-            }
-            else {
-                setTimeout($('.notifyjs-wrapper').remove(), 2000);
-                $("#" + id).notify(
-                    strMess,
-                    { position: "top center" }
-                );
-            }
-        }
-    </script>
     <style>
 
         .imgSocialNet {
@@ -457,6 +388,78 @@
     </div>
 
 
+    <script src="~/Scripts/Bootstrap/bootstrap.min.js"></script>
+    <script src="~/Scripts/SbAdmin/Sb.admin.min.js"></script>
+    <script src="~/Scripts/Notify/notify.min.js"></script>
+    <script src="~/Scripts/Common/Variable.js"></script>
+
+    <script type="text/javascript">
+
+        function message_Success(strMess) {
+            $('.notifyjs-wrapper').remove();
+            $.notify(
+                strMess,
+                "success"
+            );
+        }
+
+        function scrollToSection(id) {
+            var targetElement = $('#' + id);
+            $([document.documentElement, document.body]).animate({
+                scrollTop: targetElement.offset().top
+            }, 900);
+        }
+
+        function checkValidTxt(idTxt) {
+            var strLength = "Nhập thiếu .Thông tin phải bằng hoặc lớn hơn 6 kí tự";
+            var strTxt = $('#' + idTxt).val();
+
+            if (!strTxt) {
+                message_Error(idTxt, STR_WARNING_EMPTY);
+                return false;
+            }
+            else if (strTxt.length < 6) {
+                message_Error(idTxt, STR_WARNING_EMPTY);
+                return false;
+            }
+            return true;
+        }
+
+        //check caplock
+        var flagCheckCapLock = true;
+        var strCapLock = "Cap Lock đang bật.Hãy tắt để nhập thông tin";
+
+        function checkCapLock(idTxt) {
+            var txt = document.getElementById(idTxt);
+            txt.addEventListener("keyup", function (event) {
+                if (event.getModifierState("CapsLock")) {
+                    flagCheckCapLock = false;
+                    message_Error(idTxt, strCapLock);
+
+                } else {
+                    flagCheckCapLock = true;
+                    $('.notifyjs-wrapper').remove();
+                }
+            });
+        }
+        function message_Error(id, strMess) {
+            if (id === '') {
+                //setTimeout($('.notifyjs-wrapper').remove(), 2000);
+                $.notify(
+                    strMess,
+                    { position: "top-center" }
+                );
+            }
+            else {
+                //setTimeout($('.notifyjs-wrapper').remove(), 2000);
+                $("#" + id).notify(
+                    strMess,
+                    { position: "top center" }
+                );
+            }
+        }
+    </script>
+
     <script>
 
         var imgSrcBySes = sessionStorage.getItem("ImgSrc");
@@ -658,6 +661,8 @@
             }
         }
     </script>
+
+
 
 </body>
 </html>
