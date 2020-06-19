@@ -83,7 +83,7 @@ namespace MVC_Gas_Map.Controllers
 
         }
 
-        public ActionResult CreateAndEdit()
+        public ActionResult Edit()
         {
             return View();
 

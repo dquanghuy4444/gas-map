@@ -1,0 +1,460 @@
+﻿<style>
+    #idMap2 {
+        width: 100%;
+        height: 30rem;
+    }
+</style>
+<div class="container mt-3" style="padding: 0px 4rem;">
+    <div class="card o-hidden border-0 shadow-lg my-5">
+        <h1 class="text-center mt-2">Thông tin cửa hàng</h1>
+        <form style="padding:4rem 6rem 6rem">
+            <div class="col-md-9 col-xs-9 col-lg-9 col-sm-9">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">Tên cửa hàng</label>
+                    <input type="text" name="fullname" class="form-control" id="StoreName" placeholder="Cửa hàng gas" required>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlInput2">Số điện thoại</label>
+                    <input type="text" name="phone" class="form-control" id="StorePhone" placeholder="1900" required>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlInput3">Email</label>
+                    <input type="email" name="email" class="form-control" id="StoreEmail" placeholder="" abc@gmail.com" required>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlInput4">Địa chỉ</label>
+                    <input type="email" name="email" class="form-control" id="StoreAddress" placeholder="" abc,def" required>
+                </div>
+
+                <label for="exampleFormControlInput4">Gim toạ độ cửa hàng</label>
+                <div class="form-group" style="border: 1.3px solid #c3c3d7;border-radius: 0.4rem;">
+                    <div class="mt-2 ml-2 mb-2 mr-2">
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                            @*<div class="input-group" style="width:40%">
+                                    <input type="text" class="form-control bg-light border-0 small" id="search_input" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
+                                    <input type="hidden" id="latitude_input" />
+                                    <input type="hidden" id="longitude_input" />
+
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" onclick="findByAddress()" type="button">
+                                            <i class="fa fa-search fa-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>*@
+                            <button onclick="goToCurrentLocation()" class="h3 mt-1 btn btn-default" style="background-color:#fdecec;"><i class="glyphicon glyphicon-tags mr-1 mt-1" style="color:#ca4d1f;font-size:1rem;"></i>   <span style="font-weight: 500;font-size: initial;font-family: sans-serif;font-size:1rem;">Vị trí của bạn</span></button>
+                        </div>
+
+                        <div id="idMap2" class="mt-2"></div>
+                        <div class="mt-2" id="latAndLongArea" style="font-size:1.2rem;font-weight:400;display:none;">
+                            <span>Latitude:</span>
+                            <span class="text-nowrap bd-highlight text-info" id="latitude_view"></span>
+                            <span class="ml-2">Longitude:</span>
+                            <span class="text-nowrap bd-highlight text-info" id="longitude_view"></span>
+                            <br />
+                            @*<span>Địa chỉ:</span>
+                                <span class="text-nowrap bd-highlight text-info" id="addressOfGGMap">Số 401 Cổ Nhuế</span>
+                                <button class="btn btn-primary" id="btn_GetAddressOfGGMap"><i class="glyphicon glyphicon-plus"></i> Lấy địa chỉ này </button>*@
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlInput5">Giới thiệu về cửa hàng</label>
+                    <textarea class="form-control" rows="6" id="StoreDetail"></textarea>
+                </div>
+            </div>
+            <div class="col-md-3 col-xs-3 col-lg-3 col-sm-3">
+                <div class="form-group">
+                    <div style="height: 30rem;width: 100%;position: absolute;border: 2px solid #cd8e8e;">
+                        <img src="~/Images/pngtree-shop-store-market-building-shopping-flat-color-icon-vector-png-image_1653492.jpg" id="StoreImg" style="position: relative;width: 100%;height: 100%;padding: 0.4rem;" />
+                    </div>
+                </div>
+                <div class="form-group" onload="myFunction()" style="margin-top: 31rem;">
+                    <input type="file" id="myFile" multiple size="50" onchange="myFunction()">
+                    <p id="demo"></p>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
+                <button type="button" class="btn btn-success" id="btn_EditStore">Cập nhật thông tin cửa hàng</button>
+                <a href="/Home/Index" id="btn_Close" class="btn btn-danger">Thoát</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var flagGetLatLn = false;
+    function checkValid() {
+        var strLength = "Tối đa 36 kí tự"
+        var strFormatPhone = "Định dạng điện thoại sai";
+
+        var name = document.getElementById("StoreName").value;
+        var phone = document.getElementById("StorePhone").value;
+        var email = document.getElementById("StoreEmail").value;
+        var addr = document.getElementById("StoreAddress").value;
+        var detail = document.getElementById("StoreDetail").value;
+
+        var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
+        var reg = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+
+        if (!name) {
+            message_Error("StoreName", STR_WARNING_EMPTY);
+            return false;
+        }
+        else if (name.length > 36) {
+            message_Error("StoreName", strLength);
+            return false;
+        }
+
+        if (!phone) {
+            message_Error("StorePhone", STR_WARNING_EMPTY);
+            return false;
+        }
+        else {
+            if (vnf_regex.test(phone) == false) {
+                message_Error("StorePhone", strFormatPhone);
+                return false;
+            }
+        }
+
+        if (!email) {
+            message_Error("StoreEmail", STR_WARNING_EMPTY);
+            return false;
+        }
+        else {
+            if (reg.test(email) == false) {
+                message_Error("StoreEmail", STR_WARNING_EMPTY);
+                return false;
+            }
+        }
+
+        if (!addr) {
+            message_Error("StoreAddress", STR_WARNING_EMPTY);
+            return false;
+        }
+
+        if (!detail) {
+            message_Error("StoreDetail", STR_WARNING_EMPTY);
+            return false;
+        }
+
+        return true;
+    }
+
+    function createStore() {
+        if (checkValid()) {
+            if (flagGetLatLn) {
+                var userIDBySes = sessionStorage.getItem("UserID");
+
+                var storeName = $('#StoreName').val();
+                var storePhone = $('#StorePhone').val();
+                var storeEmail = $('#StoreEmail').val();
+                var storeAddress = $('#StoreAddress').val();
+                var storeDetail = $('#StoreDetail').val();
+                var imgSrc = $('#StoreImg').attr('src');
+                var lat = $('#latitude_view').html();
+                var long = $('#longitude_view').html();
+
+                var store = {
+                    StoreName: storeName,
+                    StorePhone: storePhone,
+                    StoreEmail: storeEmail,
+                    StoreAddress: storeAddress,
+                    StoreDetail: storeDetail,
+                    ImgSrc: imgSrc,
+                    UserID: userIDBySes,
+                    Latitude: lat,
+                    Longitude: long
+                }
+                console.log(store);
+
+                $.ajax({
+                    type: 'Get',
+                    contentType: 'application/json; charset=utf-8',
+                    url: '/Store/CreateStore',
+                    dataType: 'Json',
+                    data: store,
+                    success: function (data) {
+                        console.log(data);
+
+                        var status = data.status;
+                        var message = data.message;
+                        var permissID = data.permissionID;
+
+                        switch (status) {
+                            case 0:
+                                message_Error("", message);
+                                break;
+                            case 1:
+                                localStorage.setItem("successMess", JSON.stringify(message));
+                                clearInterval(interval);
+                                sessionStorage.setItem("PermissionID", permissID);
+                                setTimeout(function () { window.location.href = "/Store/Details"; }, 1800);
+
+                                break;
+                        }
+                    },
+                    error: function (data) {
+                        message_Error("", "Cập nhật thông tin thất bại")
+                    },
+                });
+            }
+            else
+                message_Error("", "Bạn chưa lấy tọa độ cửa hàng .");
+        }
+    }
+
+    function editStore(storeID) {
+        if (checkValid()) {
+            var userIDBySes = sessionStorage.getItem("UserID");
+
+            var storeName = $('#StoreName').val();
+            var storePhone = $('#StorePhone').val();
+            var storeEmail = $('#StoreEmail').val();
+            var storeAddress = $('#StoreAddress').val();
+            var storeDetail = $('#StoreDetail').val();
+            var imgSrc = $('#StoreImg').attr('src');
+            var lat = $('#latitude_view').html();
+            var long = $('#longitude_view').html();
+
+            var store = {
+                StoreID: storeID,
+                StoreName: storeName,
+                StorePhone: storePhone,
+                StoreEmail: storeEmail,
+                StoreAddress: storeAddress,
+                StoreDetail: storeDetail,
+                ImgSrc: imgSrc,
+                UserID: userIDBySes,
+                Latitude: lat,
+                Longitude: long
+            }
+            console.log(store);
+
+            $.ajax({
+                type: 'Get',
+                contentType: 'application/json; charset=utf-8',
+                url: '/Store/EditStore',
+                dataType: 'Json',
+                data: store,
+                success: function (data) {
+                    console.log(data);
+
+                    var status = data.status;
+                    var message = data.message;
+                    var permissID = data.permissionID;
+
+                    switch (status) {
+                        case 0:
+                            message_Error("", message);
+                            break;
+                        case 1:
+                            localStorage.setItem("successMess", JSON.stringify(message));
+                            clearInterval(interval);
+                            sessionStorage.setItem("PermissionID", permissID);
+                            setTimeout(function () { window.location.href = "/Store/Details"; }, 1800);
+
+                            break;
+                    }
+                },
+                error: function (data) {
+                    message_Error("", "Cập nhật thông tin thất bại")
+                },
+            });
+        }
+    }
+</script>
+
+<script>
+    // Variable
+    var lat = null;
+    var long = null;
+    var popupContent = null;
+    var defaultCoord = null;
+    var mapObj = null;
+    var marker;
+    var zoomLevel = 15;
+    var minimap = null;
+    var flagMarkerCurLocation = false;
+    //var amountOfStos = null;
+    var url = new URL(document.URL);
+    var search_params = url.searchParams;
+    var markerGroup = null;
+    var popup = L.popup();
+
+    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+    var osmAttrib = 'Có làm mới có ăn !!! ';
+    var osm = new L.TileLayer(osmUrl, { minZoom: 5, maxZoom: 18, attribution: osmAttrib });
+    var osm2 = new L.TileLayer(osmUrl, { minZoom: 0, maxZoom: 13, attribution: osmAttrib });
+
+    window.onload = function () {
+        var url = new URL(document.URL);
+        var pathName = url.pathname;
+
+        if (pathName == "/Store/CreateAndEdit")
+            window.location.href = STR_HREF_ERROR_404_PAGE;
+
+        if (typeof (Storage) !== "undefined") {
+            var curLocation = localStorage.getItem("curLocation");
+            if (curLocation != null) {
+                flagMarkerCurLocation = true;
+                var latAndLng = curLocation.split(",");
+                defaultCoord = [Number(latAndLng[0]), Number(latAndLng[1])];
+            }
+        }
+        else {
+            console.log("pohip");
+        }
+
+
+        if (defaultCoord == null) {
+            defaultCoord = [21.061540, 105.781103];//toạ độ mặc địNH Ở PHẠM VĂN ĐỒNG
+        }
+        var mapConfig = {
+            attributionControl: true, // hiện watermark
+            center: defaultCoord, // vị trí map mặc định hiện tại
+            zoom: zoomLevel, // level zoom
+            fullscreenControl: true,
+            fullscreenControlOptions: {
+                position: 'topleft'
+            }
+        };
+
+
+        mapObj = new L.map('idMap2', mapConfig);
+
+        mapObj.addLayer(osm);
+
+        markerGroup = L.layerGroup().addTo(mapObj);
+        //
+        L.control.coordinates({
+            position: "bottomleft",
+            decimals: 0, //optional default 4
+            decimalSeperator: ".", //optional default "."
+            labelTemplateLat: "Latitude: {y}", //optional default "Lat: {y}"
+            labelTemplateLng: "Longitude: {x}", //optional default "Lng: {x}"
+            enableUserInput: true, //optional default true
+            useDMS: false, //optional default false
+            useLatLngOrder: true, //ordering of labels, default false-> lng-lat
+            markerType: L.marker, //optional default L.marker
+            markerProps: {} //optional default {}
+        }).addTo(mapObj);
+
+        mapObj.on('click', onMapClick);
+
+        var layerGroup = new L.layerGroup([osm2]);
+
+        //////////////
+        setMarkerCurrentLocation(defaultCoord)
+        ///////////////////
+
+        var searchControl = L.esri.Geocoding.geosearch().addTo(mapObj);
+
+        var results = L.layerGroup().addTo(mapObj);
+
+        searchControl.on('results', function (data) {
+            results.clearLayers();
+            for (var i = data.results.length - 1; i >= 0; i--) {
+                results.addLayer(L.marker(data.results[i].latlng));
+            }
+        });
+    };
+
+
+    function onMapClick(e) {
+        long = e.latlng.lng.toFixed(5);//lấy giá trị long
+        lat = e.latlng.lat.toFixed(5);//lấy giá trị lat
+        var html = `<h4>Toạ độ (` + lat + `,` + long + `)</h4>
+                                        <button class="btn btn-primary" onclick="getLatAndLong()"><i class="glyphicon glyphicon-plus"></i> Lấy toạ độ này </button>`;
+        popup
+            .setLatLng(e.latlng)
+            .setContent(html)
+            .openOn(mapObj);//hiện popup
+    }
+</script>
+
+<script>
+    function goToCurrentLocation() {
+        navigator.geolocation.getCurrentPosition
+            (
+                function (location) {
+                    var currentLocation = new L.LatLng(location.coords.latitude, location.coords.longitude);
+                    mapObj.setView(currentLocation, zoomLevel);
+                    var curLocation = [location.coords.latitude, location.coords.longitude];
+                    setMarkerCurrentLocation(curLocation);
+                    localStorage.removeItem("curLocation");
+                    localStorage.setItem("curLocation", curLocation);
+                });
+
+    }
+
+    function setMarkerCurrentLocation(defaultCoord) {
+        const locationIcon = L.MakiMarkers.icon({
+            // icon: "beer",
+            icon: "star-stroked",
+            color: "#13a",
+            size: "xl"
+        });
+
+        marker = new L.marker(defaultCoord, { icon: locationIcon });
+
+        lat = defaultCoord[0];
+        long = defaultCoord[1];
+        marker.options.highlight = "permanent";
+        mapObj.markers = marker;
+        var popup = L.popup();
+
+        var strHtml = "<span>Đây là vị trí của bạn </span>";
+        strHtml += `<br><button class="btn btn-primary text-center" data-toggle="modal" data-target="#exampleModal" onclick="getLatAndLong()"><i class="glyphicon glyphicon-plus"></i> Lấy toạ độ này </button>`;
+
+        popup.setContent(strHtml);
+
+        // binding
+        marker.bindPopup(popup);
+        marker.addTo(markerGroup);
+        markerGroup = L.layerGroup().addTo(mapObj);
+    }
+</script>
+
+<script>
+    $('#btn_GetAddressOfGGMap').click(function () {
+        var addrOfGGMap = $('#addressOfGGMap').html();
+        console.log(addrOfGGMap);
+        $('#StoreAddress').val(addrOfGGMap);
+    });
+
+    function getLatAndLong() {
+        flagGetLatLn = true;
+        $('#latAndLongArea').show()
+        $('#latitude_view').html(lat);
+        $('#longitude_view').html(long);
+    }
+
+    //function findByAddress() {
+    //    //$.get(location.protocol + '//nominatim.openstreetmap.org/search?format=json&q=' + 'Ha Noi',
+    //    //    function (data) {
+    //    //    console.log(data);
+    //    //    });
+    //    var jsonUrl = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=401+C%E1%BB%95+Nhu%E1%BA%BF&sensor=false&language=vi&key=AIzaSyBfQPm46M3j2joTFlHachk4RCXfeR7ZFWE";
+    //    var myData;
+    //    getJsonData(jsonUrl, function (data) {
+    //        myData = data;
+    //    });
+    //}
+
+    function getJsonData(url, callback) {
+        let request = new XMLHttpRequest;
+        let timer = setTimeout(function () {
+            getJsonData(url, callback);
+        }, 10000);
+        request.onreadystatechange = function () {
+            if (request.readyState === 4 && request.status === 200) {
+                clearTimeout(timer);
+                return callback(JSON.parse(request.responseText));
+            }
+        }
+        request.open('GET', url);
+        request.send();
+    }
+</script>
