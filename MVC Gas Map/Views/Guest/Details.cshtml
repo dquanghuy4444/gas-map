@@ -186,7 +186,7 @@
     var defaultCoord = null;
     var mapObj = null;
     var marker;
-    var zoomLevel = 15;
+
     var minimap = null;
     var flagMarkerCurLocation = false;
     //var amountOfStos = null;
@@ -195,10 +195,9 @@
     var markerGroup = null;
     var popup = L.popup();
 
-    var osmUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-    var osmAttrib = 'Có làm mới có ăn !!! ';
-    var osm = new L.TileLayer(osmUrl, { minZoom: 5, maxZoom: 18, attribution: osmAttrib });
-    var osm2 = new L.TileLayer(osmUrl, { minZoom: 0, maxZoom: 13, attribution: osmAttrib });
+
+    var osm = new L.TileLayer(STR_OSM_URL, { minZoom: 5, maxZoom: 18, attribution: STR_OSM_ATTRIBUTE });
+    var osm2 = new L.TileLayer(STR_OSM_URL, { minZoom: 0, maxZoom: 13, attribution: STR_OSM_ATTRIBUTE });
     ///////////////////
     //L.MakiMarkers.accessToken = 'pk.eyJ1IjoiZDNwemExMm81IiwiYSI6ImNrOWljamZqczE4M2EzcHFiY3NoZms2ZTYifQ.lhpwFvZyHvEy5fZFBBhXxw';
 
@@ -236,7 +235,7 @@
         var mapConfig = {
             attributionControl: true, // hiện watermark
             center: defaultCoord, // vị trí map mặc định hiện tại
-            zoom: zoomLevel, // level zoom
+            zoom: INT_ZOOM_MAP_LEVEL, // level zoom
             fullscreenControl: true,
             fullscreenControlOptions: {
                 position: 'topleft'
@@ -514,7 +513,7 @@
             function (location)
             {
                 var currentLocation = new L.LatLng(location.coords.latitude, location.coords.longitude);
-                mapObj.setView(currentLocation, zoomLevel);
+                mapObj.setView(currentLocation, INT_ZOOM_MAP_LEVEL);
                 var curLocation = [location.coords.latitude, location.coords.longitude];
                 markerGroup.clearLayers();
                 setMarkerCurrentLocation(curLocation);

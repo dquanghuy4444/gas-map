@@ -271,7 +271,6 @@
     <Content Include="Views\Store\Index.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\Home\Intro.cshtml" />
-    <Content Include="Views\Store\CreateAndEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

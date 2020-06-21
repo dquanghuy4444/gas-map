@@ -11,8 +11,7 @@ namespace MVC_Gas_Map.Controllers
 
     public class StoreController : Controller
     {
-        // GET: Store
-        [HandleError]
+
         public ActionResult Index()
         { 
             return View();
@@ -59,8 +58,8 @@ namespace MVC_Gas_Map.Controllers
         }
 
 
-        // GET: Store/Details/5
-        [HttpPost]
+
+        [HttpGet]
         public ActionResult GetDetailStore(string storeId)
         {
             IEnumerable<Store> store;
@@ -83,13 +82,7 @@ namespace MVC_Gas_Map.Controllers
 
         }
 
-        public ActionResult CreateAndEdit()
-        {
-            return View();
 
-        }
-
-        // GET: Store/Create
         public ActionResult CreateStore(Store store)
         {
             string message = "";
@@ -120,7 +113,6 @@ namespace MVC_Gas_Map.Controllers
 
         }
 
-        // GET: Store/Edit/5
         public ActionResult EditStore(Store store)
         {
             string message = "";
@@ -140,45 +132,6 @@ namespace MVC_Gas_Map.Controllers
                 flagCheckStatus = 0; //0:fail  1:success
             }
             return Json(new { status = flagCheckStatus, message = message}, JsonRequestBehavior.AllowGet);
-        }
-
-    
-        // POST: Store/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Store/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Store/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }

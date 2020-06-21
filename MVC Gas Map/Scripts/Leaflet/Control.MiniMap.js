@@ -68,10 +68,10 @@
 				zoomControl: false,
 				zoomAnimation: this.options.zoomAnimation,
 				autoToggleDisplay: this.options.autoToggleDisplay,
-				touchZoom: this.options.centerFixed ? 'center' : !this._isZoomLevelFixed(),
-				scrollWheelZoom: this.options.centerFixed ? 'center' : !this._isZoomLevelFixed(),
-				doubleClickZoom: this.options.centerFixed ? 'center' : !this._isZoomLevelFixed(),
-				boxZoom: !this._isZoomLevelFixed(),
+				touchZoom: this.options.centerFixed ? 'center' : !this._iszoomLevelFixed(),
+				scrollWheelZoom: this.options.centerFixed ? 'center' : !this._iszoomLevelFixed(),
+				doubleClickZoom: this.options.centerFixed ? 'center' : !this._iszoomLevelFixed(),
+				boxZoom: !this._iszoomLevelFixed(),
 				crs: map.options.crs
 			};
 			mapOptions = L.Util.extend(this.options.mapOptions, mapOptions);  // merge with priority of the local mapOptions object.
@@ -255,13 +255,13 @@
 			}
 		},
 
-		_isZoomLevelFixed: function () {
+		_iszoomLevelFixed: function () {
 			var zoomLevelFixed = this.options.zoomLevelFixed;
 			return this._isDefined(zoomLevelFixed) && this._isInteger(zoomLevelFixed);
 		},
 
 		_decideZoom: function (fromMaintoMini) {
-			if (!this._isZoomLevelFixed()) {
+			if (!this._iszoomLevelFixed()) {
 				if (fromMaintoMini) {
 					return this._mainMap.getZoom() + this.options.zoomLevelOffset;
 				} else {

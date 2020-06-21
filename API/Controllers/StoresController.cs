@@ -18,10 +18,21 @@ namespace API.Controllers
         private MVC_Gas_MapEntities db = new MVC_Gas_MapEntities();
 
         // GET: api/Stores
-        [ResponseType(typeof(Store))]
+        [ResponseType(typeof(List<Store>))]
         public IHttpActionResult GetStores()
         {
-            var view = RunDataUseProcedure.getStoreInfor("");
+            //var view = RunDataUseProcedure.getStoreInfor("");
+            var view = from store in db.Stores
+                       join coord in db.Coordinates on store.StoreID equals coord.HostObjID
+                       join img in db.Images on store.StoreID equals img.HostObjID
+                       select new
+                       {
+                           StoreName = store.StoreName,
+                           StoreID = store.StoreID,
+                           Latitude = coord.Latitude,
+                           Longitude = coord.Longitude,
+                           ImgSrc = img.ImageSrc
+                       };
             return Json(view);
         }
 
@@ -82,17 +93,43 @@ namespace API.Controllers
 
         // PUT: api/Stores/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutStore(int id, Store store)
+        public IHttpActionResult PutStore(Store store)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != store.ID)
+            var storeIndb = db.Stores.FirstOrDefault(x => x.StoreName.ToLower() == store.StoreName.ToLower());
+            if (storeIndb != null)
             {
-                return BadRequest();
+                return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent
+                    (
+                        "Tên cửa hàng đã được sử dụng.Hãy đặt tên khác ",
+                        Encoding.UTF8,
+                        "text/html"
+                    )
+                });
             }
+
+            storeIndb = db.Stores.FirstOrDefault(x => x.StoreID == store.StoreID);
+            if (storeIndb != null)
+            {
+                return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent
+                    (
+                        "Không tìm thấy thông tin trong cơ sở dữ liệu",
+                        Encoding.UTF8,
+                        "text/html"
+                    )
+                });
+            }
+
+
+
 
             db.Entry(store).State = EntityState.Modified;
 
@@ -102,14 +139,7 @@ namespace API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!StoreExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return StatusCode(HttpStatusCode.NoContent);
