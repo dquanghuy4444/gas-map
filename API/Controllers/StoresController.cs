@@ -81,13 +81,25 @@ namespace API.Controllers
         [ResponseType(typeof(Store))]
         public IHttpActionResult GetStore(string storeid)
         {
-            var store = RunDataUseProcedure.getStoreInfor(storeid);
-            if (store == null)
+            //var store = RunDataUseProcedure.getStoreInfor(storeid);
+            var view = from store in db.Stores
+                       join coord in db.Coordinates on store.StoreID equals coord.HostObjID
+                       join img in db.Images on store.StoreID equals img.HostObjID
+                       where store.StoreID== storeid
+                       select new
+                       {
+                           StoreName = store.StoreName,
+                           StoreID = store.StoreID,
+                           Latitude = coord.Latitude,
+                           Longitude = coord.Longitude,
+                           ImgSrc = img.ImageSrc
+                       };
+            if (view == null)
             {
                 return NotFound();
             }
 
-            return Json(store);
+            return Json(view);
         }
 
 
@@ -100,8 +112,8 @@ namespace API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var storeIndb = db.Stores.FirstOrDefault(x => x.StoreName.ToLower() == store.StoreName.ToLower());
-            if (storeIndb != null)
+            var storeInDB = db.Stores.FirstOrDefault(x => x.StoreName.ToLower() == store.StoreName.ToLower());
+            if (storeInDB != null && storeInDB.StoreID != store.StoreID)
             {
                 return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
@@ -114,8 +126,8 @@ namespace API.Controllers
                 });
             }
 
-            storeIndb = db.Stores.FirstOrDefault(x => x.StoreID == store.StoreID);
-            if (storeIndb != null)
+            storeInDB = db.Stores.FirstOrDefault(x => x.StoreID == store.StoreID);
+            if (storeInDB == null)
             {
                 return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.BadRequest)
                 {
@@ -127,11 +139,48 @@ namespace API.Controllers
                     )
                 });
             }
+            storeInDB.StoreName = store.StoreName;
+            storeInDB.StoreEmail = store.StoreEmail;
+            storeInDB.StorePhone = store.StorePhone;
+            storeInDB.StoreDetail = store.StoreDetail;
+            storeInDB.StoreAddress = store.StoreAddress;
 
+            db.Entry(storeInDB).CurrentValues.SetValues(storeInDB);
 
+            var coordInDB = db.Coordinates.FirstOrDefault(x => x.HostObjID == store.StoreID);
+            if (coordInDB == null)
+            {
+                return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent
+                    (
+                        "Không tìm thấy thông tin trong cơ sở dữ liệu",
+                        Encoding.UTF8,
+                        "text/html"
+                    )
+                });
+            }
+            coordInDB.Latitude = store.Latitude;
+            coordInDB.Longitude = store.Longitude;
 
+            db.Entry(coordInDB).CurrentValues.SetValues(coordInDB);
 
-            db.Entry(store).State = EntityState.Modified;
+            var imgInDB = db.Images.FirstOrDefault(x => x.HostObjID == store.StoreID);
+            if (imgInDB == null)
+            {
+                return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent
+                    (
+                        "Không tìm thấy thông tin trong cơ sở dữ liệu",
+                        Encoding.UTF8,
+                        "text/html"
+                    )
+                });
+            }
+            imgInDB.ImageSrc = store.ImgSrc;
+
+            db.Entry(imgInDB).CurrentValues.SetValues(imgInDB);
 
             try
             {
@@ -139,10 +188,26 @@ namespace API.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                throw;
+                return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent
+                    (
+                        "Lỗi cập nhật",
+                        Encoding.UTF8,
+                        "text/html"
+                    )
+                });
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return base.ResponseMessage(new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StringContent
+                (
+                    "Cập nhật thông tin cửa hàng",
+                    Encoding.UTF8,
+                    "text/html"
+                )
+            });
         }
 
         // POST: api/Stores
