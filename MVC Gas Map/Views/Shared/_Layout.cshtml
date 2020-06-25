@@ -10,6 +10,7 @@
 
     <script src="~/Scripts/Jquery/jquery.min.js"></script>
     <script src="~/Scripts/Common/Variable.js"></script>
+    <script src="~/Scripts/Common/Function.js"></script>
 
     <style>
 
@@ -252,14 +253,14 @@
                                     <i class="fa fa-key fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Đổi mật khẩu
                                 </a>
-                                <a class="dropdown-item" href="#">
+                                @*<a class="dropdown-item" href="#">
                                     <i class="fa fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Settings
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fa fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Activity Log
-                                </a>
+                                </a>*@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" id="myBtn" href="#">
                                     <i class="fa fa-sign-out fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -271,10 +272,10 @@
                     </ul>
                 </nav>
 
-
                 <div class="container-fluid">
                     @RenderBody()
                 </div>
+
                 <!-- /.container-fluid -->
             </div>
             <!-- End of Main Content -->
@@ -394,73 +395,6 @@
     <script src="~/Scripts/Notify/notify.min.js"></script>
 
 
-    <script type="text/javascript">
-
-        function message_Success(strMess) {
-            $('.notifyjs-wrapper').remove();
-            $.notify(
-                strMess,
-                "success"
-            );
-        }
-
-        function scrollToSection(id) {
-            var targetElement = $('#' + id);
-            $([document.documentElement, document.body]).animate({
-                scrollTop: targetElement.offset().top
-            }, 900);
-        }
-
-        function checkValidTxt(idTxt) {
-            var strLength = "Nhập thiếu .Thông tin phải bằng hoặc lớn hơn 6 kí tự";
-            var strTxt = $('#' + idTxt).val();
-
-            if (!strTxt) {
-                message_Error(idTxt, STR_WARNING_EMPTY);
-                return false;
-            }
-            else if (strTxt.length < 6) {
-                message_Error(idTxt, STR_WARNING_EMPTY);
-                return false;
-            }
-            return true;
-        }
-
-        //check caplock
-        var flagCheckCapLock = true;
-        var strCapLock = "Cap Lock đang bật.Hãy tắt để nhập thông tin";
-
-        function checkCapLock(idTxt) {
-            var txt = document.getElementById(idTxt);
-            txt.addEventListener("keyup", function (event) {
-                if (event.getModifierState("CapsLock")) {
-                    flagCheckCapLock = false;
-                    message_Error(idTxt, strCapLock);
-
-                } else {
-                    flagCheckCapLock = true;
-                    $('.notifyjs-wrapper').remove();
-                }
-            });
-        }
-        function message_Error(id, strMess) {
-            if (id === '') {
-                //setTimeout($('.notifyjs-wrapper').remove(), 2000);
-                $.notify(
-                    strMess,
-                    { position: "top-center" }
-                );
-            }
-            else {
-                //setTimeout($('.notifyjs-wrapper').remove(), 2000);
-                $("#" + id).notify(
-                    strMess,
-                    { position: "top center" }
-                );
-            }
-        }
-    </script>
-
     <script>
 
         var imgSrcBySes = sessionStorage.getItem("ImgSrc");
@@ -518,80 +452,6 @@
         //    }
         //    if (!returnBool) return false;
         //}
-    </script>
-
-    <script>
-        var interval = setInterval(
-            function () {
-                var url = new URL(document.URL);
-                var pathName = url.pathname;
-
-                $("#loginArea").hide();
-                $("#btn_GoToStorePage").hide();
-                $("#btn_GoToCusPage").hide();
-                $("#userArea").hide();
-                $("#callGasSetting").hide();
-                $("#storeSetting").hide();
-
-                var userIDBySes = sessionStorage.getItem("UserID");
-                var permissionIDBySes = sessionStorage.getItem("PermissionID");
-                var guestNameBySes = sessionStorage.getItem("GuestName");
-                var imgSrcBySes = sessionStorage.getItem("ImgSrc");
-
-                if (userIDBySes && permissionIDBySes && guestNameBySes != null && imgSrcBySes) {
-                    goTo404Page(pathName, "/Login/Index", this);
-
-                    var guestName = (guestNameBySes === "") ? DEFAULT_NAME_GUEST : guestNameBySes;
-                    $("#guestName").html(guestName);
-
-                    $("#userArea").show();
-
-                    if (permissionIDBySes == 2) {
-                        goTo404Page(pathName, "/Store/Details", this);
-                        $("#btn_GoToCusPage").show();
-                        $("#callGasSetting").show();
-
-                        modal2.style.display = "none";
-
-                    }
-                    else if (permissionIDBySes == 3 || permissionIDBySes == 4) {
-                        modal2.style.display = "none";
-                        goTo404Page(pathName, "/Guest/Details", this);
-
-                        $("#storeSetting").show();
-                        $("#createStoreSetting").show();
-                        $("#btn_GoToStorePage").show();
-
-                    }
-                }
-                else {
-                    $("#loginArea").show();
-
-                    clearInterval(interval);
-                    sessionStorage.clear();
-
-                    var array404Page =
-                        [
-                            "/Guest/Index",
-                            "/Guest/Details",
-                            "/Store/Details",
-                            "/Store/Create",
-                            "/User/Edit",
-                        ]
-
-                    //pathName == "/Guest/Index" || pathName == "/Store/Details" || pathName == "/Guest/Details"
-                    if (array404Page.indexOf(pathName) != - 1)
-                        window.location.href = STR_HREF_ERROR_404_PAGE;
-                }
-            }
-            , 2e2);
-
-        function goTo404Page(pathName, pathNameNotFound, interval) {
-            if (pathName == pathNameNotFound) {
-                clearInterval(interval);
-                window.location.href = STR_HREF_ERROR_404_PAGE;
-            }
-        }
     </script>
 
     <script>
@@ -659,6 +519,72 @@
         window.onclick = function (event) {
             if (event.target == modal) {
                 modal.style.display = "none";
+            }
+        }
+    </script>
+
+    <!-----------SET INTERVAL TO PERMISS USERS ------------>
+    <script type="text/javascript">
+        var interval = setInterval(
+            function () {
+                var url = new URL(document.URL);
+                var pathName = url.pathname;
+
+                $("#loginArea").hide();
+                $("#btn_GoToStorePage").hide();
+                $("#btn_GoToCusPage").hide();
+                $("#userArea").hide();
+                $("#callGasSetting").hide();
+                $("#storeSetting").hide();
+
+                var userIDBySes = sessionStorage.getItem("UserID");
+                var permissionIDBySes = sessionStorage.getItem("PermissionID");
+                var guestNameBySes = sessionStorage.getItem("GuestName");
+                var imgSrcBySes = sessionStorage.getItem("ImgSrc");
+
+                if (userIDBySes && permissionIDBySes && guestNameBySes != null && imgSrcBySes) {
+                    goTo404Page(pathName, "/Login/Index", this);
+
+                    var guestName = (guestNameBySes === "") ? DEFAULT_NAME_GUEST : guestNameBySes;
+                    $("#guestName").html(guestName);
+
+                    $("#userArea").show();
+
+                    if (permissionIDBySes == 2) {
+                        goTo404Page(pathName, "/Store/Details", this);
+                        $("#btn_GoToCusPage").show();
+                        $("#callGasSetting").show();
+
+                        modal2.style.display = "none";
+
+                    }
+                    else if (permissionIDBySes == 3 || permissionIDBySes == 4) {
+                        modal2.style.display = "none";
+                        goTo404Page(pathName, "/Guest/Details", this);
+
+                        $("#storeSetting").show();
+                        $("#createStoreSetting").show();
+                        $("#btn_GoToStorePage").show();
+
+                    }
+                }
+                else {
+                    $("#loginArea").show();
+
+                    clearInterval(interval);
+                    sessionStorage.clear();
+
+                    //pathName == "/Guest/Index" || pathName == "/Store/Details" || pathName == "/Guest/Details"
+                    if (ARR_PAGE_GO_TO_404_PAGE.indexOf(pathName) != - 1)
+                        window.location.href = STR_HREF_ERROR_404_PAGE;
+                }
+            }
+            , 2e2);
+
+        function goTo404Page(pathName, pathNameNotFound, interval) {
+            if (pathName == pathNameNotFound) {
+                clearInterval(interval);
+                window.location.href = STR_HREF_ERROR_404_PAGE;
             }
         }
     </script>

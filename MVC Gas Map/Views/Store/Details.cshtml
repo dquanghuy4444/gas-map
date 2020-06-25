@@ -27,6 +27,11 @@
         height: 30rem;
     }
 
+    #idMap {
+        width: 100%;
+        height: 52rem;
+    }
+
     .collapsible {
         background-color: #f3e8e8;
         color: black;
@@ -62,7 +67,7 @@
         overflow: hidden;
         transition: max-height 0.2s ease-out;
         /*background-color: #f1f1f1;*/
-    }
+    }x
 </style>
 
 <div class="text-center" id="noStoreArea" style="margin:11rem 0;display:none;">
@@ -77,29 +82,41 @@
 
     <form style="margin-bottom:1.2rem;">
         <h4>Chọn cửa hàng của bạn </h4>
-        <select class="form-control" id="ddl_Stores" style="width:20%;font-size:1.4rem;font-weight:500;">
-            <option>One</option>
-            <option>Two</option>
-        </select>
+        <select class="form-control" id="ddl_Stores" style="width:20%;font-size:1.4rem;font-weight:500;"></select>
     </form>
 
-    <button class="collapsible">Khách hàng quanh đây</button>
+    <button class="collapsible">
+        <i class="fa fa-users" aria-hidden="true"></i>
+        Khách hàng quanh đây
+    </button>
+    <div class="content">
+        <div id="idMap" class="mt-2"></div>
+    </div>
+    <button class="collapsible mt-1">
+        <i class="fa fa-cube" aria-hidden="true"></i>
+        Đơn hàng hiện có
+    </button>
     <div class="content">
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
     </div>
-    <button class="collapsible mt-1">Đơn hàng hiện có</button>
+    <button class="collapsible mt-1">
+        <i class="fa fa-inbox" aria-hidden="true"></i>
+        Thông tin sản phẩm
+    </button>
     <div class="content">
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
     </div>
-    <button class="collapsible mt-1">Thông tin sản phẩm</button>
+    <button class="collapsible mt-1">
+        <i class="fa fa-braille" aria-hidden="true"></i>
+        Quản lí kinh doanh cửa hàng
+    </button>
     <div class="content">
         <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
     </div>
-    <button class="collapsible mt-1">Quản lí kinh doanh cửa hàng</button>
-    <div class="content">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
-    <button class="collapsible mt-1">Thông tin cửa hàng</button>
+    <button class="collapsible mt-1">
+        <i class="fa fa-university" aria-hidden="true"></i>
+        Thông tin cửa hàng
+    </button>
     <div class="content" style="padding:0 4rem;">
         <div class="container mt-3" style="padding: 0px 4rem;">
             <div class="card o-hidden border-0 shadow-lg my-5">
@@ -176,11 +193,17 @@
     var popupContent = null;
     var defaultCoord = null;
     var mapObj = null;
-    var marker;
+    var mapObj2 = null;
+    var marker=null;
     var minimap = null;
     var flagMarkerCurLocation = null;
     var markerGroup = null;
     var popup = null;
+    var latInDB = null;
+    var longInDB = null;
+    var mapConfig = null;
+    var searchControl = null;
+    var results = null;
 </script>
 
 <!----------COLLAPSIBLE--------->
@@ -222,7 +245,9 @@
 
             loadData();
 
-            loadOsmForEditStore();
+            mapObj = loadOsm('idMap');
+
+            mapObj2=loadOsm('idMap2');
         }
     }
 
@@ -230,30 +255,21 @@
 
 <!----------LOAD OPEN STREET MAP------------------->
 <script>
-    function loadOsmForEditStore() {
+    function loadOsm(idMap) {
         // Variable
+        var mapObj = null;
         popup = L.popup();
         var osm = new L.TileLayer(STR_OSM_URL, { minZoom: 5, maxZoom: 18, attribution: STR_OSM_ATTRIBUTE });
         var osm2 = new L.TileLayer(STR_OSM_URL, { minZoom: 0, maxZoom: 13, attribution: STR_OSM_ATTRIBUTE });
 
-
-        if (typeof (Storage) !== "undefined") {
-            var curLocation = localStorage.getItem("curLocation");
-            if (curLocation != null) {
-                flagMarkerCurLocation = true;
-                var latAndLng = curLocation.split(",");
-                defaultCoord = [Number(latAndLng[0]), Number(latAndLng[1])];
-            }
+        if (latInDB != null && longInDB != null) {
+            defaultCoord = [latInDB, longInDB];
         }
         else {
-            console.log("pohip");
-        }
-
-
-        if (defaultCoord == null) {
             defaultCoord = [21.061540, 105.781103];//toạ độ mặc địNH Ở PHẠM VĂN ĐỒNG
         }
-        var mapConfig = {
+
+        mapConfig = {
             attributionControl: true, // hiện watermark
             center: defaultCoord, // vị trí map mặc định hiện tại
             zoom: INT_ZOOM_MAP_LEVEL, // level zoom
@@ -263,9 +279,7 @@
             }
         };
 
-
-        mapObj = new L.map('idMap2', mapConfig);
-
+        mapObj = new L.map(idMap, mapConfig);
         mapObj.addLayer(osm);
 
         markerGroup = L.layerGroup().addTo(mapObj);
@@ -288,12 +302,12 @@
         var layerGroup = new L.layerGroup([osm2]);
 
         //////////////
-        setMarkerCurrentLocation(defaultCoord)
+        setMarkerCurrentLocation(defaultCoord, mapObj,1)
         ///////////////////
 
-        var searchControl = L.esri.Geocoding.geosearch().addTo(mapObj);
+        searchControl = L.esri.Geocoding.geosearch().addTo(mapObj);
 
-        var results = L.layerGroup().addTo(mapObj);
+        results = L.layerGroup().addTo(mapObj);
 
         searchControl.on('results', function (data) {
             results.clearLayers();
@@ -301,6 +315,8 @@
                 results.addLayer(L.marker(data.results[i].latlng));
             }
         });
+
+        return mapObj;
     }
 </script>
 
@@ -320,7 +336,7 @@
 
                 var firstStore = storeList[0];
 
-                //loadDdlStore()
+                loadDdlStore(storeList)
 
                 renderHtmlForStore(firstStore);
 
@@ -343,6 +359,19 @@
         $('#latitude_view').html(store.Latitude);
         $('#longitude_view').html(store.Longitude);
 
+        latInDB = store.Latitude;
+        longInDB = store.Longitude;
+
+    }
+
+    function loadDdlStore(storeList) {
+        storeList.forEach(
+            store =>
+                $('#ddl_Stores').append($('<option>', {
+                    value: store.StoreID,
+                    text: store.StoreName
+                }))
+        )
     }
 </script>
 
@@ -489,14 +518,14 @@
                 var currentLocation = new L.LatLng(location.coords.latitude, location.coords.longitude);
                 mapObj.setView(currentLocation, INT_ZOOM_MAP_LEVEL);
                 var curLocation = [location.coords.latitude, location.coords.longitude];
-                setMarkerCurrentLocation(curLocation);
+                setMarkerCurrentLocation(curLocation,mapObj2,2);
                 localStorage.removeItem("curLocation");
                 localStorage.setItem("curLocation", curLocation);
             });
 
     }
 
-    function setMarkerCurrentLocation(defaultCoord) {
+    function setMarkerCurrentLocation(defaultCoord, mapObj, mode) {
         const locationIcon = L.MakiMarkers.icon({
             // icon: "beer",
             icon: "star-stroked",
@@ -506,21 +535,22 @@
 
         marker = new L.marker(defaultCoord, { icon: locationIcon });
 
-        lat = defaultCoord[0];
-        long = defaultCoord[1];
-        marker.options.highlight = "permanent";
-        mapObj.markers = marker;
-        var popup = L.popup();
 
-        var strHtml = "<span>Đây là vị trí của bạn </span>";
-        strHtml += `<br><button class="btn btn-primary text-center" data-toggle="modal" data-target="#exampleModal" onclick="getLatAndLong()"><i class="glyphicon glyphicon-plus"></i> Lấy toạ độ này </button>`;
+            lat = defaultCoord[0];
+            long = defaultCoord[1];
+            marker.options.highlight = "permanent";
+            mapObj.markers = marker;
+            var popup = L.popup();
 
-        popup.setContent(strHtml);
+            var strHtml = "<span>Đây là vị trí của bạn </span>";
+            strHtml += `<br><button class="btn btn-primary text-center" data-toggle="modal" data-target="#exampleModal" onclick="getLatAndLong()"><i class="glyphicon glyphicon-plus"></i> Lấy toạ độ này </button>`;
 
-        // binding
-        marker.bindPopup(popup);
-        marker.addTo(markerGroup);
-        markerGroup = L.layerGroup().addTo(mapObj);
+            popup.setContent(strHtml);
+
+            // binding
+            marker.bindPopup(popup);
+            marker.addTo(markerGroup);
+            markerGroup = L.layerGroup().addTo(mapObj);
     }
 
     $('#btn_GetAddressOfGGMap').click(function () {
@@ -535,4 +565,30 @@
         $('#latitude_view').html(lat);
         $('#longitude_view').html(long);
     }
+</script>
+
+<!----------EVENT ON CHANGE OF SELECT---------->
+<script>
+    $('#ddl_Stores').change(function () {
+        $('#idMap').hide();
+        $('#idMap2').hide();
+        $('.loader').show();
+        try {
+            var storeIDSelected = $("#ddl_Stores option:selected").val();
+            var store = storeList.find(store => store.StoreID == storeIDSelected);
+            renderHtmlForStore(store);
+            setMarkerCurrentLocation([store.Latitude, store.Longitude],mapObj,1);
+        }
+        catch (err) {
+            window.href.location = window.href.location
+        }
+        finally {
+            setTimeout(function () {
+                $('#idMap').show();
+                $('#idMap2').show();
+                $('.loader').hide();
+            }, 3e2
+            )
+        }
+    });
 </script>
