@@ -25,6 +25,7 @@ namespace API.Models
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public string ImgSrc { get; set; }
+        public string PermissionID { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
     }
 }

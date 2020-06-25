@@ -3,8 +3,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" type="text/javascript"></script>
+<link href="~/Scripts/Leaflet/LeafLet/leaflet.css" rel="stylesheet" />
+<script src="~/Scripts/Leaflet/LeafLet/leaflet.js"></script>
 <!------>
 <link href="~/Content/Leaflet/Control.Coordinates-0.1.5.css" rel="stylesheet" />
 <script src="~/Scripts/Leaflet/Control.Coordinates-0.1.5.min.js"></script>
@@ -13,14 +13,12 @@
 <script src="~/Scripts/Leaflet/Control.MarkerHighLight.js"></script>
 <!------>
 <script src="~/Scripts/Leaflet/Control.MakiMarkers.js"></script>
-
-<!-- Load Esri Leaflet from CDN -->
-<script src="https://unpkg.com/esri-leaflet@2.4.1/dist/esri-leaflet.js" integrity="sha512-xY2smLIHKirD03vHKDJ2u4pqeHA7OQZZ27EjtqmuhDguxiUvdsOuXMwkg16PQrm9cgTmXtoxA6kwr8KBy3cdcw==" crossorigin=""></script>
-
-<!-- Load Esri Leaflet Geocoder from CDN -->
-<link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@2.3.3/dist/esri-leaflet-geocoder.css" integrity="sha512-IM3Hs+feyi40yZhDH6kV8vQMg4Fh20s9OzInIIAc4nx7aMYMfo+IenRUekoYsHZqGkREUgx0VvlEsgm7nCDW9g==" crossorigin="">
-<script src="https://unpkg.com/esri-leaflet-geocoder@2.3.3/dist/esri-leaflet-geocoder.js" integrity="sha512-HrFUyCEtIpxZloTgEKKMq4RFYhxjJkCiF5sDxuAokklOeZ68U2NPfh4MFtyIVWlsKtVbK5GD2/JzFyAfvT5ejA==" crossorigin=""></script>
-
+<!------>
+<script src="~/Scripts/Leaflet/Search Control/esri-leaflet.js"></script>
+<link href="~/Scripts/Leaflet/Search Control/src/esri-leaflet-geocoder.css" rel="stylesheet" />
+<script src="~/Scripts/Leaflet/Search Control/src/esri-leaflet-geocoder.js"></script>
+<!------>
+<script src="~/Scripts/Leaflet/Common/Common.js"></script>
 <style>
     #idMap2 {
         width: 100%;
@@ -67,7 +65,9 @@
         overflow: hidden;
         transition: max-height 0.2s ease-out;
         /*background-color: #f1f1f1;*/
-    }x
+    }
+
+    x
 </style>
 
 <div class="text-center" id="noStoreArea" style="margin:11rem 0;display:none;">
@@ -194,7 +194,7 @@
     var defaultCoord = null;
     var mapObj = null;
     var mapObj2 = null;
-    var marker=null;
+    var marker = null;
     var minimap = null;
     var flagMarkerCurLocation = null;
     var markerGroup = null;
@@ -204,6 +204,10 @@
     var mapConfig = null;
     var searchControl = null;
     var results = null;
+    var layerGroup = null;
+
+    var osm = new L.TileLayer(STR_OSM_URL, { minZoom: 5, maxZoom: 18, attribution: STR_OSM_ATTRIBUTE });
+    var osm2 = new L.TileLayer(STR_OSM_URL, { minZoom: 0, maxZoom: 13, attribution: STR_OSM_ATTRIBUTE });
 </script>
 
 <!----------COLLAPSIBLE--------->
@@ -245,9 +249,26 @@
 
             loadData();
 
-            mapObj = loadOsm('idMap');
+            if (latInDB != null && longInDB != null) {
+                defaultCoord = [latInDB, longInDB];
+            }
+            else {
+                defaultCoord = [21.061540, 105.781103];//toạ độ mặc địNH Ở PHẠM VĂN ĐỒNG
+            }
 
-            mapObj2=loadOsm('idMap2');
+            mapConfig = {
+                attributionControl: true, // hiện watermark
+                center: defaultCoord, // vị trí map mặc định hiện tại
+                zoom: INT_ZOOM_MAP_LEVEL, // level zoom
+                fullscreenControl: true,
+                fullscreenControlOptions: {
+                    position: 'topleft'
+                }
+            };
+
+            loadOsm();
+
+            loadOsm2();
         }
     }
 
@@ -255,68 +276,31 @@
 
 <!----------LOAD OPEN STREET MAP------------------->
 <script>
-    function loadOsm(idMap) {
-        // Variable
-        var mapObj = null;
+    function loadOsm() {
+
+    }
+
+    function loadOsm2() {
         popup = L.popup();
-        var osm = new L.TileLayer(STR_OSM_URL, { minZoom: 5, maxZoom: 18, attribution: STR_OSM_ATTRIBUTE });
-        var osm2 = new L.TileLayer(STR_OSM_URL, { minZoom: 0, maxZoom: 13, attribution: STR_OSM_ATTRIBUTE });
 
-        if (latInDB != null && longInDB != null) {
-            defaultCoord = [latInDB, longInDB];
-        }
-        else {
-            defaultCoord = [21.061540, 105.781103];//toạ độ mặc địNH Ở PHẠM VĂN ĐỒNG
-        }
-
-        mapConfig = {
-            attributionControl: true, // hiện watermark
-            center: defaultCoord, // vị trí map mặc định hiện tại
-            zoom: INT_ZOOM_MAP_LEVEL, // level zoom
-            fullscreenControl: true,
-            fullscreenControlOptions: {
-                position: 'topleft'
-            }
-        };
-
-        mapObj = new L.map(idMap, mapConfig);
+        mapObj = new L.map("idMap2", mapConfig);
         mapObj.addLayer(osm);
 
         markerGroup = L.layerGroup().addTo(mapObj);
         //
-        L.control.coordinates({
-            position: "bottomleft",
-            decimals: 0, //optional default 4
-            decimalSeperator: ".", //optional default "."
-            labelTemplateLat: "Latitude: {y}", //optional default "Lat: {y}"
-            labelTemplateLng: "Longitude: {x}", //optional default "Lng: {x}"
-            enableUserInput: true, //optional default true
-            useDMS: false, //optional default false
-            useLatLngOrder: true, //ordering of labels, default false-> lng-lat
-            markerType: L.marker, //optional default L.marker
-            markerProps: {} //optional default {}
-        }).addTo(mapObj);
+
 
         mapObj.on('click', onMapClick);
 
-        var layerGroup = new L.layerGroup([osm2]);
+        layerGroup = new L.layerGroup([osm2]);
 
         //////////////
-        setMarkerCurrentLocation(defaultCoord, mapObj,1)
+        setMarkerCurrentLocation(defaultCoord)
         ///////////////////
+        addCoordBox(mapObj);
 
-        searchControl = L.esri.Geocoding.geosearch().addTo(mapObj);
+        addSearchControl(mapObj);
 
-        results = L.layerGroup().addTo(mapObj);
-
-        searchControl.on('results', function (data) {
-            results.clearLayers();
-            for (var i = data.results.length - 1; i >= 0; i--) {
-                results.addLayer(L.marker(data.results[i].latlng));
-            }
-        });
-
-        return mapObj;
     }
 </script>
 
@@ -404,39 +388,36 @@
                     Latitude: lat,
                     Longitude: long
                 }
-                console.log(store);
-
-                $.ajax({
-                    type: 'Get',
-                    contentType: 'application/json; charset=utf-8',
-                    url: '/Store/EditStore',
-                    dataType: 'Json',
-                    data: store,
-                    success: function (data) {
-                        console.log(data);
-
-                        var status = data.status;
-                        var message = data.message;
-                        var permissID = data.permissionID;
-
-                        switch (status) {
-                            case 0:
-                                message_Error("", message);
-                                break;
-                            case 1:
-                                localStorage.setItem("successMess", JSON.stringify(message));
-                                clearInterval(interval);
-                                sessionStorage.setItem("PermissionID", permissID);
-                                setTimeout(function () { window.location.href = "/Store/Details"; }, 1800);
-
-                                break;
-                        }
-                    },
-                    error: function (data) {
-                        message_Error("", "Cập nhật thông tin thất bại")
-                    },
-                });
             }
+            console.log(store);
+
+            $.ajax({
+                type: 'Get',
+                contentType: 'application/json; charset=utf-8',
+                url: '/Store/EditStore',
+                dataType: 'Json',
+                data: store,
+                success: function (data) {
+                    console.log(data);
+
+                    var status = data.status;
+                    var message = data.message;
+
+                    switch (status) {
+                        case 0:
+                            message_Error("", message);
+                            break;
+                        case 1:
+                            localStorage.setItem("successMess", JSON.stringify(message));
+                            clearInterval(interval);
+                            setTimeout(function () { window.location.href = "/Store/Details"; }, 1800);
+                            break;
+                    }
+                },
+                error: function (data) {
+                    message_Error("", "Cập nhật thông tin thất bại")
+                },
+            });
         }
     }
 
@@ -518,14 +499,15 @@
                 var currentLocation = new L.LatLng(location.coords.latitude, location.coords.longitude);
                 mapObj.setView(currentLocation, INT_ZOOM_MAP_LEVEL);
                 var curLocation = [location.coords.latitude, location.coords.longitude];
-                setMarkerCurrentLocation(curLocation,mapObj2,2);
+                setMarkerCurrentLocation(curLocation);
                 localStorage.removeItem("curLocation");
                 localStorage.setItem("curLocation", curLocation);
             });
 
     }
 
-    function setMarkerCurrentLocation(defaultCoord, mapObj, mode) {
+    function setMarkerCurrentLocation(defaultCoord) {
+
         const locationIcon = L.MakiMarkers.icon({
             // icon: "beer",
             icon: "star-stroked",
@@ -536,21 +518,20 @@
         marker = new L.marker(defaultCoord, { icon: locationIcon });
 
 
-            lat = defaultCoord[0];
-            long = defaultCoord[1];
-            marker.options.highlight = "permanent";
-            mapObj.markers = marker;
-            var popup = L.popup();
+        lat = defaultCoord[0];
+        long = defaultCoord[1];
+        marker.options.highlight = "permanent";
+        mapObj.markers = marker;
+        var popup = L.popup();
 
-            var strHtml = "<span>Đây là vị trí của bạn </span>";
-            strHtml += `<br><button class="btn btn-primary text-center" data-toggle="modal" data-target="#exampleModal" onclick="getLatAndLong()"><i class="glyphicon glyphicon-plus"></i> Lấy toạ độ này </button>`;
+        var strHtml = "<span>Đây là vị trí cửa hàng của bạn </span>";
 
-            popup.setContent(strHtml);
+        popup.setContent(strHtml);
 
-            // binding
-            marker.bindPopup(popup);
-            marker.addTo(markerGroup);
-            markerGroup = L.layerGroup().addTo(mapObj);
+        // binding
+        marker.bindPopup(popup);
+        marker.addTo(markerGroup);
+        markerGroup = L.layerGroup().addTo(mapObj);
     }
 
     $('#btn_GetAddressOfGGMap').click(function () {
@@ -564,6 +545,8 @@
         $('#latAndLongArea').show()
         $('#latitude_view').html(lat);
         $('#longitude_view').html(long);
+
+        changeMarkerInOtherLocation(lat, long);
     }
 </script>
 
@@ -576,11 +559,14 @@
         try {
             var storeIDSelected = $("#ddl_Stores option:selected").val();
             var store = storeList.find(store => store.StoreID == storeIDSelected);
+            var lat = store.Latitude;
+            var long = store.Longitude;
             renderHtmlForStore(store);
-            setMarkerCurrentLocation([store.Latitude, store.Longitude],mapObj,1);
+
+            changeMarkerInOtherLocation(lat, long);
         }
         catch (err) {
-            window.href.location = window.href.location
+            window.location.href = window.location.href;
         }
         finally {
             setTimeout(function () {
@@ -591,4 +577,11 @@
             )
         }
     });
+
+    function changeMarkerInOtherLocation(lat, long) {
+        mapObj.markers.remove();
+
+        mapObj.setView(new L.LatLng(lat, long), INT_ZOOM_MAP_LEVEL);
+        setMarkerCurrentLocation([lat, long])
+    }
 </script>

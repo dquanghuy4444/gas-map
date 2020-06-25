@@ -223,6 +223,7 @@
     <Content Include="Scripts\Charts\Chart.min.js" />
     <Content Include="Scripts\Charts\datatables-demo.js" />
     <Content Include="Scripts\Common\Function.js" />
+    <Content Include="Scripts\Leaflet\Common\Common.js" />
     <Content Include="Scripts\Leaflet\Control.Coordinates-0.1.5.min.js" />
     <Content Include="Scripts\Leaflet\Control.FullScreen.js" />
     <Content Include="Scripts\Leaflet\Control.MarkerHighLight.js" />
@@ -247,6 +248,33 @@
     <Content Include="Scripts\Leaflet\Control.MakiMarkers.js" />
     <Content Include="Scripts\Bootstrap\modernizr-2.8.3.js" />
     <Content Include="Scripts\Leaflet\Control.IconLayer.Providers.js" />
+    <Content Include="Scripts\Leaflet\LeafLet\images\layers-2x.png" />
+    <Content Include="Scripts\Leaflet\LeafLet\images\layers.png" />
+    <Content Include="Scripts\Leaflet\LeafLet\images\marker-icon-2x.png" />
+    <Content Include="Scripts\Leaflet\LeafLet\images\marker-icon.png" />
+    <Content Include="Scripts\Leaflet\LeafLet\images\marker-shadow.png" />
+    <Content Include="Scripts\Leaflet\LeafLet\leaflet.css" />
+    <Content Include="Scripts\Leaflet\LeafLet\leaflet.js" />
+    <Content Include="Scripts\Leaflet\Search Control\esri-leaflet.js" />
+    <Content Include="Scripts\Leaflet\Search Control\src\Classes\GeosearchCore.js" />
+    <Content Include="Scripts\Leaflet\Search Control\src\Controls\Geosearch.js" />
+    <Content Include="Scripts\Leaflet\Search Control\src\esri-leaflet-geocoder.css" />
+    <Content Include="Scripts\Leaflet\Search Control\src\esri-leaflet-geocoder.js" />
+    <Content Include="Scripts\Leaflet\Search Control\src\helper.js" />
+    <Content Include="Scripts\Leaflet\Search Control\src\img\loading%402x.gif" />
+    <Content Include="Scripts\Leaflet\Search Control\src\img\loading.gif" />
+    <Content Include="Scripts\Leaflet\Search Control\src\img\search%402x-disabled.png" />
+    <Content Include="Scripts\Leaflet\Search Control\src\img\search%402x.png" />
+    <Content Include="Scripts\Leaflet\Search Control\src\img\search-disabled.png" />
+    <Content Include="Scripts\Leaflet\Search Control\src\img\search.png" />
+    <Content Include="Scripts\Leaflet\Search Control\src\Providers\ArcgisOnlineGeocoder.js" />
+    <Content Include="Scripts\Leaflet\Search Control\src\Providers\FeatureLayer.js" />
+    <Content Include="Scripts\Leaflet\Search Control\src\Providers\GeocodeService.js" />
+    <Content Include="Scripts\Leaflet\Search Control\src\Providers\MapService.js" />
+    <Content Include="Scripts\Leaflet\Search Control\src\Services\Geocode.js" />
+    <Content Include="Scripts\Leaflet\Search Control\src\Tasks\Geocode.js" />
+    <Content Include="Scripts\Leaflet\Search Control\src\Tasks\ReverseGeocode.js" />
+    <Content Include="Scripts\Leaflet\Search Control\src\Tasks\Suggest.js" />
     <Content Include="Scripts\Notify\notify.min.js" />
     <Content Include="Scripts\SbAdmin\Sb.admin.min.js" />
     <Content Include="Scripts\Common\Variable.js" />
@@ -271,6 +299,8 @@
     <Content Include="Views\Store\Index.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\Home\Intro.cshtml" />
+    <Content Include="Scripts\Leaflet\Search Control\src\esri-leaflet-geocoder.js.map" />
+    <Content Include="Scripts\Leaflet\Search Control\esri-leaflet.js.map" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

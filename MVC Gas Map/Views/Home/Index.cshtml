@@ -4,8 +4,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <!------>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js" type="text/javascript"></script>
+<link href="~/Scripts/Leaflet/LeafLet/leaflet.css" rel="stylesheet" />
+<script src="~/Scripts/Leaflet/LeafLet/leaflet.js"></script>
 <!------>
 <script src="~/Scripts/Leaflet/Control.FullScreen.js"></script>
 <link href="~/Content/Leaflet/Control.FullScreen.css" rel="stylesheet" />
@@ -26,12 +26,9 @@
 <script src="~/Scripts/Leaflet/Control.MakiMarkers.js"></script>
 <!------>
 <!------>
-<!-- Load Esri Leaflet from CDN -->
-<script src="https://unpkg.com/esri-leaflet@2.4.1/dist/esri-leaflet.js" integrity="sha512-xY2smLIHKirD03vHKDJ2u4pqeHA7OQZZ27EjtqmuhDguxiUvdsOuXMwkg16PQrm9cgTmXtoxA6kwr8KBy3cdcw==" crossorigin=""></script>
-
-<!-- Load Esri Leaflet Geocoder from CDN -->
-<link rel="stylesheet" href="https://unpkg.com/esri-leaflet-geocoder@2.3.3/dist/esri-leaflet-geocoder.css" integrity="sha512-IM3Hs+feyi40yZhDH6kV8vQMg4Fh20s9OzInIIAc4nx7aMYMfo+IenRUekoYsHZqGkREUgx0VvlEsgm7nCDW9g==" crossorigin="">
-<script src="https://unpkg.com/esri-leaflet-geocoder@2.3.3/dist/esri-leaflet-geocoder.js" integrity="sha512-HrFUyCEtIpxZloTgEKKMq4RFYhxjJkCiF5sDxuAokklOeZ68U2NPfh4MFtyIVWlsKtVbK5GD2/JzFyAfvT5ejA==" crossorigin=""></script>
+<script src="~/Scripts/Leaflet/Search Control/esri-leaflet.js"></script>
+<link href="~/Scripts/Leaflet/Search Control/src/esri-leaflet-geocoder.css" rel="stylesheet" />
+<script src="~/Scripts/Leaflet/Search Control/src/esri-leaflet-geocoder.js"></script>
 
 <style>
     .leaflet-popup-content {
@@ -620,16 +617,16 @@
     function goToCurrentLocation() {
         navigator.geolocation.getCurrentPosition
             (
-                function (location) {
-                    var currentLocation = new L.LatLng(location.coords.latitude, location.coords.longitude);
-                    mapObj.setView(currentLocation, INT_ZOOM_MAP_LEVEL);
-                    var curLocation = [location.coords.latitude, location.coords.longitude];
-                    markerGroup.clearLayers();
-                    setMarkerCurrentLocation(curLocation);
-                    getAllStoresInDb();
-                    localStorage.removeItem("curLocation");
-                    localStorage.setItem("curLocation", curLocation);
-                });
+            function (location) {
+                var currentLocation = new L.LatLng(location.coords.latitude, location.coords.longitude);
+                mapObj.setView(currentLocation, INT_ZOOM_MAP_LEVEL);
+                var curLocation = [location.coords.latitude, location.coords.longitude];
+                markerGroup.clearLayers();
+                setMarkerCurrentLocation(curLocation);
+                getAllStoresInDb();
+                localStorage.removeItem("curLocation");
+                localStorage.setItem("curLocation", curLocation);
+            });
     }
 </script>
 
