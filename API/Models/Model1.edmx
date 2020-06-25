@@ -5,6 +5,13 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'MVC Gas Map.dbo.CategoryProduct' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="CategoryProduct">
+          <Property Name="CateProductID" Type="int" />
+          <Property Name="CateProductName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>-->
         <EntityType Name="Coordinates">
           <Key>
             <PropertyRef Name="ID" />
@@ -46,6 +53,37 @@ warning 6013: The table/view 'MVC Gas Map.dbo.Permission' does not have a primar
           <Property Name="PermissionName" Type="nvarchar" MaxLength="50" />
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
         </EntityType>-->
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProductID" Type="varchar" MaxLength="11" StoreGeneratedPattern="Computed" />
+          <Property Name="ProductName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ProductWeight" Type="int" />
+          <Property Name="ProductTrademark" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProductPrice" Type="int" />
+          <Property Name="ProductPromotionPrice" Type="int" />
+          <Property Name="ProductDescription" Type="nvarchar(max)" />
+          <Property Name="WarrantyPeriod" Type="int" />
+          <Property Name="CateProductID" Type="int" />
+        </EntityType>
+        <EntityType Name="RequestFromGuest">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ReqFrmGueID" Type="varchar" MaxLength="17" StoreGeneratedPattern="Computed" />
+          <Property Name="GuestID" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="RequestID" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="200" />
+          <Property Name="Address" Type="nvarchar" MaxLength="200" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+          <Property Name="Latitude" Type="nvarchar" MaxLength="50" />
+          <Property Name="Longitude" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="Store">
           <Key>
             <PropertyRef Name="ID" />
@@ -75,6 +113,8 @@ warning 6013: The table/view 'MVC Gas Map.dbo.Permission' does not have a primar
           <EntitySet Name="Coordinates" EntityType="Self.Coordinates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Guest" EntityType="Self.Guest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Image" EntityType="Self.Image" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RequestFromGuest" EntityType="Self.RequestFromGuest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Store" EntityType="Self.Store" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="UserInSystem" EntityType="Self.UserInSystem" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
@@ -138,6 +178,8 @@ warning 6013: The table/view 'MVC Gas Map.dbo.Permission' does not have a primar
           <EntitySet Name="Stores" EntityType="Self.Store" />
           <EntitySet Name="UserInSystems" EntityType="Self.UserInSystem" />
           <EntitySet Name="Images" EntityType="Model.Image" />
+          <EntitySet Name="Products" EntityType="Model.Product" />
+          <EntitySet Name="RequestFromGuests" EntityType="Model.RequestFromGuest" />
         </EntityContainer>
         <EntityType Name="Image">
           <Key>
@@ -147,6 +189,37 @@ warning 6013: The table/view 'MVC Gas Map.dbo.Permission' does not have a primar
           <Property Name="ImageID" Type="String" MaxLength="11" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="HostObjID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ImageSrc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Product">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProductID" Type="String" MaxLength="11" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="ProductName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ProductWeight" Type="Int32" />
+          <Property Name="ProductTrademark" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductPrice" Type="Int32" />
+          <Property Name="ProductPromotionPrice" Type="Int32" />
+          <Property Name="ProductDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="WarrantyPeriod" Type="Int32" />
+          <Property Name="CateProductID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="RequestFromGuest">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ReqFrmGueID" Type="String" MaxLength="17" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="GuestID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RequestID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Longitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -214,6 +287,39 @@ warning 6013: The table/view 'MVC Gas Map.dbo.Permission' does not have a primar
                 <ScalarProperty Name="ImageSrc" ColumnName="ImageSrc" />
                 <ScalarProperty Name="HostObjID" ColumnName="HostObjID" />
                 <ScalarProperty Name="ImageID" ColumnName="ImageID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="Model.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="CateProductID" ColumnName="CateProductID" />
+                <ScalarProperty Name="WarrantyPeriod" ColumnName="WarrantyPeriod" />
+                <ScalarProperty Name="ProductDescription" ColumnName="ProductDescription" />
+                <ScalarProperty Name="ProductPromotionPrice" ColumnName="ProductPromotionPrice" />
+                <ScalarProperty Name="ProductPrice" ColumnName="ProductPrice" />
+                <ScalarProperty Name="ProductTrademark" ColumnName="ProductTrademark" />
+                <ScalarProperty Name="ProductWeight" ColumnName="ProductWeight" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RequestFromGuests">
+            <EntityTypeMapping TypeName="Model.RequestFromGuest">
+              <MappingFragment StoreEntitySet="RequestFromGuest">
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="RequestID" ColumnName="RequestID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="GuestID" ColumnName="GuestID" />
+                <ScalarProperty Name="ReqFrmGueID" ColumnName="ReqFrmGueID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -106,7 +106,7 @@
             <div id="content">
                 <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow" style="margin-bottom:0rem !important">
                     <a class="navbar-brand btn btn-danger" style="font-size:1.8rem;padding:1rem 2.4rem;" href="/Home/Index">Trang chủ</a>
-                    <a class="navbar-brand btn btn-group" id="btn_GoToCusPage" style="display:none;" href="/Guest/Details">Gọi Gas</a>
+                    <a class="navbar-brand btn btn-group" id="btn_GoToCusPage" style="display:none;" href="/Guest/Details">Yêu cầu dịch vụ</a>
                     <a class="navbar-brand btn btn-group" id="btn_GoToStorePage" style="display:none;" href="/Store/Details">Quản lí cửa hàng</a>
                     <a class="navbar-brand btn btn-group" href="#" style="display:none;" onclick="scrollToSection('IntroSection')" id="introProject">Giới thiệu về chúng tôi</a>
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -235,7 +235,7 @@
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="/Guest/Details" id="callGasSetting">
                                     <i class="fa fa-whatsapp fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Dịch vụ gọi gas
+                                    Yêu cầu dịch vụ
                                 </a>
                                 <a class="dropdown-item" href="/Store/Details" id="storeSetting">
                                     <i class="fa fa-outdent fa-sm fa-fw mr-2 text-gray-400"></i>
@@ -536,6 +536,7 @@
                 $("#userArea").hide();
                 $("#callGasSetting").hide();
                 $("#storeSetting").hide();
+                $("#createStoreSetting").hide();
 
                 var userIDBySes = sessionStorage.getItem("UserID");
                 var permissionIDBySes = sessionStorage.getItem("PermissionID");
@@ -561,7 +562,7 @@
                     else if (permissionIDBySes == 3 || permissionIDBySes == 4) {
                         modal2.style.display = "none";
                         goTo404Page(pathName, "/Guest/Details", this);
-
+                        
                         $("#storeSetting").show();
                         $("#createStoreSetting").show();
                         $("#btn_GoToStorePage").show();

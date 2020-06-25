@@ -112,7 +112,7 @@ namespace API.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if(user.Password.Length ==0 || user.NewPassword.Length ==0)
+            if(user.Password==null || user.NewPassword == null)
             {
                 userInDb = db.UserInSystems.FirstOrDefault(x => x.UserID == user.UserID);
                 if(userInDb == null) return NotFound();

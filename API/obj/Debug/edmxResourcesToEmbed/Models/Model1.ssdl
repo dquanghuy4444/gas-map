@@ -1,5 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'MVC Gas Map.dbo.CategoryProduct' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="CategoryProduct">
+          <Property Name="CateProductID" Type="int" />
+          <Property Name="CateProductName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Description" Type="nvarchar(max)" />
+        </EntityType>-->
   <EntityType Name="Coordinates">
     <Key>
       <PropertyRef Name="ID" />
@@ -41,6 +48,37 @@ warning 6013: The table/view 'MVC Gas Map.dbo.Permission' does not have a primar
           <Property Name="PermissionName" Type="nvarchar" MaxLength="50" />
           <Property Name="Description" Type="nvarchar" MaxLength="50" />
         </EntityType>-->
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProductID" Type="varchar" MaxLength="11" StoreGeneratedPattern="Computed" />
+    <Property Name="ProductName" Type="nvarchar" MaxLength="100" />
+    <Property Name="ProductWeight" Type="int" />
+    <Property Name="ProductTrademark" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProductPrice" Type="int" />
+    <Property Name="ProductPromotionPrice" Type="int" />
+    <Property Name="ProductDescription" Type="nvarchar(max)" />
+    <Property Name="WarrantyPeriod" Type="int" />
+    <Property Name="CateProductID" Type="int" />
+  </EntityType>
+  <EntityType Name="RequestFromGuest">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ReqFrmGueID" Type="varchar" MaxLength="17" StoreGeneratedPattern="Computed" />
+    <Property Name="GuestID" Type="nvarchar" MaxLength="50" />
+    <Property Name="UserID" Type="nvarchar" MaxLength="50" />
+    <Property Name="RequestID" Type="int" />
+    <Property Name="Description" Type="nvarchar" MaxLength="200" />
+    <Property Name="Address" Type="nvarchar" MaxLength="200" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="50" />
+    <Property Name="Latitude" Type="nvarchar" MaxLength="50" />
+    <Property Name="Longitude" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreatedDate" Type="datetime" />
+  </EntityType>
   <EntityType Name="Store">
     <Key>
       <PropertyRef Name="ID" />
@@ -70,6 +108,8 @@ warning 6013: The table/view 'MVC Gas Map.dbo.Permission' does not have a primar
     <EntitySet Name="Coordinates" EntityType="Self.Coordinates" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Guest" EntityType="Self.Guest" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Image" EntityType="Self.Image" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RequestFromGuest" EntityType="Self.RequestFromGuest" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Store" EntityType="Self.Store" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserInSystem" EntityType="Self.UserInSystem" Schema="dbo" store:Type="Tables" />
   </EntityContainer>

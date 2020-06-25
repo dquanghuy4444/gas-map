@@ -10,6 +10,8 @@
         <EntityTypeShape EntityType="Model.Store" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.UserInSystem" Width="1.5" PointX="0.75" PointY="4.75" IsExpanded="true" />
         <EntityTypeShape EntityType="Model.Image" Width="1.5" PointX="3.375" PointY="4.75" />
+        <EntityTypeShape EntityType="Model.Product" Width="1.5" PointX="5.375" PointY="4.5" />
+        <EntityTypeShape EntityType="Model.RequestFromGuest" Width="1.5" PointX="7.375" PointY="0.5" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

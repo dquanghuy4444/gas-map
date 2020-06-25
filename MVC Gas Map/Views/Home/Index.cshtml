@@ -49,47 +49,6 @@
         border-radius: .25em;
     }
 
-    .fullscreen-icon {
-        background-image: url('../../Images/icon-fullscreen.png');
-    }
-
-    .leaflet-retina .fullscreen-icon {
-        background-image: url('../../Images/icon-fullscreen-2x.png');
-        background-size: 26px 26px;
-    }
-
-    .leaflet-container:-webkit-full-screen {
-        width: 100% !important;
-        height: 100% !important;
-        z-index: 99999;
-    }
-
-    .leaflet-container:-ms-fullscreen {
-        width: 100% !important;
-        height: 100% !important;
-        z-index: 99999;
-    }
-
-    .leaflet-container:full-screen {
-        width: 100% !important;
-        height: 100% !important;
-        z-index: 99999;
-    }
-
-    .leaflet-container:fullscreen {
-        width: 100% !important;
-        height: 100% !important;
-        z-index: 99999;
-    }
-
-    .leaflet-pseudo-fullscreen {
-        position: fixed !important;
-        width: 100% !important;
-        height: 100% !important;
-        top: 0px !important;
-        left: 0px !important;
-        z-index: 99999;
-    }
 
     #idGasMap {
         width: 100%;
@@ -547,40 +506,6 @@
     function showPopUp() {
         var str = `Tạo phòng ở toạ độ (${lat},${long})`;
         $('#exampleModalLabel').text(str);
-    }
-
-    function addRoom() {
-        var url = `/Points/Main?lat=${lat}&lng=${long}`;
-
-        var mapName = $('#mapName').val();//HẢI BÉO
-        var phoneNumber = $('#phoneNumber').val();
-        var address = $('#address').val();
-        var moneyEachMonth = $('#moneyEachMonth').val();
-        var acreageRoom = $('#acreageRoom').val();
-        var descriptionDetail = $('#descriptionDetail').val();
-
-        var parameters = `{MapName: '${mapName}',Latitude:'${lat}',Longitude:'${long}',
-                          PhoneNumber:'${phoneNumber}',
-                          Address:'${address}',
-                          MoneyEachMonth:'${moneyEachMonth}',
-                          AcreageRoom:'${acreageRoom}',
-                          DescriptionDetail:'${descriptionDetail}'}`;//tạo string
-
-
-        $.ajax({
-            type: 'POST',
-            url: '/Points/Save',
-            dataType: 'JSON',
-            contentType: 'application/json; charset=utf-8',
-            data: parameters,
-            success: function (data) {
-                if (1 == 1) {
-                    alert("Tạo phòng trọ thành công");
-                    $(location).attr('href', url);//chuyển url
-                }
-            }
-
-        })
     }
 
     function showPopUpDetailStore(storeId) {

@@ -56,6 +56,8 @@
     <EntitySet Name="Stores" EntityType="Self.Store" />
     <EntitySet Name="UserInSystems" EntityType="Self.UserInSystem" />
     <EntitySet Name="Images" EntityType="Model.Image" />
+    <EntitySet Name="Products" EntityType="Model.Product" />
+    <EntitySet Name="RequestFromGuests" EntityType="Model.RequestFromGuest" />
   </EntityContainer>
   <EntityType Name="Image">
     <Key>
@@ -65,5 +67,36 @@
     <Property Name="ImageID" Type="String" MaxLength="11" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
     <Property Name="HostObjID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="ImageSrc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductID" Type="String" MaxLength="11" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
+    <Property Name="ProductName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ProductWeight" Type="Int32" />
+    <Property Name="ProductTrademark" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ProductPrice" Type="Int32" />
+    <Property Name="ProductPromotionPrice" Type="Int32" />
+    <Property Name="ProductDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="WarrantyPeriod" Type="Int32" />
+    <Property Name="CateProductID" Type="Int32" />
+  </EntityType>
+  <EntityType Name="RequestFromGuest">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ReqFrmGueID" Type="String" MaxLength="17" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
+    <Property Name="GuestID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="UserID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RequestID" Type="Int32" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Latitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Longitude" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreatedDate" Type="DateTime" Precision="3" />
   </EntityType>
 </Schema>

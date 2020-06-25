@@ -12,20 +12,18 @@ namespace API.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Store
+    public partial class RequestFromGuest
     {
         public int ID { get; set; }
-        public string StoreID { get; set; }
-        public string StoreName { get; set; }
-        public string StoreAddress { get; set; }
-        public string StorePhone { get; set; }
-        public string StoreEmail { get; set; }
-        public string StoreDetail { get; set; }
+        public string ReqFrmGueID { get; set; }
+        public string GuestID { get; set; }
         public string UserID { get; set; }
+        public Nullable<int> RequestID { get; set; }
+        public string Description { get; set; }
+        public string Address { get; set; }
+        public string Phone { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
-        public string ImgSrc { get; set; }
-
         public Nullable<System.DateTime> CreatedDate { get; set; }
     }
 }

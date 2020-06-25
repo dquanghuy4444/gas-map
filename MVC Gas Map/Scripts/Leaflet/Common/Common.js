@@ -32,3 +32,4 @@ function addCoordBox(mapObj) {
     return mapObj;
 }
 
+

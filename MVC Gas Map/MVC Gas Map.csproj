@@ -178,7 +178,6 @@
     <Content Include="Content\Leaflet\Control.IconLayers.css" />
     <Content Include="Content\Font Awesome\fontawesome.min.css" />
     <Content Include="Content\SbAmin\Sb.admin.min.css" />
-    <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

@@ -30,5 +30,7 @@ namespace API.Models
         public virtual DbSet<Store> Stores { get; set; }
         public virtual DbSet<UserInSystem> UserInSystems { get; set; }
         public virtual DbSet<Image> Images { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<RequestFromGuest> RequestFromGuests { get; set; }
     }
 }

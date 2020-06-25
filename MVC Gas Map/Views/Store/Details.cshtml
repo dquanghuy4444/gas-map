@@ -9,6 +9,9 @@
 <link href="~/Content/Leaflet/Control.Coordinates-0.1.5.css" rel="stylesheet" />
 <script src="~/Scripts/Leaflet/Control.Coordinates-0.1.5.min.js"></script>
 <!------>
+<script src="~/Scripts/Leaflet/Control.FullScreen.js"></script>
+<link href="~/Content/Leaflet/Control.FullScreen.css" rel="stylesheet" />
+<!------>
 <link href="~/Content/Leaflet/Control.MarkerHighLight.css" rel="stylesheet" />
 <script src="~/Scripts/Leaflet/Control.MarkerHighLight.js"></script>
 <!------>
@@ -19,6 +22,8 @@
 <script src="~/Scripts/Leaflet/Search Control/src/esri-leaflet-geocoder.js"></script>
 <!------>
 <script src="~/Scripts/Leaflet/Common/Common.js"></script>
+<!------>
+
 <style>
     #idMap2 {
         width: 100%;
@@ -67,7 +72,18 @@
         /*background-color: #f1f1f1;*/
     }
 
-    x
+    .label {
+        display: inline;
+        padding: .2em .6em .3em;
+        font-size: 75%;
+        font-weight: 700;
+        line-height: 1;
+        color: #656;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: .25em;
+    }
 </style>
 
 <div class="text-center" id="noStoreArea" style="margin:11rem 0;display:none;">
@@ -92,27 +108,7 @@
     <div class="content">
         <div id="idMap" class="mt-2"></div>
     </div>
-    <button class="collapsible mt-1">
-        <i class="fa fa-cube" aria-hidden="true"></i>
-        Đơn hàng hiện có
-    </button>
-    <div class="content">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
-    <button class="collapsible mt-1">
-        <i class="fa fa-inbox" aria-hidden="true"></i>
-        Thông tin sản phẩm
-    </button>
-    <div class="content">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
-    <button class="collapsible mt-1">
-        <i class="fa fa-braille" aria-hidden="true"></i>
-        Quản lí kinh doanh cửa hàng
-    </button>
-    <div class="content">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
+
     <button class="collapsible mt-1">
         <i class="fa fa-university" aria-hidden="true"></i>
         Thông tin cửa hàng
@@ -181,6 +177,28 @@
             </div>
         </div>
     </div>
+
+    <button class="collapsible mt-1">
+        <i class="fa fa-cube" aria-hidden="true"></i>
+        Đơn hàng hiện có
+    </button>
+    <div class="content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+    <button class="collapsible mt-1">
+        <i class="fa fa-inbox" aria-hidden="true"></i>
+        Thông tin sản phẩm
+    </button>
+    <div class="content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+    <button class="collapsible mt-1">
+        <i class="fa fa-braille" aria-hidden="true"></i>
+        Quản lí kinh doanh cửa hàng
+    </button>
+    <div class="content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
 </div>
 
 <!----------GLOBAL VARIABLES------->
@@ -198,42 +216,28 @@
     var minimap = null;
     var flagMarkerCurLocation = null;
     var markerGroup = null;
+    var markerGroup2 = null;
     var popup = null;
+    var popup2 = null;
     var latInDB = null;
     var longInDB = null;
     var mapConfig = null;
+    var mapConfig2 = null;
+
     var searchControl = null;
     var results = null;
     var layerGroup = null;
+    var layerGroup2 = null;
 
     var osm = new L.TileLayer(STR_OSM_URL, { minZoom: 5, maxZoom: 18, attribution: STR_OSM_ATTRIBUTE });
     var osm2 = new L.TileLayer(STR_OSM_URL, { minZoom: 0, maxZoom: 13, attribution: STR_OSM_ATTRIBUTE });
-</script>
 
-<!----------COLLAPSIBLE--------->
-<script>
-    var coll = document.getElementsByClassName("collapsible");
-    var i;
-
-    coll[0].classList.toggle("active");
-    var content = coll[0].nextElementSibling;
-    if (content.style.maxHeight) {
-        content.style.maxHeight = null;
-    } else {
-        content.style.maxHeight = content.scrollHeight + "px";
-    }
-
-    for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function () {
-            this.classList.toggle("active");
-            var content = this.nextElementSibling;
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
-            } else {
-                content.style.maxHeight = content.scrollHeight + "px";
-            }
-        });
-    }
+    const OBJ_LOCATION_ICON = L.MakiMarkers.icon({
+        // icon: "beer",
+        icon: "star-stroked",
+        color: "#13a",
+        size: "xl"
+    });
 </script>
 
 <!----------WINDOWN ON LOAD------------------->
@@ -269,6 +273,7 @@
             loadOsm();
 
             loadOsm2();
+
         }
     }
 
@@ -277,29 +282,43 @@
 <!----------LOAD OPEN STREET MAP------------------->
 <script>
     function loadOsm() {
+        //popup = L.popup();
+        mapObj = new L.map("idMap", mapConfig);
+        mapObj.addLayer(osm);
+
+
+        markerGroup = L.layerGroup().addTo(mapObj);
+
+        setMarkerCurrentLocationForMap1(defaultCoord)
+
+        addCoordBox(mapObj);
+
+        addSearchControl(mapObj);
+
 
     }
 
     function loadOsm2() {
         popup = L.popup();
 
-        mapObj = new L.map("idMap2", mapConfig);
-        mapObj.addLayer(osm);
+        mapObj2 = L.map('idMap2').setView([latInDB, longInDB], INT_ZOOM_MAP_LEVEL);
 
-        markerGroup = L.layerGroup().addTo(mapObj);
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: STR_OSM_ATTRIBUTE,
+        }).addTo(mapObj2);
+
+        markerGroup2 = L.layerGroup().addTo(mapObj2);
         //
+        mapObj2.on('click', onMapClick);
 
-
-        mapObj.on('click', onMapClick);
-
-        layerGroup = new L.layerGroup([osm2]);
+        //layerGroup2 = new L.layerGroup([osm2]);
 
         //////////////
-        setMarkerCurrentLocation(defaultCoord)
+        setMarkerCurrentLocationForMap2(defaultCoord)
         ///////////////////
-        addCoordBox(mapObj);
+        addCoordBox(mapObj2);
 
-        addSearchControl(mapObj);
+        addSearchControl(mapObj2);
 
     }
 </script>
@@ -489,39 +508,56 @@
         popup
             .setLatLng(e.latlng)
             .setContent(html)
-            .openOn(mapObj);//hiện popup
+            .openOn(mapObj2);//hiện popup
     }
 
     function goToCurrentLocation() {
         navigator.geolocation.getCurrentPosition
             (
             function (location) {
-                var currentLocation = new L.LatLng(location.coords.latitude, location.coords.longitude);
-                mapObj.setView(currentLocation, INT_ZOOM_MAP_LEVEL);
-                var curLocation = [location.coords.latitude, location.coords.longitude];
-                setMarkerCurrentLocation(curLocation);
+                changeMarkerInOtherLocationForMap2(location.coords.latitude, location.coords.longitude);
                 localStorage.removeItem("curLocation");
                 localStorage.setItem("curLocation", curLocation);
             });
 
     }
 
-    function setMarkerCurrentLocation(defaultCoord) {
+    function setMarkerCurrentLocationForMap2(defaultCoord) {
 
-        const locationIcon = L.MakiMarkers.icon({
-            // icon: "beer",
-            icon: "star-stroked",
-            color: "#13a",
-            size: "xl"
-        });
 
-        marker = new L.marker(defaultCoord, { icon: locationIcon });
+        marker = new L.marker(defaultCoord, { icon: OBJ_LOCATION_ICON });
+
+
+        lat = defaultCoord[0];
+        long = defaultCoord[1];
+        marker.options.highlight = "permanent";
+        mapObj2.markers = marker;
+
+
+        var popup = L.popup();
+
+        var strHtml = "<span>Đây là vị trí cửa hàng của bạn </span>";
+
+        popup.setContent(strHtml);
+
+        // binding
+        marker.bindPopup(popup);
+        marker.addTo(markerGroup2);
+        markerGroup2 = L.layerGroup().addTo(mapObj2);
+
+    }
+
+    function setMarkerCurrentLocationForMap1(defaultCoord) {
+
+
+        var marker = new L.marker(defaultCoord, { icon: OBJ_LOCATION_ICON });
 
 
         lat = defaultCoord[0];
         long = defaultCoord[1];
         marker.options.highlight = "permanent";
         mapObj.markers = marker;
+
         var popup = L.popup();
 
         var strHtml = "<span>Đây là vị trí cửa hàng của bạn </span>";
@@ -532,6 +568,7 @@
         marker.bindPopup(popup);
         marker.addTo(markerGroup);
         markerGroup = L.layerGroup().addTo(mapObj);
+
     }
 
     $('#btn_GetAddressOfGGMap').click(function () {
@@ -546,7 +583,7 @@
         $('#latitude_view').html(lat);
         $('#longitude_view').html(long);
 
-        changeMarkerInOtherLocation(lat, long);
+        changeMarkerInOtherLocationForMap2(lat, long);
     }
 </script>
 
@@ -563,7 +600,8 @@
             var long = store.Longitude;
             renderHtmlForStore(store);
 
-            changeMarkerInOtherLocation(lat, long);
+            changeMarkerInOtherLocationForMap2(lat, long);
+            changeMarkerInOtherLocationForMap1(lat, long);
         }
         catch (err) {
             window.location.href = window.location.href;
@@ -578,10 +616,43 @@
         }
     });
 
-    function changeMarkerInOtherLocation(lat, long) {
+    function changeMarkerInOtherLocationForMap2(lat, long) {
+        mapObj2.markers.remove();
+
+        mapObj2.setView(new L.LatLng(lat, long), INT_ZOOM_MAP_LEVEL);
+        setMarkerCurrentLocationForMap2([lat, long])
+    }
+
+    function changeMarkerInOtherLocationForMap1(lat, long) {
         mapObj.markers.remove();
 
         mapObj.setView(new L.LatLng(lat, long), INT_ZOOM_MAP_LEVEL);
-        setMarkerCurrentLocation([lat, long])
+        setMarkerCurrentLocationForMap1([lat, long])
+    }
+</script>
+
+<!----------COLLAPSIBLE--------->
+<script>
+    var coll = document.getElementsByClassName("collapsible");
+    var i;
+
+    coll[0].classList.toggle("active");
+    var content = coll[0].nextElementSibling;
+    if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+    } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+    }
+
+    for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        });
     }
 </script>

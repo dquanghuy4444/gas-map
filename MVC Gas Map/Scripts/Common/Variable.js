@@ -22,3 +22,40 @@ const ARR_PAGE_GO_TO_404_PAGE =
         "/User/Edit",
     ];
 
+//----------------------ENUM
+class objPro {
+    constructor(vlu, txt) {
+        this.Value = vlu;
+        this.Text = txt;
+    }
+}
+
+const PERMISSION = {
+    Undefined: 0,
+    Unknown: 1,
+    Guest: 2,
+    Store:
+    {
+        NoStore: 3,
+        HaveStore: 4
+    },
+    Admin: 5
+};
+
+
+const REQUEST_FROM_GUEST = {
+    Refer: new objPro(0,"Tư vấn"),
+    Repair: new objPro(1, "Sửa chữa"),
+    Buy: {
+        Gas: new objPro(2, "Mua bình gas"),
+        Stove: new objPro(3, "Mua bếp gas"),
+        Other: new objPro(4, "Mua các vật dụng khác")
+    },
+    Sell :
+    {
+        Gas: new objPro(5, "Bán bình gas"),
+        Stove: new objPro(6, "Bán bếp gas"),
+        Other: new objPro(7, "Bán các vật dụng khác")
+    }
+}
+
