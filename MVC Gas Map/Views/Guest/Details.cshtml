@@ -230,20 +230,20 @@
                 </div>
                 <div class="form-group">
                     <label for="exampleFormControlInput2">Địa chỉ</label>
-                    <input type="text" name="phone" class="form-control" id="Address" required>
+                    <input type="text" name="address" class="form-control" id="Address" required>
                 </div>
                 <div class="form-group">
                     <label for="exampleFormControlInput3">Điện thoại</label>
-                    <input type="email" name="email" class="form-control" id="Phone" placeholder="09xxx" required>
+                    <input type="email" name="phone" class="form-control" id="Phone" placeholder="09xxx" required>
                 </div>
                 <div class="form-group">
                     <label for="exampleFormControlInput4">Latitude</label>
-                    <input type="text" name="address" class="form-control" id="Latitude" disabled>
+                    <input type="text" name="" class="form-control" id="Latitude" disabled>
                 </div>
 
                 <div class="form-group">
                     <label for="exampleFormControlInput4">Longitude</label>
-                    <input type="text" name="address" class="form-control" id="Longitude" disabled>
+                    <input type="text" name="" class="form-control" id="Longitude" disabled>
                 </div>
                 <div class="form-group">
                     <label for="exampleFormControlInput5">Yêu cầu chi tiết</label>
@@ -348,7 +348,7 @@
         marker.addTo(markerGroup);
     }
 
-    function addMarker(coord, popupContent, popupOptionObj, markerObj) {
+    function addMarker(coord, popupContent, popupOptionObj) {
 
         const storeIcon = L.MakiMarkers.icon({
             //icon: "beer",
@@ -409,7 +409,6 @@
 
 </script>
 
-
 <script>
     var modal_CreReqFrmGue = document.getElementById("div_CreateReqFromGuest");
 
@@ -469,6 +468,7 @@
             Latitude: lat,
             Longitude :long
         }
+        console.log(requestFromGuest);
 
         $.ajax({
             type: 'Get',
@@ -481,33 +481,46 @@
 
                 var status = data.status;
                 var message = data.message;
-                var permissID = data.permissionID;
 
                 switch (status) {
                     case 0:
                         message_Error("", message);
                         break;
                     case 1:
-                        localStorage.setItem("successMess", JSON.stringify(message));
-                        clearInterval(interval);
-                        sessionStorage.setItem("PermissionID", permissID);
-                        setTimeout(function () { window.location.href = "/Store/Details"; }, 1800);
+                        message_Success(message);
+
+                        setTimeout(function () {
+                            modal_CreReqFrmGue.style.display = "none";
+                            clearValueInCreateReqArea();
+                        }, 1e3);
 
                         break;
                 }
             },
             error: function (data) {
-                message_Error("", "Cập nhật thông tin thất bại")
+                message_Error("", "Tạo yêu cầu thất bại.");
             },
         });
     }
 </script>
 
-<!--------------LOAD CHECK BOX REQUEST ID------------->
-@*<script>
-    function loadCheckBoxArea() {
-        for (var i = 0; i < REQUEST_FROM_GUEST.size(); i++) {
-            console.log(REQUEST_FROM_GUEST[i]);
-        }
+<script>
+    function clearValueInCreateReqArea() {
+        $('#Address').val("");
+        $('#Phone').val("");
+        $('#Latitude').val("");
+        $('#Longitude').val("");
+        $('#Description').val("");
+
+        if ($('#rdo_Refer').is(':checked'))
+            $('#rdo_Refer').removeAttr("checked");
+        else if ($('#rdo_Repair').is(':checked'))
+            $('#rdo_Repair').removeAttr("checked");
+        else if ($('#rdo_BuyGas').is(':checked'))
+            $('#rdo_BuyGas').removeAttr("checked");
+        else if ($('#rdo_BuyStove').is(':checked'))
+            $('#rdo_BuyStove').removeAttr("checked");
+        else if ($('#rdo_BuyOther').is(':checked'))
+            $('#rdo_BuyOther').removeAttr("checked");
     }
-</script>*@
+</script>

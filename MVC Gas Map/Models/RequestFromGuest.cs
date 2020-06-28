@@ -17,6 +17,7 @@ namespace MVC_Gas_Map.Models
         public string Phone { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }
+        public string GuestName { get; set; }
         public Nullable<System.DateTime> CreatedDate { get; set; }
     }
 }

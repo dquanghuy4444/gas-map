@@ -25,6 +25,65 @@
 <!------>
 
 <style>
+    /* The Modal (background) */
+    .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        /*z-index: 1;*/ /* Sit on top */
+        padding-top: 12rem; /* Location of the box */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+        position: relative;
+        background-color: #fefefe;
+        margin: auto;
+        padding: 0;
+        border: 1px solid #888;
+        width: 36%;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+        animation-name: animatetop;
+        animation-duration: 0.5s
+    }
+
+    @@keyframes animatetop {
+        from {
+            top: -300px;
+            opacity: 0
+        }
+
+        to {
+            top: 0;
+            opacity: 1
+        }
+    }
+
+    .closeX {
+        color: white;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+        .closeX:hover,
+        .closeX:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+    .modal-body, .modal-header, .modal-footer {
+        padding: 3px 16px;
+        margin: 3px;
+    }
+
     #idMap2 {
         width: 100%;
         height: 30rem;
@@ -201,6 +260,72 @@
     </div>
 </div>
 
+<div id="div_CreateReqFromGuest" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Yêu cầu của khách hàng </h2>
+            @*<span class="closeX" style="color:black">&times;</span>*@
+        </div>
+        <div class="modal-body">
+            <br />
+            <div class="">
+                <div class="form-group">
+                    <label for="exampleFormControlInput1">Dịch vụ yêu cầu</label>
+                    <br />
+                    <div id="checkBox_Area"></div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="reqID" id="rdo_Refer" value="0">
+                        <label class="form-check-label" for="inlineCheckbox1">Tư vấn</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="reqID" id="rdo_Repair" value="1">
+                        <label class="form-check-label" for="inlineCheckbox1">Sửa chữa</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="reqID" id="rdo_BuyGas" value="2">
+                        <label class="form-check-label" for="inlineCheckbox1">Mua bình gas</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="reqID" id="rdo_BuyStove" value="3">
+                        <label class="form-check-label" for="inlineCheckbox1">Mua bếp gas</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="reqID" id="rdo_BuyOther" value="4">
+                        <label class="form-check-label" for="inlineCheckbox1">Mua vật dụng khác</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlInput2">Địa chỉ</label>
+                    <input type="text" name="address" class="form-control" id="Address" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlInput3">Điện thoại</label>
+                    <input type="email" name="phone" class="form-control" id="Phone" placeholder="09xxx" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlInput4">Latitude</label>
+                    <input type="text" name="" class="form-control" id="Latitude" disabled>
+                </div>
+
+                <div class="form-group">
+                    <label for="exampleFormControlInput4">Longitude</label>
+                    <input type="text" name="" class="form-control" id="Longitude" disabled>
+                </div>
+                <div class="form-group">
+                    <label for="exampleFormControlInput5">Yêu cầu chi tiết</label>
+                    <textarea class="form-control" rows="6" id="Description" disabled></textarea>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="modal-footer mb-2">
+            <button class="btn btn-danger" onclick="closePopupX()">Thoát</button>
+        </div>
+    </div>
+
+</div>
+
 <!----------GLOBAL VARIABLES------->
 <script type="text/javascript">
     var storeList = null;
@@ -295,7 +420,7 @@
 
         addSearchControl(mapObj);
 
-
+        getAllRequestsInDb();
     }
 
     function loadOsm2() {
@@ -375,6 +500,97 @@
                     text: store.StoreName
                 }))
         )
+    }
+</script>
+
+<!----------LOAD REQUEST FROM GUEST IN DB------------------->
+<script>
+    function getAllRequestsInDb() {
+        var popupContent = null;
+        var popupOption = {
+            className: "map-popup-content",
+        };
+
+        $.ajax({
+            type: 'get',
+            url: '/RequestFromGuest/GetAllRequests',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            beforeSend: function () {
+                $(".loader").show();
+            },
+            success: function (data) {
+                if (1 == 1) {
+                    var name = null;
+                    var layerGroup = new L.layerGroup([osm2]);
+                    var responsive = data.data;
+                    for (let i = 0; i < responsive.length; i++) {
+                        if (responsive[i].GuestName == null) {
+                            name = `Cửa hàng gas`;
+                        } else {
+                            name = responsive[i].GuestName;
+                        }
+
+                        popupContent = `<div class='left'><img src="/Images/pngtree-cute-grievance-request-chat-emoji-pack-png-image_2135388.jpg" width="100%" /></div>`;
+                        popupContent += `<div class='right'><h5>${name}</h5><br>`;
+                        popupContent += `<button class="btn btn-primary" data-toggle="modal" onclick="showPopUpDetailRequest('${responsive[i].ReqFrmGueID}')">
+                        <i class="glyphicon glyphicon-eye-open"></i>
+                        Xem chi tiết
+                        </button></div>`;
+                        popupContent += `<div class='clearfix'></div>`;
+
+                        addMarker([Number(responsive[i].Latitude), Number(responsive[i].Longitude)], popupContent, popupOption);
+                    }
+                }
+            }
+        })
+        $(".loader").hide();
+    }
+</script>
+
+<!----------LOAD REQUEST DETAILS FROM GUEST IN DB------------------->
+<script>
+    function showPopUpDetailRequest(ReqFrmGueID) {
+        $.ajax({
+            type: 'Get',
+            url: '/RequestFromGuest/GetRequestDetail?reqFrmGueID=' + ReqFrmGueID,
+            dataType: 'JSON',
+            success: function (data) {
+                if (1 === 1) {
+                    var responsive = data.data;
+                    modal_CreReqFrmGue.style.display = "block";
+
+                    //switch (responsive.Address) {
+                    //    case 0:
+                    //        $("#rdo_Refer").attr('checked', 'checked');
+                    //        break;
+                    //    case 1:
+                    //        $("#rdo_Repair").attr('checked', 'checked');
+                    //        break;
+                    //    case 2:
+                    //        $("#rdo_BuyGas").attr('checked', 'checked');
+                    //        break;
+                    //    case 3:
+                    //        $("#rdo_BuyStove").attr('checked', 'checked');
+                    //        break;
+                    //    case 4:
+                    //        $("#rdo_BuyOther").attr('checked', 'checked');
+                    //        break;
+                    //}
+
+
+                    $('#Address').val(responsive.Address);
+                    $('#Phone').val(responsive.Phone);
+                    $('#Latitude').val(responsive.Latitude);
+                    $('#Longitude').val(responsive.Longitude);
+                    $('#Description').val(responsive.Description);
+                }
+
+            }
+        })
+
+        var str = `Chi tiết `;
+        $('#exampleModalLabel1').text(str);
     }
 </script>
 
@@ -499,6 +715,31 @@
 
 <!----------EVENT FOR OPEN STREET MAP--------------------->
 <script>
+    function addMarker(coord, popupContent, popupOptionObj) {
+
+        const storeIcon = L.MakiMarkers.icon({
+            //icon: "beer",
+            icon: "campsite",
+            color: "#12a",
+            size: "l"
+        });
+
+        marker = new L.marker(coord, { icon: storeIcon });
+
+        //console.log(marker);
+
+        marker.options.highlight = "permanent";
+        //marker.addTo(mapObj);
+        mapObj.markers = marker;
+        var popup = L.popup(popupOptionObj);
+        popup.setContent(popupContent);
+
+        // binding
+        marker.bindPopup(popup);
+        marker.addTo(markerGroup);
+
+
+    }
 
     function onMapClick(e) {
         long = e.latlng.lng.toFixed(5);//lấy giá trị long
@@ -602,12 +843,14 @@
 
             changeMarkerInOtherLocationForMap2(lat, long);
             changeMarkerInOtherLocationForMap1(lat, long);
+
+            getAllRequestsInDb();
         }
         catch (err) {
             window.location.href = window.location.href;
         }
         finally {
-            setTimeout(function () {
+            setTimeout(function () {1
                 $('#idMap').show();
                 $('#idMap2').show();
                 $('.loader').hide();
@@ -654,5 +897,31 @@
                 content.style.maxHeight = content.scrollHeight + "px";
             }
         });
+    }
+</script>
+
+<script>
+    var modal_CreReqFrmGue = document.getElementById("div_CreateReqFromGuest");
+
+    //var spanX = document.getElementsByClassName("closeX")[0];
+    // When the user clicks the button, open the modal
+    //btn.onclick = function () {
+    //    modal_CreReqFrmGue.style.display = "block";
+    //}
+
+    function closePopupX() {
+        modal_CreReqFrmGue.style.display = "none";
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    //spanX.onclick = function () {
+    //    modal_CreReqFrmGue.style.display = "none";
+    //}
+
+    // When the user clicks anywhere outside of the modal, close it
+    window.onclick = function (event) {
+        if (event.target == modal_CreReqFrmGue) {
+            modal_CreReqFrmGue.style.display = "none";
+        }
     }
 </script>

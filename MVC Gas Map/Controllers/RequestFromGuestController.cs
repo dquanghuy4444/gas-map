@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
 
@@ -25,67 +27,49 @@ namespace MVC_Gas_Map.Controllers
         public ActionResult Create(RequestFromGuest reqFrmGue)
         {
             reqFrmGue.CreatedDate = DateTime.Now;
-            return View();
+            HttpResponseMessage response = GlobalVariables.webApiClient.PostAsJsonAsync("RequestFromGuests", reqFrmGue).Result;
+            string mess = response.Content.ReadAsStringAsync().Result;
+            var status = -1;
+            if (response.StatusCode == HttpStatusCode.Created)
+                status = 1;
+            else
+                status = 0;
+            return Json(new { message = mess,status=status }, JsonRequestBehavior.AllowGet);
         }
 
-        // POST: RequestFromGuest/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        [HttpGet]
+        public ActionResult GetAllRequests()
         {
+            IEnumerable<RequestFromGuest> requestList;
             try
             {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
+                HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("RequestFromGuests").Result;
+                requestList = response.Content.ReadAsAsync<IEnumerable<RequestFromGuest>>().Result;
             }
             catch
             {
-                return View();
+                requestList = null;
             }
+            //return View(storeList);
+            return Json(new { data = requestList }, JsonRequestBehavior.AllowGet);
+
         }
 
-        // GET: RequestFromGuest/Edit/5
-        public ActionResult Edit(int id)
+        [HttpGet]
+        public ActionResult GetRequestDetail(string reqFrmGueID)
         {
-            return View();
-        }
-
-        // POST: RequestFromGuest/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
+            RequestFromGuest req;
+            HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("RequestFromGuests?reqFrmGueID=" + reqFrmGueID).Result;
             try
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
+                req = response.Content.ReadAsAsync<RequestFromGuest>().Result;
             }
             catch
             {
-                return View();
+                req = null;
             }
-        }
-
-        // GET: RequestFromGuest/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: RequestFromGuest/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            //return View(storeList);
+            return Json(new { data = req }, JsonRequestBehavior.AllowGet);
         }
     }
 }
