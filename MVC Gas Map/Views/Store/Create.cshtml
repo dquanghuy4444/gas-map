@@ -21,6 +21,8 @@
 <script src="~/Scripts/Leaflet/Search Control/esri-leaflet.js"></script>
 <link href="~/Scripts/Leaflet/Search Control/src/esri-leaflet-geocoder.css" rel="stylesheet" />
 <script src="~/Scripts/Leaflet/Search Control/src/esri-leaflet-geocoder.js"></script>
+<!------>
+<script src="~/Scripts/Leaflet/Common/Common.js"></script>
 
 <style>
     #idMap {
@@ -28,11 +30,12 @@
         height: 30rem;
     }
 </style>
+
 <div class="container mt-3" style="padding: 0px 4rem;">
     <div class="card o-hidden border-0 shadow-lg my-5">
         <h1 class="text-center mt-2">Thông tin cửa hàng</h1>
-        <form style="padding:4rem 6rem 6rem">
-            <div class="col-md-9 col-xs-9 col-lg-9 col-sm-9">
+        <div style="padding:4rem 6rem 6rem">
+            <div class="col-md-9 col-xs-9 col-lg-9 col-sm-12">
                 <div class="form-group">
                     <label for="exampleFormControlInput1">Tên cửa hàng</label>
                     <input type="text" name="fullname" class="form-control" id="StoreName" placeholder="Cửa hàng gas" required>
@@ -88,27 +91,26 @@
                     <textarea class="form-control" rows="6" id="StoreDetail"></textarea>
                 </div>
             </div>
-            <div class="col-md-3 col-xs-3 col-lg-3 col-sm-3">
-                <div class="form-group">
+            <div class="col-md-3 col-xs-3 col-lg-3 col-sm-12">
+                <div class="form-group" style="margin-top: 2rem;">
                     <div style="height: 30rem;width: 100%;position: absolute;border: 2px solid #cd8e8e;">
                         <img src="~/Images/pngtree-shop-store-market-building-shopping-flat-color-icon-vector-png-image_1653492.jpg" id="StoreImg" style="position: relative;width: 100%;height: 100%;padding: 0.4rem;" />
                     </div>
                 </div>
-                <div class="form-group" onload="myFunction()" style="margin-top: 31rem;">
-                    <input type="file" id="myFile" multiple size="50" onchange="myFunction()">
-                    <p id="demo"></p>
+                <div class="form-group" style="margin-top: 33rem;">
+                    <input type="file" accept="image/*" id="myFile" multiple size="50" onchange="changeStoreImage(event)">
                 </div>
             </div>
             <div class="col-xs-12 col-sm-12 col-lg-12 col-md-12">
                 <button type="button" class="btn btn-success" id="btn_CreateOrEditStore" onclick="createStore()">Tạo cửa hàng</button>
                 <a href="/Home/Index" id="btn_Close" class="btn btn-danger">Thoát</a>
             </div>
-        </form>
+        </div>
     </div>
 </div>
+
+<!---------------CHECK VALID INPUT TO CREATE STORE---------------->
 <script type="text/javascript">
-
-
     var flagGetLatLn = false;
     function checkValid() {
         var strLength = "Tối đa 36 kí tự"
@@ -167,6 +169,10 @@
         return true;
     }
 
+</script>
+
+<!---------------CALL AJAX TO CREATE STORE FROM STORE CONTROLLER---------------->
+<script>
     function createStore() {
         if (checkValid()) {
             if (flagGetLatLn) {
@@ -208,10 +214,10 @@
                         var permissID = data.permissionID;
 
                         switch (status) {
-                            case 0:
+                            case INT_FLAGCHECK_FAIL:
                                 message_Error("", message);
                                 break;
-                            case 1:
+                            case INT_FLAGCHECK_SUCCESS:
                                 localStorage.setItem("successMess", JSON.stringify(message));
                                 clearInterval(interval);
                                 sessionStorage.setItem("PermissionID", permissID);
@@ -221,7 +227,7 @@
                         }
                     },
                     error: function (data) {
-                        message_Error("", "Cập nhật thông tin thất bại")
+                        message_Error("", "Tạo mới cửa hàng thất bại")
                     },
                 });
             }
@@ -229,67 +235,9 @@
                 message_Error("", "Bạn chưa lấy tọa độ cửa hàng .");
         }
     }
-
-    function editStore(storeID) {
-        if (checkValid()) {
-            var userIDBySes = sessionStorage.getItem("UserID");
-
-            var storeName = $('#StoreName').val();
-            var storePhone = $('#StorePhone').val();
-            var storeEmail = $('#StoreEmail').val();
-            var storeAddress = $('#StoreAddress').val();
-            var storeDetail = $('#StoreDetail').val();
-            var imgSrc = $('#StoreImg').attr('src');
-            var lat = $('#latitude_view').html();
-            var long = $('#longitude_view').html();
-
-            var store = {
-                StoreID: storeID,
-                StoreName: storeName,
-                StorePhone: storePhone,
-                StoreEmail: storeEmail,
-                StoreAddress: storeAddress,
-                StoreDetail: storeDetail,
-                ImgSrc: imgSrc,
-                UserID: userIDBySes,
-                Latitude: lat,
-                Longitude: long
-            }
-
-            $.ajax({
-                type: 'Get',
-                contentType: 'application/json; charset=utf-8',
-                url: '/Store/EditStore',
-                dataType: 'Json',
-                data: store,
-                success: function (data) {
-                    console.log(data);
-
-                    var status = data.status;
-                    var message = data.message;
-                    var permissID = data.permissionID;
-
-                    switch (status) {
-                        case 0:
-                            message_Error("", message);
-                            break;
-                        case 1:
-                            localStorage.setItem("successMess", JSON.stringify(message));
-                            clearInterval(interval);
-                            sessionStorage.setItem("PermissionID", permissID);
-                            setTimeout(function () { window.location.href = "/Store/Details"; }, 1800);
-
-                            break;
-                    }
-                },
-                error: function (data) {
-                    message_Error("", "Cập nhật thông tin thất bại")
-                },
-            });
-        }
-    }
 </script>
 
+<!---------------GLOBAL VARIABLES---------------->
 <script>
     // Variable
     var lat = null;
@@ -306,62 +254,35 @@
     var markerGroup = null;
     var popup = L.popup();
 
-
     var osm = new L.TileLayer(STR_OSM_URL, { minZoom: 5, maxZoom: 18, attribution: STR_OSM_ATTRIBUTE });
     var osm2 = new L.TileLayer(STR_OSM_URL, { minZoom: 0, maxZoom: 13, attribution: STR_OSM_ATTRIBUTE });
 
+</script>
+
+<!---------------WINDOWN ON LOAD---------------->
+<script>
     window.onload = function () {
-        var url = new URL(document.URL);
-        var pathName = url.pathname;
-
-        if (pathName == "/Store/CreateAndEdit")
-            window.location.href = STR_HREF_ERROR_404_PAGE;
-
-        if (typeof (Storage) !== "undefined") {
-            var curLocation = localStorage.getItem("curLocation");
-            if (curLocation != null) {
-                flagMarkerCurLocation = true;
-                var latAndLng = curLocation.split(",");
-                defaultCoord = [Number(latAndLng[0]), Number(latAndLng[1])];
-            }
-        }
-        else {
-            console.log("pohip");
-        }
-
-
         if (defaultCoord == null) {
-            defaultCoord = [21.061540, 105.781103];//toạ độ mặc địNH Ở PHẠM VĂN ĐỒNG
+            defaultCoord = ARR_DEFAULT_COORD
         }
         var mapConfig = {
             attributionControl: true, // hiện watermark
-            center: defaultCoord, // vị trí map mặc định hiện tại
-            zoom: INT_ZOOM_MAP_LEVEL, // level zoom
+            center: defaultCoord,
+            zoom: INT_ZOOM_MAP_LEVEL,
             fullscreenControl: true,
             fullscreenControlOptions: {
                 position: 'topleft'
             }
         };
 
-
         mapObj = new L.map('idMap', mapConfig);
 
         mapObj.addLayer(osm);
 
         markerGroup = L.layerGroup().addTo(mapObj);
-        //
-        L.control.coordinates({
-            position: "bottomleft",
-            decimals: 0, //optional default 4
-            decimalSeperator: ".", //optional default "."
-            labelTemplateLat: "Latitude: {y}", //optional default "Lat: {y}"
-            labelTemplateLng: "Longitude: {x}", //optional default "Lng: {x}"
-            enableUserInput: true, //optional default true
-            useDMS: false, //optional default false
-            useLatLngOrder: true, //ordering of labels, default false-> lng-lat
-            markerType: L.marker, //optional default L.marker
-            markerProps: {} //optional default {}
-        }).addTo(mapObj);
+
+        /////////////////
+        addCoordBox(mapObj);
 
         mapObj.on('click', onMapClick);
 
@@ -370,20 +291,12 @@
         //////////////
         setMarkerCurrentLocation(defaultCoord)
         ///////////////////
-
-        var searchControl = L.esri.Geocoding.geosearch().addTo(mapObj);
-
-        var results = L.layerGroup().addTo(mapObj);
-
-        searchControl.on('results', function (data) {
-            results.clearLayers();
-            for (var i = data.results.length - 1; i >= 0; i--) {
-                results.addLayer(L.marker(data.results[i].latlng));
-            }
-        });
+        addSearchControl(mapObj);
     };
+</script>
 
-
+<!---------------EVENT FOR OPEN STREET MAP--------------------->
+<script>
     function onMapClick(e) {
         long = e.latlng.lng.toFixed(5);//lấy giá trị long
         lat = e.latlng.lat.toFixed(5);//lấy giá trị lat
@@ -394,20 +307,18 @@
             .setContent(html)
             .openOn(mapObj);//hiện popup
     }
-</script>
 
-<script>
     function goToCurrentLocation() {
         navigator.geolocation.getCurrentPosition
             (
-            function (location) {
-                var currentLocation = new L.LatLng(location.coords.latitude, location.coords.longitude);
-                mapObj.setView(currentLocation, INT_ZOOM_MAP_LEVEL);
-                var curLocation = [location.coords.latitude, location.coords.longitude];
-                setMarkerCurrentLocation(curLocation);
-                localStorage.removeItem("curLocation");
-                localStorage.setItem("curLocation", curLocation);
-            });
+                function (location) {
+                    var currentLocation = new L.LatLng(location.coords.latitude, location.coords.longitude);
+                    mapObj.setView(currentLocation, INT_ZOOM_MAP_LEVEL);
+                    var curLocation = [location.coords.latitude, location.coords.longitude];
+                    setMarkerCurrentLocation(curLocation);
+                    localStorage.removeItem("curLocation");
+                    localStorage.setItem("curLocation", curLocation);
+                });
 
     }
 
@@ -437,14 +348,6 @@
         marker.addTo(markerGroup);
         markerGroup = L.layerGroup().addTo(mapObj);
     }
-</script>
-
-<script>
-    $('#btn_GetAddressOfGGMap').click(function () {
-        var addrOfGGMap = $('#addressOfGGMap').html();
-        console.log(addrOfGGMap);
-        $('#StoreAddress').val(addrOfGGMap);
-    });
 
     function getLatAndLong() {
         flagGetLatLn = true;
@@ -452,18 +355,17 @@
         $('#latitude_view').html(lat);
         $('#longitude_view').html(long);
     }
+</script>
 
-    //function findByAddress() {
-    //    //$.get(location.protocol + '//nominatim.openstreetmap.org/search?format=json&q=' + 'Ha Noi',
-    //    //    function (data) {
-    //    //    console.log(data);
-    //    //    });
-    //    var jsonUrl = "https://maps.googleapis.com/maps/api/place/textsearch/json?query=401+C%E1%BB%95+Nhu%E1%BA%BF&sensor=false&language=vi&key=AIzaSyBfQPm46M3j2joTFlHachk4RCXfeR7ZFWE";
-    //    var myData;
-    //    getJsonData(jsonUrl, function (data) {
-    //        myData = data;
-    //    });
-    //}
+<!---------------EVENT CHANGE SOURCE STORE IMAGE--------------------->
+<script>
+    function changeStoreImage(event) {
+        var getImagePath = URL.createObjectURL(event.target.files[0]);
+        $("#StoreImg").attr("src", getImagePath);
+    }
+</script>
+
+<script>
 
     function getJsonData(url, callback) {
         let request = new XMLHttpRequest;
@@ -480,44 +382,6 @@
         request.send();
     }
 </script>
-
-
-@*<script>
-        var searchInput = 'search_input';
-
-        $(document).ready(function () {
-            var autocomplete;
-            autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
-                types: ['geocode'],
-            });
-
-            google.maps.event.addListener(autocomplete, 'place_changed', function () {
-                var near_place = autocomplete.getPlace();
-                document.getElementById('latitude_input').value = near_place.geometry.location.lat();
-                document.getElementById('longitude_input').value = near_place.geometry.location.lng();
-
-                document.getElementById('latitude_view').innerHTML = near_place.geometry.location.lat();
-                document.getElementById('longitude_view').innerHTML = near_place.geometry.location.lng();
-            });
-        });
-
-        $(document).on('change', '#' + searchInput, function () {
-            document.getElementById('latitude_input').value = '';
-            document.getElementById('longitude_input').value = '';
-
-            document.getElementById('latitude_view').innerHTML = '';
-            document.getElementById('longitude_view').innerHTML = '';
-        });
-
-        var autocomplete;
-        autocomplete = new google.maps.places.Autocomplete((document.getElementById(searchInput)), {
-            types: ['geocode'],
-            //componentRestrictions: {
-            //    country: "DE"
-            //}
-        });
-
-    </script>*@
 
 
 

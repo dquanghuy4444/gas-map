@@ -10,7 +10,8 @@ const STR_OSM_ATTRIBUTE = 'Có làm mới có ăn !!! ';
 
 //------------------INTEGER
 const INT_ZOOM_MAP_LEVEL = 15;
-
+const INT_FLAGCHECK_FAIL = 0;
+const INT_FLAGCHECK_SUCCESS = 1;
 
 //----------------------ARRAY
 const ARR_PAGE_GO_TO_404_PAGE =
@@ -21,6 +22,8 @@ const ARR_PAGE_GO_TO_404_PAGE =
         "/Store/Create",
         "/User/Edit",
     ];
+
+const ARR_DEFAULT_COORD = [21.061540, 105.781103];//toạ độ mặc địNH Ở PHẠM VĂN ĐỒNG
 
 //----------------------ENUM
 class objPro {

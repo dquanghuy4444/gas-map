@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Mvc;
+using MVC_Gas_Map.Class;
 using MVC_Gas_Map.Models;
 namespace MVC_Gas_Map.Controllers
 {
@@ -87,17 +88,22 @@ namespace MVC_Gas_Map.Controllers
         {
             string message = "";
             int permissionID = 3;
-            int flagCheckStatus = 0; //0:fail  1:success
+            int flagCheckStatus = (int)ConstData.FlagCheck.Fail; //0:fail  1:success
             store.CreatedDate = DateTime.Now;
             try
             {
                 HttpResponseMessage response = GlobalVariables.webApiClient.PostAsJsonAsync("Stores", store).Result;
-                if (response.StatusCode == HttpStatusCode.BadRequest)
-                    flagCheckStatus = 0;
-                else if (response.StatusCode == HttpStatusCode.OK)
-                    flagCheckStatus = 1;
-                message = response.Content.ReadAsStringAsync().Result;
 
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                    flagCheckStatus = (int)ConstData.FlagCheck.Fail;
+                else if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    flagCheckStatus = (int)ConstData.FlagCheck.Success;
+                    string storeImg = store.ImgSrc;
+                    Common.SaveAsImage(ConstData.STR_IMAGE_STORE, storeId,store)
+                }
+
+                message = response.Content.ReadAsStringAsync().Result;
                 response = GlobalVariables.webApiClient.GetAsync("User?userID=" + store.UserID).Result;
                 if (response.StatusCode == HttpStatusCode.Accepted)
                     permissionID = Convert.ToInt32(response.Content.ReadAsStringAsync().Result);
@@ -106,7 +112,7 @@ namespace MVC_Gas_Map.Controllers
             {
                  message = "";
                  permissionID = 3;
-                 flagCheckStatus = 0; //0:fail  1:success
+                 flagCheckStatus = (int)ConstData.FlagCheck.Fail
             }
 
             return Json(new { status = flagCheckStatus, message= message, permissionID= permissionID }, JsonRequestBehavior.AllowGet);

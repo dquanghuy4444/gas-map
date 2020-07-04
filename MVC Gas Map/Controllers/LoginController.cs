@@ -29,7 +29,7 @@ namespace MVC_Gas_Map.Controllers
         public JsonResult Create(User user)
         {
             user.CreatedDate = DateTime.Now;
-            user.Password = HashByMd5.CreateMD5(user.Password);
+            user.Password = Common.CreateMD5(user.Password);
             HttpResponseMessage response = GlobalVariables.webApiClient.PostAsJsonAsync("User", user).Result;
             if(response.StatusCode == HttpStatusCode.Created)
                 return Json(new { status = 0 });
@@ -42,7 +42,7 @@ namespace MVC_Gas_Map.Controllers
         [HttpGet]
         public JsonResult Get(string pass,string userName)
         {
-            string strQuery= "username="+ userName + "&&password="+ HashByMd5.CreateMD5(pass); 
+            string strQuery= "username="+ userName + "&&password="+ Common.CreateMD5(pass); 
             HttpResponseMessage response = GlobalVariables.webApiClient.GetAsync("User?"+strQuery).Result;
             if (response.StatusCode == HttpStatusCode.Accepted)
             {
@@ -60,48 +60,5 @@ namespace MVC_Gas_Map.Controllers
             else return Json(new { status = 2 });
         }
 
-        // GET: Login/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Login/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Login/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: Login/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }
